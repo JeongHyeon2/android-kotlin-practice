@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Bts_Practice"
         tools:targetApi="31">
         <activity
+            android:name=".Bts1Activity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
