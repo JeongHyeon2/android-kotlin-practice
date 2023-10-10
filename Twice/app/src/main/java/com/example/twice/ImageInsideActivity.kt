@@ -10,7 +10,8 @@ class ImageInsideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_inside)
         val getData = intent.getStringExtra("data")
-        val memberImage = findViewById<ImageView>(R.id.memberImageArea)
+
+        var memberImage = findViewById<ImageView>(R.id.memberImageArea)
         if (getData == "1") {
             memberImage.setImageResource(R.drawable.member_1)
         }
