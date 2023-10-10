@@ -9,6 +9,7 @@ class ImageInsideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_inside)
+
         val getData = intent.getStringExtra("data")
 
         var memberImage = findViewById<ImageView>(R.id.memberImageArea)
