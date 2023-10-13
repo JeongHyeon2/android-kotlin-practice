@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         val myRef = database.getReference("myMemo")
         val listview = findViewById<ListView>(R.id.mainLV)
         val myAdapter = ListViewAdpater(dataModelList)
-
         listview.adapter = myAdapter
 
         myRef.child(Firebase.auth.currentUser!!.uid).addValueEventListener(object :ValueEventListener{
