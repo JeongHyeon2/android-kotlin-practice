@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_margin="20dp"
-    android:layout_height="220dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/radius"
     android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        >
     <ImageView
         android:id="@+id/rvImageArea"
         android:src="@drawable/ic_launcher_background"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginLeft="25dp"
+
         android:scaleType="fitXY"
         android:layout_height="100dp"/>
+
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/rvTextArea"
         android:text="text"
@@ -23,6 +29,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:layout_gravity="center"/>
 
 </LinearLayout>
