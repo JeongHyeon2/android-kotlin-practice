@@ -1,7 +1,9 @@
 package com.example.mango_contents
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +22,20 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
+        items.add(ContentsModel("https://www.mangoplate.com/restaurants/kduafZiXUT","https://mp-seoul-image-production-s3.mangoplate.com/155404/449685_1597161095276_16783?fit=around|512:512&crop=512:512;*,*&output-format=jpg&output-quality=80","산울림1992"))
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv)
-        recyclerView.adapter = RVAdapter(baseContext,items)
+        val rvAdapter = RVAdapter(baseContext,items)
+            recyclerView.adapter =  rvAdapter
+        rvAdapter.itemClick  = object  :RVAdapter.ItemClick{
+            override fun onClick(viwe: View, position: Int) {
+                val intent = Intent(baseContext,ViewActivity::class.java)
+                intent.putExtra("url",items[position].url)
+                startActivity(intent)
+
+            }
+
+        }
         recyclerView.layoutManager = GridLayoutManager(this,2)
 
     }
