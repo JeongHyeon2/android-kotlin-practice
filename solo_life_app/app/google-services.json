@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "619440043793",
+    "project_id": "solo-life-app",
+    "storage_bucket": "solo-life-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619440043793:android:5ae4aa9d32b329f8057eb0",
+        "android_client_info": {
+          "package_name": "com.example.solo_life_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfcYBX8Ex_UopT-OclThMitd3T_X5dqD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
