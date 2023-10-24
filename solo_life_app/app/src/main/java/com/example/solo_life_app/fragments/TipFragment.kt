@@ -1,5 +1,6 @@
 package com.example.solo_life_app.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.solo_life_app.R
+import com.example.solo_life_app.contents_list.ContentsListActivity
 import com.example.solo_life_app.databinding.FragmentTipBinding
 
 class TipFragment : Fragment() {
@@ -25,6 +27,9 @@ class TipFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tip, container, false)
+        binding.category1.setOnClickListener {
+            startActivity(Intent(context,ContentsListActivity::class.java))
+        }
         binding.tipTap.setOnClickListener {
         }
         binding.talkTap.setOnClickListener {
