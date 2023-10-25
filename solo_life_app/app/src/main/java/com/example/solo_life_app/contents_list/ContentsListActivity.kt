@@ -52,12 +52,6 @@ class ContentsListActivity : AppCompatActivity() {
         val rv = findViewById<RecyclerView>(R.id.rv)
         rv.adapter = myAdapter
         rv.layoutManager = GridLayoutManager(this, 2)
-        myAdapter.itemClick = object : RVAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                val intent = Intent(baseContext, ContentShowActivity::class.java)
-                intent.putExtra("url", items[position].webUrl)
-                startActivity(intent)
-            }
-        }
+
     }
 }
