@@ -1,5 +1,4 @@
 package com.example.solo_life_app.contents_list
-
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -15,14 +14,14 @@ import com.example.solo_life_app.R
 import com.example.solo_life_app.util.FirebaseAuth
 import com.example.solo_life_app.util.FirebaseRef
 
-class RVAdapter(
+class BookmarkRVAdapter(
     val context: Context,
     val item: ArrayList<ContentModel>,
     val keyList: ArrayList<String>,
     val bookmarkIdList: MutableList<String>
-) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<BookmarkRVAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RVAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkRVAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.rv_item, parent, false)
 
         Log.d("testlist", bookmarkIdList.toString())
@@ -30,7 +29,7 @@ class RVAdapter(
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: RVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookmarkRVAdapter.ViewHolder, position: Int) {
 
         holder.bindItems(item[position], keyList[position])
     }
