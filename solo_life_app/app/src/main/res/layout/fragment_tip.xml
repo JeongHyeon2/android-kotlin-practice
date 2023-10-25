@@ -30,6 +30,7 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"/>
                     <ImageView
+                        android:id="@+id/category_2"
                         android:layout_weight="1"
                         android:src="@drawable/main_icon_cook"
                         android:layout_width="120dp"

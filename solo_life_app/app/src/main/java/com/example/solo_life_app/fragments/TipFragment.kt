@@ -28,7 +28,14 @@ class TipFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tip, container, false)
         binding.category1.setOnClickListener {
-            startActivity(Intent(context,ContentsListActivity::class.java))
+            val intent = Intent(context,ContentsListActivity::class.java)
+            intent.putExtra("category","category1")
+            startActivity(intent)
+        }
+        binding.category2.setOnClickListener {
+            val intent = Intent(context,ContentsListActivity::class.java)
+            intent.putExtra("category","category2")
+            startActivity(intent)
         }
         binding.tipTap.setOnClickListener {
         }
