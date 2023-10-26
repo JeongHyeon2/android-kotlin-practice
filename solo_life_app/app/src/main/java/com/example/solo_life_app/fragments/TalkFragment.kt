@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 class TalkFragment : Fragment() {
     private lateinit var binding: FragmentTalkBinding
     private val boardDataList = mutableListOf<BoardModel>()
+    private val boardKey = mutableListOf<String>()
     private lateinit var  adpater : BoardListViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +52,10 @@ class TalkFragment : Fragment() {
         binding.boardListview.adapter = adpater
         binding.boardListview.setOnItemClickListener { adapterView, view, i, l ->
             val intent = Intent(context,BoardInsideActivity::class.java)
-            intent.putExtra("title",boardDataList[i].title)
-            intent.putExtra("content",boardDataList[i].content)
-            intent.putExtra("time",boardDataList[i].time)
-
+//            intent.putExtra("title",boardDataList[i].title)
+//            intent.putExtra("content",boardDataList[i].content)
+//            intent.putExtra("time",boardDataList[i].time)
+            intent.putExtra("key",boardKey[i])
             startActivity(intent)
         }
 
@@ -85,8 +86,10 @@ class TalkFragment : Fragment() {
                 for (dataModel in dataSnapshot.children) {
                     val item = dataModel.getValue(BoardModel::class.java)
                     boardDataList.add(item!!)
+                    boardKey.add(dataModel.key.toString())
                 }
                 boardDataList.reverse()
+                boardKey.reverse()
                 adpater.notifyDataSetChanged()
             }
             override fun onCancelled(error: DatabaseError) {
