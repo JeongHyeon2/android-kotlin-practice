@@ -38,7 +38,7 @@ class StoreFragment : Fragment() {
         binding.storeTap.setOnClickListener {
         }
         binding.homeTap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_bookmarkFragment_to_homeFragment)
+            it.findNavController().navigate(R.id.action_storeFragment_to_homeFragment)
 
         }
         return binding.root

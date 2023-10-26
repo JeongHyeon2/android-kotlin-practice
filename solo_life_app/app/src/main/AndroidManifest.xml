@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Solo_life_app"
         tools:targetApi="31">
         <activity
+            android:name=".board.BoardInsideActivity"
+            android:exported="false" />
+        <activity
+            android:name=".board.BoardWriteActivity"
+            android:exported="false" />
+        <activity
             android:name=".contents_list.ContentShowActivity"
             android:exported="false"
             android:label="@string/title_activity_content_show"
