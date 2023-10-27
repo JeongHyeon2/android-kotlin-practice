@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".board.BoardInsideActivity"
@@ -13,16 +12,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp">
-
-            <TextView
-                android:id="@+id/titleArea"
-                android:text="title"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"/>
+                >
+                <TextView
+                    android:id="@+id/titleArea"
+                    android:text="title"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"/>
+
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/board_setting_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/main_menu"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="10dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </LinearLayout>
 
@@ -44,7 +60,7 @@
         <TextView
             android:id="@+id/textArea"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:textColor="@color/black"
             android:text="여기는 내용 영역"
@@ -56,7 +72,7 @@
             android:id="@+id/getImageArea"
             android:layout_margin="30dp"
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

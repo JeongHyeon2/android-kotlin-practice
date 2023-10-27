@@ -75,11 +75,6 @@ class BoardWriteActivity : AppCompatActivity() {
         val data = baos.toByteArray()
 
         var uploadTask = mountainsRef.putBytes(data)
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
-        }
+
     }
 }
