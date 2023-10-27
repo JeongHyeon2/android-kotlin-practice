@@ -10,5 +10,6 @@ class FirebaseRef {
         val category2 = database.getReference("contents2")
         val bookMarkRef = database.getReference("bookmark_list")
         val boardRef = database.getReference("board")
+        val commentRef = database.getReference("comment")
     }
 }

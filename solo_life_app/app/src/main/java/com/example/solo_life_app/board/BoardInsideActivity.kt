@@ -15,6 +15,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.solo_life_app.R
+import com.example.solo_life_app.comment.CommentLVAdapter
+import com.example.solo_life_app.comment.CommentModel
 import com.example.solo_life_app.databinding.ActivityBoardInsideBinding
 import com.example.solo_life_app.util.FirebaseAuth
 import com.example.solo_life_app.util.FirebaseRef
@@ -29,7 +31,9 @@ import java.lang.Exception
 
 class BoardInsideActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBoardInsideBinding
-    private lateinit var key:String
+    private lateinit var key: String
+    private val commentDataList = mutableListOf<CommentModel>()
+    private lateinit var commentLVAdapter: CommentLVAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,14 +44,44 @@ class BoardInsideActivity : AppCompatActivity() {
 //        binding.titleArea.text = title
 //        binding.textArea.text = content
 //        binding.timeArea.text=time
-         key = intent.getStringExtra("key").toString()
+        key = intent.getStringExtra("key").toString()
         getBoardData(key.toString())
         getImageData(key.toString())
         binding.boardSettingIcon.setOnClickListener {
             showDialog()
-
         }
+        binding.ivWrite.setOnClickListener {
+            insertComment(key)
+        }
+        commentLVAdapter = CommentLVAdapter(commentDataList)
+        binding.lv.adapter =commentLVAdapter
+        getCommentData(key)
 
+    }
+    fun getCommentData(key: String){
+        FirebaseRef.commentRef.child(key).addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                commentDataList.clear()
+                for (dataModel in dataSnapshot.children) {
+                    val item = dataModel.getValue(CommentModel::class.java)
+                    commentDataList.add(item!!)
+
+                }
+                commentLVAdapter.notifyDataSetChanged()
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    fun insertComment(key: String) {
+        FirebaseRef.commentRef.child(key).push()
+            .setValue(CommentModel(binding.etComment.text.toString(),FirebaseAuth.getTime()))
+
+        Toast.makeText(this,"댓글을 입력하였습니다.",Toast.LENGTH_SHORT).show()
+        binding.etComment.setText("")
     }
 
     private fun getImageData(key: String) {
@@ -55,19 +89,19 @@ class BoardInsideActivity : AppCompatActivity() {
 
         val image = binding.getImageArea
         storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-            if(task.isSuccessful){
+            if (task.isSuccessful) {
                 Glide.with(this).load(task.result).into(image)
             }
         })
     }
 
-    private fun showDialog(){
-        val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog,null)
+    private fun showDialog() {
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
         val mBuilder = AlertDialog.Builder(this).setView(mDialogView).setTitle("게시글 수정/삭제")
         val dialog = mBuilder.show()
         dialog.findViewById<Button>(R.id.btn_edit)?.setOnClickListener {
-            val intent = Intent(this,BoardEditActivity::class.java)
-            intent.putExtra("key",key)
+            val intent = Intent(this, BoardEditActivity::class.java)
+            intent.putExtra("key", key)
             startActivity(intent)
         }
         dialog.findViewById<Button>(R.id.btn_delete)?.setOnClickListener {
@@ -82,7 +116,7 @@ class BoardInsideActivity : AppCompatActivity() {
             // Delete the image file
             imageRef.delete()
 
-            Toast.makeText(this,"삭제되었습니다",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
@@ -98,11 +132,11 @@ class BoardInsideActivity : AppCompatActivity() {
                     binding.timeArea.text = dataModel?.time
                     val myUid = FirebaseAuth.getUid()
                     val writerUid = dataModel?.uid
-                    if(myUid.equals(writerUid)){
+                    if (myUid.equals(writerUid)) {
                         binding.boardSettingIcon.isVisible = true
                     }
 
-                }catch (e : Exception){
+                } catch (e: Exception) {
 
                 }
             }
