@@ -17,14 +17,18 @@ class StoreFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_store, container, false)
+        val view = binding.storeWebView
+        view.loadUrl("https://www.inflearn.com/")
         binding.tipTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_storeFragment_to_tipFragment)
         }

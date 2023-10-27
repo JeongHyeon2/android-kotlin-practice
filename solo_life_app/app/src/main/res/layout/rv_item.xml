@@ -4,10 +4,14 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="200dp">
+
     <ImageView
         android:id="@+id/image_view"
         android:src="@drawable/main_icon_oneroom"
         android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_height="100dp"/>
     <TextView
         android:id="@+id/tv"
