@@ -124,7 +124,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         FBRef.userInfoRef.addValueEventListener(postListener)
-
     }
     private fun getMyData(){
         val postListener = object : ValueEventListener {
