@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/image_area"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -70,9 +71,10 @@
                 android:layout_margin="10dp"
                 android:background="@color/white"
                 app:counterEnabled="true"
-                app:counterMaxLength="10">
+              >
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/genderArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="성별" />
@@ -84,9 +86,10 @@
                 android:layout_margin="10dp"
                 android:background="@color/white"
                 app:counterEnabled="true"
-                app:counterMaxLength="10">
+              >
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/regionArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="지역" />
@@ -98,12 +101,27 @@
                 android:layout_margin="10dp"
                 android:background="@color/white"
                 app:counterEnabled="true"
-                app:counterMaxLength="10">
-
+              >
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ageArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="나이" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                app:counterEnabled="true"
+            >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nicknameArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="닉네임" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
