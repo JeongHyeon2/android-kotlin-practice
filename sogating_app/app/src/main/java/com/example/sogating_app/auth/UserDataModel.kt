@@ -6,4 +6,5 @@ data class UserDataModel(
     val age : String = "",
     val gender : String = "",
     val city : String = "",
+    val token : String = "",
     )

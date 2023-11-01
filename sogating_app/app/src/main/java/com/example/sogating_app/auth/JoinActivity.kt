@@ -16,11 +16,13 @@ import com.example.sogating_app.MainActivity
 import com.example.sogating_app.R
 import com.example.sogating_app.utils.FBAuthUtil
 import com.example.sogating_app.utils.FBRef
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
@@ -70,10 +72,20 @@ class JoinActivity : AppCompatActivity() {
                             "회원가입 성공",
                             Toast.LENGTH_SHORT,
                         ).show()
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                            OnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                return@OnCompleteListener
+                            }
 
-                        val user = UserDataModel(uid,nickname, age, gender, city)
-                        FBRef.userInfoRef.child(uid).setValue(user)
-                        uploadImage(uid)
+                            // Get new FCM registration token
+                             val token = task.result
+                                val user = UserDataModel(uid,nickname, age, gender, city,token)
+                                FBRef.userInfoRef.child(uid).setValue(user)
+                                uploadImage(uid)
+                            Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+                        })
+
                         startActivity(Intent(this,MainActivity::class.java))
 
 
