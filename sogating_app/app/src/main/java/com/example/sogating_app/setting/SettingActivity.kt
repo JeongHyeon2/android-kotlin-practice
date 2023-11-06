@@ -7,6 +7,7 @@ import android.widget.Button
 import com.example.sogating_app.R
 import com.example.sogating_app.auth.IntroActivity
 import com.example.sogating_app.message.MyLikeListActivity
+import com.example.sogating_app.message.MyMsgActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -18,6 +19,8 @@ class SettingActivity : AppCompatActivity() {
         btn.setOnClickListener {
             startActivity(Intent(this,MyPageActivity::class.java))
         }
+        val myMsg = findViewById<Button>(R.id.myMsg)
+        myMsg.setOnClickListener { startActivity(Intent(this,MyMsgActivity::class.java)) }
         findViewById<Button>(R.id.logoutButton).setOnClickListener {
             val auth = Firebase.auth
             auth.signOut()

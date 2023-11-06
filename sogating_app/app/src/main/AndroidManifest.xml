@@ -15,12 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sogating_app"
         tools:targetApi="31">
-         <service android:name=".message.fcm.FirebaseService"
-             android:exported="false">
-             <intent-filter>
-                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-             </intent-filter>
-         </service>
+        <activity
+            android:name=".message.MyMsgActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".message.fcm.FirebaseService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".message.MyLikeListActivity"
             android:exported="false" />
@@ -52,4 +58,5 @@
             android:name=".MainActivity"
             android:exported="false" />
     </application>
+
 </manifest>

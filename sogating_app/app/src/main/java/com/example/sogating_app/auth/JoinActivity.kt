@@ -77,12 +77,7 @@ class JoinActivity : AppCompatActivity() {
                                 if (!task.isSuccessful) {
                                     return@OnCompleteListener
                                 }
-
-                                // Get new FCM registration token
                                 val token = task.result
-
-                                // Log and toast
-
                                 val userModel = UserDataModel(
                                     uid,
                                     nickname,
@@ -91,13 +86,8 @@ class JoinActivity : AppCompatActivity() {
                                     city,
                                     token
                                 )
-
                                 FBRef.userInfoRef.child(uid).setValue(userModel)
-
                                 uploadImage(uid)
-
-
-                                //
 
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)

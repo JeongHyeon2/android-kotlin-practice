@@ -18,6 +18,11 @@
         android:layout_height="wrap_content"
         android:text="MY MATCHING LIST"/>
     <Button
+        android:id="@+id/myMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MY MESSAGE"/>
+    <Button
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

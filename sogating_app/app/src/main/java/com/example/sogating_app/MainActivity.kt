@@ -12,26 +12,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.bumptech.glide.Glide
-import com.example.sogating_app.auth.IntroActivity
 import com.example.sogating_app.auth.UserDataModel
-import com.example.sogating_app.setting.MyPageActivity
 import com.example.sogating_app.setting.SettingActivity
 import com.example.sogating_app.slider.CardStackAdapter
 import com.example.sogating_app.utils.FBAuthUtil
 import com.example.sogating_app.utils.FBRef
-import com.google.firebase.auth.ktx.auth
+import com.example.sogating_app.utils.MyInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import com.google.firebase.storage.ktx.storage
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.CardStackView
@@ -130,6 +123,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user  = dataSnapshot.getValue(UserDataModel::class.java)
                 currentUserGender = user!!.gender
+                MyInfo.myNickname =user.nickname
                 getUserList(currentUserGender)
             }
             override fun onCancelled(databaseError: DatabaseError) {
