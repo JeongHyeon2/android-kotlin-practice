@@ -7,11 +7,17 @@ import android.widget.ListView
 import android.widget.Toast
 import com.example.sogating_app.R
 import com.example.sogating_app.auth.UserDataModel
+import com.example.sogating_app.message.fcm.NotiModel
+import com.example.sogating_app.message.fcm.PushNotification
+import com.example.sogating_app.message.fcm.RetrofitInstance
 import com.example.sogating_app.utils.FBAuthUtil
 import com.example.sogating_app.utils.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyLikeListActivity : AppCompatActivity() {
     private val uid = FBAuthUtil.getUid()
@@ -31,6 +37,9 @@ class MyLikeListActivity : AppCompatActivity() {
         getMyLikeList()
         userListView.setOnItemClickListener { adapterView, view, i, l ->
             checkMatching(likeUserList[i].uid)
+            val notiModel = NotiModel("aaaa","bbbbb")
+            val pushModel = PushNotification(notiModel,likeUserList[i].token)
+            testPush(pushModel)
         }
     }
 
@@ -96,5 +105,10 @@ class MyLikeListActivity : AppCompatActivity() {
         }
         FBRef.userLikeRef.child(otherUid).addValueEventListener(postListener)
 
+    }
+    private fun testPush(notification: PushNotification)= CoroutineScope(Dispatchers.IO).launch {
+        Log.d("gigigi","abcd")
+        RetrofitInstance.api.postNotification(notification)
+        Log.d("gigigi","fffff")
     }
 }

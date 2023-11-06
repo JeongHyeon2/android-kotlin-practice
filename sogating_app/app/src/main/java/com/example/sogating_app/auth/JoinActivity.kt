@@ -64,38 +64,48 @@ class JoinActivity : AppCompatActivity() {
 
             auth.createUserWithEmailAndPassword(email.text.toString(), pwd.text.toString())
                 .addOnCompleteListener(this) { task ->
-                    val user = auth.currentUser
-                    uid = user?.uid.toString()
                     if (task.isSuccessful) {
-                        Toast.makeText(
-                            baseContext,
-                            "회원가입 성공",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        // Sign in success, update UI with the signed-in user's information
+
+                        val user = auth.currentUser
+                        uid = user?.uid.toString()
+
+
+                        // Token
                         FirebaseMessaging.getInstance().token.addOnCompleteListener(
                             OnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                return@OnCompleteListener
-                            }
+                                if (!task.isSuccessful) {
+                                    return@OnCompleteListener
+                                }
 
-                            // Get new FCM registration token
-                             val token = task.result
-                                val user = UserDataModel(uid,nickname, age, gender, city,token)
-                                FBRef.userInfoRef.child(uid).setValue(user)
+                                // Get new FCM registration token
+                                val token = task.result
+
+                                // Log and toast
+
+                                val userModel = UserDataModel(
+                                    uid,
+                                    nickname,
+                                    age,
+                                    gender,
+                                    city,
+                                    token
+                                )
+
+                                FBRef.userInfoRef.child(uid).setValue(userModel)
+
                                 uploadImage(uid)
-                            Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
-                        })
 
-                        startActivity(Intent(this,MainActivity::class.java))
+
+                                //
+
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            })
 
 
                     } else {
 
-                        Toast.makeText(
-                            baseContext,
-                            "Authentication failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
 
                     }
                 }

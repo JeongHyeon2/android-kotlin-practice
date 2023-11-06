@@ -27,6 +27,7 @@ class SettingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         findViewById<Button>(R.id.matchingListButton).setOnClickListener {
             startActivity(Intent(this,MyLikeListActivity::class.java))
         }
