@@ -47,6 +47,7 @@ class SelectRVAdapter(val context : Context, private val coinPriceList : List<Cu
 
         val likeImage = holder.likeImage
         val currentCoin = coinPriceList[position].coinName
+
         // view가 그려질 때
         if(selectedCoinList.contains(currentCoin)){
             likeImage.setImageResource(R.drawable.like_red)

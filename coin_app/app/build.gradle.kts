@@ -58,7 +58,11 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
- // Coroutine
+    // Coroutine
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    // DateStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    // Lottie
+    implementation ("com.airbnb.android:lottie:3.4.0")
 }

@@ -1,10 +1,12 @@
 package com.example.coin_app.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coin_app.MainActivity
 import com.example.coin_app.R
 import com.example.coin_app.databinding.ActivitySelectBinding
 import com.example.coin_app.databinding.FragmentIntro1Binding
@@ -27,5 +29,9 @@ class SelectActivity : AppCompatActivity() {
             binding.coinListRV.adapter = selectRVAdapter
             binding.coinListRV.layoutManager = LinearLayoutManager(this)
         })
+        binding.laterTextArea.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+            viewModel.setupFirstFlag()
+        }
     }
 }
