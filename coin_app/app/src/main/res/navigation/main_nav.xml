@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/introFragment1"
-        android:name="com.example.coin_app.view.IntroFragment1"
+        android:name="com.example.coin_app.view.intro.IntroFragment1"
         android:label="fragment_intro1"
         tools:layout="@layout/fragment_intro1" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/introFragment2"
-        android:name="com.example.coin_app.view.IntroFragment2"
+        android:name="com.example.coin_app.view.intro.IntroFragment2"
         android:label="fragment_intro2"
         tools:layout="@layout/fragment_intro2" />
 </navigation>

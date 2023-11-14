@@ -1,4 +1,4 @@
-package com.example.coin_app.view
+package com.example.coin_app.view.intro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
