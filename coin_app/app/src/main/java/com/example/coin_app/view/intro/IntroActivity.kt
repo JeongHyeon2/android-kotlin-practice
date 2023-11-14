@@ -13,8 +13,8 @@ import com.example.coin_app.R
 import com.example.coin_app.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
-    private val viewModel : IntroViewModel by viewModels()
-    private lateinit var binding : ActivityIntroBinding
+    private val viewModel: IntroViewModel by viewModels()
+    private lateinit var binding: ActivityIntroBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -22,10 +22,10 @@ class IntroActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel.checkFirstFlag()
         viewModel.first.observe(this, Observer {
-            if(it){
+            if (it) {
                 //처음 접속한 유저가 아니면
-                startActivity(Intent(this,MainActivity::class.java))
-            }else{
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
                 binding.animationView.visibility = View.INVISIBLE
                 binding.fragmentContainerView.visibility = View.VISIBLE
 

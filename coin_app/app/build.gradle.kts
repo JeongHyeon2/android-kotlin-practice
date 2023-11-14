@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,10 +60,20 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Coroutine
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     // DateStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     // Lottie
     implementation ("com.airbnb.android:lottie:3.4.0")
+    // ROOM
+    // ROOM
+    val roomVersion = "2.4.0"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+// To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$roomVersion")
+
 }

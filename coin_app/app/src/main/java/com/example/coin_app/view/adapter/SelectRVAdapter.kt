@@ -13,7 +13,7 @@ import com.example.coin_app.dataModel.CurrentPriceResult
 import timber.log.Timber
 
 class SelectRVAdapter(val context : Context, private val coinPriceList : List<CurrentPriceResult> ) : RecyclerView.Adapter<SelectRVAdapter.ViewHolder>(){
-    private val selectedCoinList = ArrayList<String>()
+     val selectedCoinList = ArrayList<String>()
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val coinName : TextView = view.findViewById(R.id.coinName)
         val coinPriceUpDown : TextView = view.findViewById(R.id.coinPriceUpDown)
