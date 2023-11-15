@@ -67,12 +67,14 @@ dependencies {
     // Lottie
     implementation ("com.airbnb.android:lottie:3.4.0")
     // ROOM
-    // ROOM
     val roomVersion = "2.4.0"
 
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation ("androidx.room:room-ktx:$roomVersion")
 
+    // livedata
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$roomVersion")
 

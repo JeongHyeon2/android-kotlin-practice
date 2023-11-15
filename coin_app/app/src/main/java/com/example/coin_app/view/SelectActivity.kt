@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coin_app.MainActivity
+import com.example.coin_app.view.main.MainActivity
 import com.example.coin_app.databinding.ActivitySelectBinding
 import com.example.coin_app.view.adapter.SelectRVAdapter
 

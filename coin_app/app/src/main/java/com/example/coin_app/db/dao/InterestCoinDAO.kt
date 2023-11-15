@@ -17,7 +17,7 @@ interface InterestCoinDAO {
     // 데이터의 변경 사항을 감지하기 좋다
     // flow 에러 발생함...
     @Query("SELECT * FROM interest_coin_table")
-    fun getAllData() : List<InterestCoinEntity>
+    fun getAllData() : Flow<List<InterestCoinEntity>>
 
     // Insert
     @Insert(onConflict = OnConflictStrategy.IGNORE)

@@ -39,6 +39,7 @@ class SelectRVAdapter(val context : Context, private val coinPriceList : List<Cu
         if(coinPriceList[position].coinInfo.fluctate_rate_24H.toDouble()<0){
             upDown.setTextColor(ContextCompat.getColor(context, R.color.blue))
         }else if(coinPriceList[position].coinInfo.fluctate_rate_24H.toDouble()>0) {
+            holder.coinName.text = "+"+coinPriceList[position].coinName
             upDown.setTextColor(ContextCompat.getColor(context, R.color.red))
         }else{
             upDown.setTextColor(ContextCompat.getColor(context, R.color.black))

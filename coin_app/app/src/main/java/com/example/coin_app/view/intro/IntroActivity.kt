@@ -1,15 +1,13 @@
 package com.example.coin_app.view.intro
 
 import android.content.Intent
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
-import com.example.coin_app.MainActivity
-import com.example.coin_app.R
+import com.example.coin_app.view.main.MainActivity
 import com.example.coin_app.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
