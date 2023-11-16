@@ -78,4 +78,7 @@ dependencies {
 // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$roomVersion")
 
+    // Coroutine WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+
 }
