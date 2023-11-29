@@ -7,20 +7,38 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.cooking_app.HomeFragment"
+        android:name="com.example.cooking_app.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_comuFragment"
             app:destination="@id/comuFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myRecipeFragment"
+            app:destination="@id/myRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/comuFragment"
-        android:name="com.example.cooking_app.ComuFragment"
+        android:name="com.example.cooking_app.fragments.ComuFragment"
         android:label="fragment_comu"
         tools:layout="@layout/fragment_comu" >
         <action
             android:id="@+id/action_comuFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_comuFragment_to_myRecipeFragment"
+            app:destination="@id/myRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myRecipeFragment"
+        android:name="com.example.cooking_app.fragments.MyRecipeFragment"
+        android:label="fragment_my_recipe"
+        tools:layout="@layout/fragment_my_recipe" >
+        <action
+            android:id="@+id/action_myRecipeFragment_to_comuFragment"
+            app:destination="@id/comuFragment" />
+        <action
+            android:id="@+id/action_myRecipeFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

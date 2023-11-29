@@ -3,6 +3,7 @@
     <style name="Base.Theme.Cooking_app" parent="Theme.AppCompat.Light">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="windowNoTitle" >true</item>
     </style>
 
     <style name="Theme.Cooking_app" parent="Base.Theme.Cooking_app" />

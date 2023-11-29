@@ -4,9 +4,14 @@
         android:id="@+id/homeFragment"
         android:title="홈"
         android:icon="@drawable/home_icon_white" />
+    <item
+        android:id="@+id/myRecipeFragment"
+        android:title="나만의레시피"
+        android:icon="@drawable/my_recipe_icon"/>
 
     <item
         android:id="@+id/comuFragment"
         android:title="커뮤니티"
         android:icon="@drawable/community_icon"/>
+
 </menu>
