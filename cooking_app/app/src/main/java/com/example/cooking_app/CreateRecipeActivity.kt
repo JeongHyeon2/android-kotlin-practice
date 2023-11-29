@@ -1,47 +1,70 @@
 package com.example.cooking_app
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageView
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.view.drawToBitmap
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.cooking_app.adpater.MyRecipeRVAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cooking_app.adpater.CreateRecipeRVAdapter
 import com.example.cooking_app.database.MyRecipeDB
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
+import com.example.cooking_app.models.ContentModel
 import com.example.cooking_app.models.RecipeModel
-import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
+import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class CreateRecipeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateRecipeBinding
-    private lateinit var imageView: ImageView
-
-    // 이미지 선택을 위한 ActivityResultLauncher 선언
-    private val getAction =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            // 이미지 뷰에 선택한 이미지 표시
-            imageView.setImageURI(uri)
-        }
+    private val myAdapter = CreateRecipeRVAdapter()
+    private val viewModel: CreateRecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
+        var position = 0
+        val rv = binding.createRecipeRv
+        val getAction =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                if(uri!=null) {
+                    val oldItem = viewModel.liveRecipeListModel.value!![position]
+                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+                    viewModel.updateItem(ContentModel(oldItem.id, oldItem.title, bitmap))
+                }
+            }
 
-        imageView = binding.createRecipeIv
-
-        // 이미지 선택 버튼에 리스너 등록
-        imageView.setOnClickListener {
-            // 이미지 선택 액티비티 시작
+        myAdapter.setOnButtonClickListener {
+            Log.d("kkkkk",it.toString())
+            position= it
             getAction.launch("image/*")
         }
+        myAdapter.setOnEditTextChangeListener {
+            text, position ->
+           viewModel.updateText(text,position)
+
+        }
+
+        rv.adapter = myAdapter
+        rv.layoutManager = LinearLayoutManager(this)
+
+        viewModel.liveRecipeListModel.observe(this, Observer {
+            Log.d("asdwqeqweqw","asd")
+            myAdapter.submitList(it)
+        })
+
+
+//        // 이미지 선택 버튼에 리스너 등록
+//        imageView.setOnClickListener {
+//            // 이미지 선택 액티비티 시작
+//
+//        }
 
         binding.done.setOnClickListener {
             // 이미지와 텍스트를 사용하여 원하는 작업 수행
@@ -51,9 +74,13 @@ class CreateRecipeActivity : AppCompatActivity() {
                     Log.d("asasdasdsad","dkdkd")
 
                 }
-                db.myRecipeDAO().insert(RecipeModel(0, binding.createRecipeEt.text.toString(),imageView.drawToBitmap()))
+                db.myRecipeDAO().insert(RecipeModel(0,binding.createRecipeEtTitle.text.toString(),null,viewModel.liveRecipeListModel.value!!))
             }
             finish()
+
+        }
+        binding.btnAdd.setOnClickListener {
+            viewModel.addItem(ContentModel(0,""))
         }
     }
 }

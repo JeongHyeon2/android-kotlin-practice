@@ -8,11 +8,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.example.cooking_app.models.ContentModel
 import com.example.cooking_app.models.RecipeModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 
 @Database(entities = [RecipeModel::class], version = 1)
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class,ContentModelConverters::class)
 abstract class MyRecipeDB  : RoomDatabase(){
     abstract fun myRecipeDAO() : MyRecipeDAO
 
@@ -50,5 +53,21 @@ class Converters {
     fun toBitmap(bytes : ByteArray?) : Bitmap? {
         if(bytes==null) return null
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+}
+class ContentModelConverters {
+    @TypeConverter
+    fun fromContentList(contentList: List<ContentModel>?): String? {
+        if (contentList == null) return null
+        val gson = Gson()
+        return gson.toJson(contentList)
+    }
+
+    @TypeConverter
+    fun toContentList(contentListString: String?): List<ContentModel>? {
+        if (contentListString == null) return null
+        val gson = Gson()
+        val type = object : TypeToken<List<ContentModel>>() {}.type
+        return gson.fromJson(contentListString, type)
     }
 }

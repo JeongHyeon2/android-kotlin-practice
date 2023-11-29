@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="cooking_app_padding_mini">8dp</dimen>
     <dimen name="cooking_app_padding_small">12dp</dimen>
     <dimen name="cooking_app_padding_middle">16dp</dimen>
     <dimen name="cooking_app_padding_large">20dp</dimen>
+    <dimen name="cooking_app_text_size_large">22sp</dimen>
+    <dimen name="cooking_app_text_size_middle">18sp</dimen>
+    <dimen name="cooking_app_text_size_small">14sp</dimen>
+
 </resources>
