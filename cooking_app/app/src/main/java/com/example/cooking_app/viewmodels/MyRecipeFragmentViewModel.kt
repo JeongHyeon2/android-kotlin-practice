@@ -1,6 +1,7 @@
 package com.example.cooking_app.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +25,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     }
     fun getData() = viewModelScope.launch(Dispatchers.IO) {
         _mutableRecipeListModel.postValue(db.myRecipeDAO().getAllData())
+        Log.d("getalldata",db.myRecipeDAO().getAllData().toString())
 
     }
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,15 +19,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cooking_app.CreateRecipeActivity
 import com.example.cooking_app.R
 import com.example.cooking_app.adpater.MyRecipeRVAdapter
+import com.example.cooking_app.database.ContentModelConverters
 import com.example.cooking_app.databinding.FragmentMyRecipeBinding
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 
-class MyRecipeFragment : Fragment() {
+class MyRecipeFragment() : Fragment() {
     private var _binding: FragmentMyRecipeBinding? = null
     private val binding get() = _binding!!
-    private  val viewModel: MyRecipeFragmentViewModel by viewModels()
+    private  val viewModel: MyRecipeFragmentViewModel by activityViewModels()
     private val myAdapter = MyRecipeRVAdapter()
 
     override fun onCreateView(
@@ -48,24 +50,28 @@ class MyRecipeFragment : Fragment() {
 
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
-            Log.d("dddd","dd")
         })
-
-
-        binding.myRecipeFab.setOnClickListener {
-            startActivity(Intent(activity, CreateRecipeActivity::class.java))
-            // 이 부분 solo life app에 북마크 기능 있는데 그거 한 번 보기
+        rv.setOnClickListener {
+        }
+        myAdapter.setOnItemClickListener { position ->
+            val intent = Intent(activity, CreateRecipeActivity::class.java)
+            intent.putExtra("ID_KEY", position)
+            startActivity(intent)
 
 
         }
-    }
 
+        binding.myRecipeFab.setOnClickListener {
+            val intent = Intent(activity, CreateRecipeActivity::class.java)
+            intent.putExtra("ID_KEY", -1)
+            startActivity(intent)
+
+        }
+    }
     override fun onStart() {
         super.onStart()
-       Log.d( "hihi",viewModel.liveRecipeListModel.value.toString())
         viewModel.getData()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
