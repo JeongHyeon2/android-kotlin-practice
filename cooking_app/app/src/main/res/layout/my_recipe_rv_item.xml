@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:id="@+id/my_recipe_rv_item_title"
         android:text="text_area"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:textSize="30sp"
         />

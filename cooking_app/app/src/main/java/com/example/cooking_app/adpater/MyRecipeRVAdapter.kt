@@ -12,6 +12,7 @@ import com.example.cooking_app.models.RecipeModel
 class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
     private var recipeList: List<RecipeModel> = emptyList()
     private var itemClickListener: ((position: Int) -> Unit)? = null
+    private var longItemClickListener: ((position: Int) -> Unit)? = null
 
 
     fun submitList(newList: List<RecipeModel>) {
@@ -20,6 +21,9 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
     }
     fun setOnItemClickListener(listener: (position: Int) -> Unit) {
         itemClickListener = listener
+    }
+    fun setOnLongItemClickListener(listener: (position: Int) -> Unit) {
+        longItemClickListener = listener
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,6 +36,10 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
             if(item.image!=null){
             iv.setImageBitmap(item.image)}
             iv.setOnClickListener { itemClickListener?.invoke(position) }
+            iv.setOnLongClickListener {
+                longItemClickListener?.invoke(position)
+                true // Return true to consume the long click event
+            }
         }
 
     }

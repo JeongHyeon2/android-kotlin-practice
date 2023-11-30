@@ -16,9 +16,7 @@ import com.example.cooking_app.adpater.CreateRecipeRVAdapter
 import com.example.cooking_app.database.MyRecipeDB
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
 import com.example.cooking_app.models.ContentModel
-import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
-import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,12 +32,12 @@ class CreateRecipeActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         id = intent.getIntExtra("ID_KEY", -1)
-        Log.d("ID_KEY",id.toString())
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
         val rv = binding.createRecipeRv
         if(id>=0) {
-            viewModel.getData(id+1)
+            viewModel.getData(id)
         }
+
         val getAction =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
                 if(uri!=null&&position>=0) {
@@ -55,18 +53,18 @@ class CreateRecipeActivity() : AppCompatActivity() {
             position = it
             getAction.launch("image/*")
         }
+
         myAdapter.setOnEditTextChangeListener {
             text, position ->
            viewModel.updateText(text,position)
         }
+
         binding.createRecipeEtTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // 텍스트 변경 전에 호출되는 메서드
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // 텍스트가 변경될 때 호출되는 메서드
                 val newText = s.toString()
-                viewModel.editText(newText)
+                viewModel.editTitle(newText)
             }
             override fun afterTextChanged(s: Editable?) {
             }
@@ -79,22 +77,11 @@ class CreateRecipeActivity() : AppCompatActivity() {
         viewModel.liveRecipeListModel.observe(this, Observer {
             myAdapter.submitList(it.contentList)
             binding.createRecipeEtTitle.setText(viewModel.liveRecipeListModel.value!!.title)
-            Log.d("asasdasdsad",it.contentList.toString())
         })
 
         binding.done.setOnClickListener {
-            // 이미지와 텍스트를 사용하여 원하는 작업 수행
-            val db = MyRecipeDB.getDatabase(applicationContext)
-            CoroutineScope(Dispatchers.IO).launch {
-                Log.d("doneButton",viewModel.liveRecipeListModel.value!!.toString())
-                if(id==-1) {
-                    db.myRecipeDAO().insert(viewModel.liveRecipeListModel.value!!)
-                }else{
-                    db.myRecipeDAO().update(viewModel.liveRecipeListModel.value!!)
-                }
-            }
+            viewModel.saveData(id)
             finish()
-
         }
         binding.btnAdd.setOnClickListener {
             viewModel.addItem(ContentModel(0,""))

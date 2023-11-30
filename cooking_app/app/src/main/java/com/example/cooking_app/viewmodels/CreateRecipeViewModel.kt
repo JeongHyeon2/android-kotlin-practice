@@ -1,7 +1,6 @@
 package com.example.cooking_app.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.cooking_app.database.MyRecipeDB
 import com.example.cooking_app.models.ContentModel
 import com.example.cooking_app.models.RecipeModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.FieldPosition
 
 class CreateRecipeViewModel(application: Application) : AndroidViewModel(application) {
     private var _mutableRecipeListModel = MutableLiveData<RecipeModel>()
@@ -31,7 +30,6 @@ class CreateRecipeViewModel(application: Application) : AndroidViewModel(applica
         item.id = currentList.size
         currentList.add(item)
         val new = RecipeModel(old.id,old.title,old.image,currentList)
-
         _mutableRecipeListModel.value = new
 
     }
@@ -39,13 +37,10 @@ class CreateRecipeViewModel(application: Application) : AndroidViewModel(applica
         val old = _mutableRecipeListModel.value!!
         val currentList = _mutableRecipeListModel.value?.contentList!!.toMutableList() ?: mutableListOf()
         currentList[item.id].image = item.image
-        Log.d("dlrjs",item.id.toString())
-
         val new = RecipeModel(old.id,old.title,old.image,currentList)
-        Log.d("dlrjs",new.toString())
         _mutableRecipeListModel.value = new
     }
-    fun editText(text: String){
+    fun editTitle(text: String){
         _mutableRecipeListModel.value!!.title = text
     }
     fun updateText(text: String,position: Int) {
@@ -55,9 +50,15 @@ class CreateRecipeViewModel(application: Application) : AndroidViewModel(applica
     }
     fun getData(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         _mutableRecipeListModel.postValue(db.myRecipeDAO().getData(id))
-        Log.d("getData",_mutableRecipeListModel.value.toString())
-        Log.d("getData",db.myRecipeDAO().getData(id).toString())
-
+    }
+    fun saveData(id:Int) = viewModelScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if(id==-1) {
+                db.myRecipeDAO().insert(liveRecipeListModel.value!!)
+            }else{
+                db.myRecipeDAO().update(liveRecipeListModel.value!!)
+            }
+        }
     }
 
 }

@@ -20,7 +20,8 @@ interface MyRecipeDAO {
     @Update()
     fun update(entity: RecipeModel)
 
-
+    @Query("DELETE from my_recipe_table WHERE id = :id")
+    fun deleteOne(id:Int)
     @Query("DELETE from my_recipe_table")
     fun deleteAll()
 }
