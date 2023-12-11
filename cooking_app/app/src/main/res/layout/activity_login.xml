@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="vm"
+            type="com.example.cooking_app.viewmodels.LoginViewModel" />
+    </data>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.JoinActivity"
+        android:orientation="vertical"
+        android:background="@color/main_color">
+        <EditText
+            android:text="@={vm.email}"
+            android:layout_margin="@dimen/cooking_app_padding_small"
+            android:id="@+id/join_et_email"
+            android:hint="이메일"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <EditText
+            android:inputType="textPassword"
+            android:text="@={vm.pwd}"
+            android:layout_margin="@dimen/cooking_app_padding_small"
+            android:id="@+id/join_et_pwd"
+            android:hint="비밀번호"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:onClick="@{()->vm.onLoginButtonClick()}"
+            android:padding="@dimen/cooking_app_text_size_middle"
+            android:layout_margin="@dimen/cooking_app_padding_small"
+            android:text="로그인"
+            android:textStyle="bold"
+            android:textSize="@dimen/cooking_app_text_size_middle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</layout>
