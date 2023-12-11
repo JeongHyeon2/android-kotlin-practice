@@ -30,11 +30,9 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
         private val title: TextView = view.findViewById(R.id.my_recipe_rv_item_title)
         private val iv : ImageView = view.findViewById(R.id.my_recipe_rv_item_iv)
 
-
         fun bind(item: RecipeModel,position: Int) {
             title.text = item.title
-            if(item.image!=null){
-            iv.setImageBitmap(item.image)}
+
             iv.setOnClickListener { itemClickListener?.invoke(position) }
             iv.setOnLongClickListener {
                 longItemClickListener?.invoke(position)

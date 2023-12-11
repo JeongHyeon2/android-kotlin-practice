@@ -24,6 +24,7 @@
 
         <EditText
             android:layout_marginLeft="@dimen/cooking_app_padding_mini"
+            android:paddingVertical="@dimen/cooking_app_padding_mini"
             android:background="@android:color/transparent"
             android:id="@+id/my_recipe_create_rv_item_et"
             android:layout_width="wrap_content"
@@ -31,25 +32,11 @@
             android:hint="글을 입력하세요                                                         "
             android:textSize="@dimen/cooking_app_text_size_middle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/my_recipe_create_rv_item_btn"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_recipe_create_rv_item_tv_count"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <Button
-            android:id="@+id/my_recipe_create_rv_item_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="사진"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <ImageView
-        android:id="@+id/my_recipe_create_rv_item_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
-        />
+
 
 </LinearLayout>

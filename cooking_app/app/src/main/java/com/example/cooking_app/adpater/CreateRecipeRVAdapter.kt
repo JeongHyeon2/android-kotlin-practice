@@ -1,59 +1,37 @@
 package com.example.cooking_app.adpater
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cooking_app.R
-import com.example.cooking_app.models.ContentModel
+import com.example.cooking_app.models.RecipeModel
 
-class CreateRecipeRVAdapter : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewHolder>() {
-    private var recipeList: List<ContentModel> = emptyList()
-    private var buttonClickListener: ((position: Int) -> Unit)? = null
+class CreateRecipeRVAdapter() : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewHolder>() {
+    private var recipe: List<String> =  emptyList()
     private var editTextChangeListener: ((text: String,position: Int) -> Unit)? = null
-
-    fun submitList(newList: List<ContentModel>) {
-        recipeList = newList
+    fun submitList(newList: List<String>) {
+        recipe = newList
         notifyDataSetChanged()
     }
 
-
-    fun setOnButtonClickListener(listener: (position: Int) -> Unit) {
-        buttonClickListener = listener
-    }
     fun setOnEditTextChangeListener(listener: (text: String,position: Int)  -> Unit) {
         editTextChangeListener = listener
-    }
 
+    }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val content: EditText = view.findViewById(R.id.my_recipe_create_rv_item_et)
-        private val iv: ImageView = view.findViewById(R.id.my_recipe_create_rv_item_iv)
         private val number: TextView = view.findViewById(R.id.my_recipe_create_rv_item_tv_count)
-        private val btn: Button = view.findViewById(R.id.my_recipe_create_rv_item_btn)
 
-        fun bind(item: ContentModel, position: Int) {
+        fun bind(item: String, position: Int) {
             number.text = (position + 1).toString() + "."
-            content.setText(item.title)
-            if (item.image != null) {
-                iv.setImageBitmap(item.image)
-                Log.d("item.image", item.image.toString())
-            } else {
-                // 이미지가 null인 경우의 처리를 추가할 수 있습니다.
-                iv.setImageDrawable(null)
-            }
-            btn.setOnClickListener {
-                buttonClickListener?.invoke(adapterPosition)
-            }
+            content.setText(item)
             content.addTextChangedListener {
                 editTextChangeListener?.invoke(content.text.toString(),position)
             }
-
         }
     }
 
@@ -65,11 +43,11 @@ class CreateRecipeRVAdapter : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewHol
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(recipeList[position], position)
+        holder.bind(recipe[position], position)
     }
 
     override fun getItemCount(): Int {
-        return recipeList.size
+        return recipe.size
     }
     override fun getItemId(position: Int): Long {
         return position.toLong()

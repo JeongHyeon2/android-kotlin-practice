@@ -21,9 +21,5 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContainer)
         bottomNavigationView.setupWithNavController(navController)
     }
-    override fun onStart() {
-        super.onStart()
-        viewModel.getData()
-    }
 
 }
