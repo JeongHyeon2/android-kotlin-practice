@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.cooking_app.database.MyRecipeDB
 import com.example.cooking_app.models.RecipeModel
@@ -26,6 +26,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     }
     fun getData() = viewModelScope.launch(Dispatchers.IO) {
         _mutableRecipeListModel.postValue(db.myRecipeDAO().getAllData())
+        Log.d("alldata",_mutableRecipeListModel.value.toString())
 
     }
     fun deleteDialog(position: Int,thisContext : Context){

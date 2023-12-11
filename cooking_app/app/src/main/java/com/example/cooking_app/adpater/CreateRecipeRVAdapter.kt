@@ -1,5 +1,6 @@
 package com.example.cooking_app.adpater
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,10 @@ class CreateRecipeRVAdapter : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewHol
             content.setText(item.title)
             if (item.image != null) {
                 iv.setImageBitmap(item.image)
+                Log.d("item.image", item.image.toString())
+            } else {
+                // 이미지가 null인 경우의 처리를 추가할 수 있습니다.
+                iv.setImageDrawable(null)
             }
             btn.setOnClickListener {
                 buttonClickListener?.invoke(adapterPosition)

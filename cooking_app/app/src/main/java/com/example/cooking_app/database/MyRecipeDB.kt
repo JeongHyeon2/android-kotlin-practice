@@ -3,6 +3,7 @@ package com.example.cooking_app.database
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.databinding.adapters.Converters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -15,7 +16,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 
 @Database(entities = [RecipeModel::class], version = 1)
-@TypeConverters(Converters::class,ContentModelConverters::class)
+@TypeConverters(MyBitmapConverter::class,ContentModelConverters::class)
 abstract class MyRecipeDB  : RoomDatabase(){
     abstract fun myRecipeDAO() : MyRecipeDAO
 
@@ -37,24 +38,26 @@ abstract class MyRecipeDB  : RoomDatabase(){
         }
     }
 }
-class Converters {
-
-    // Bitmap -> ByteArray 변환
+class MyBitmapConverter {
     @TypeConverter
-    fun toByteArray(bitmap : Bitmap?) : ByteArray?{
-        if(bitmap==null) return null
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        return outputStream.toByteArray()
+    fun fromBitmap(bitmap: Bitmap?): ByteArray? {
+        if (bitmap == null) {
+            return null
+        }
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        return stream.toByteArray()
     }
 
-    // ByteArray -> Bitmap 변환
     @TypeConverter
-    fun toBitmap(bytes : ByteArray?) : Bitmap? {
-        if(bytes==null) return null
+    fun toBitmap(bytes: ByteArray?): Bitmap? {
+        if (bytes == null) {
+            return null
+        }
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
     }
 }
+
 class ContentModelConverters {
     @TypeConverter
     fun fromContentList(contentList: List<ContentModel>?): String? {
@@ -71,3 +74,4 @@ class ContentModelConverters {
         return gson.fromJson(contentListString, type)
     }
 }
+

@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.cooking_app.models.RecipeModel
+import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface MyRecipeDAO {
     @Query("SELECT * FROM my_recipe_table")

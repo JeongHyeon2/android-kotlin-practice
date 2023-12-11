@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -58,13 +59,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
-// ROOM
+    // ROOM
     val roomVersion = "2.5.0"
 
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
-// To use Kotlin annotation processing tool (kapt)
+    // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$roomVersion")
 
     // Coroutine
@@ -72,4 +73,12 @@ dependencies {
 
     //gson
     implementation ("com.google.code.gson:gson:2.10.1")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // FireBase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx")
 }
