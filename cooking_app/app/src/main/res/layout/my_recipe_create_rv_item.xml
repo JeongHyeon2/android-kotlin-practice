@@ -24,7 +24,7 @@
 
         <EditText
             android:layout_marginLeft="@dimen/cooking_app_padding_mini"
-            android:paddingVertical="@dimen/cooking_app_padding_mini"
+            android:paddingVertical="@dimen/cooking_app_padding_small"
             android:background="@android:color/transparent"
             android:id="@+id/my_recipe_create_rv_item_et"
             android:layout_width="wrap_content"

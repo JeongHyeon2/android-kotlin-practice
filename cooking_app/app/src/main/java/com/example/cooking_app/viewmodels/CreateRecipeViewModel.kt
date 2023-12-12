@@ -1,11 +1,13 @@
 package com.example.cooking_app.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airbnb.lottie.model.content.ContentModel
 import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.utils.FBRef
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -35,8 +37,12 @@ class CreateRecipeViewModel() : ViewModel() {
         val currentList = _mutableRecipeListModel.value?.recipes!!
         currentList[position] = text
     }
-    private fun getData(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-
+     fun getData(key: String) = viewModelScope.launch(Dispatchers.IO) {
+         FBRef.myRecipe.child(key).get().addOnSuccessListener {
+             _mutableRecipeListModel.value = it.getValue(RecipeModel::class.java)
+         }.addOnFailureListener{
+             Log.e("firebase", "Error getting data", it)
+         }
     }
     fun saveData(id:Int) = viewModelScope.launch(Dispatchers.IO) {
 

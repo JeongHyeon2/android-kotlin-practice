@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,7 +16,11 @@ import com.example.cooking_app.views.CreateRecipeActivity
 import com.example.cooking_app.adpater.MyRecipeRVAdapter
 import com.example.cooking_app.databinding.FragmentMyRecipeBinding
 import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.utils.FBAuth
+import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class MyRecipeFragment() : Fragment() {
     private var _binding: FragmentMyRecipeBinding? = null
@@ -30,7 +35,6 @@ class MyRecipeFragment() : Fragment() {
         _binding = FragmentMyRecipeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,31 +44,24 @@ class MyRecipeFragment() : Fragment() {
         rv.layoutManager = GridLayoutManager(activity, 2)
         viewModel.getData()
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
-            myAdapter.submitList(it.recipeList)
+            myAdapter.submitList(it)
         })
-
-
-//
-//        myAdapter.setOnItemClickListener { position ->
-//            val intent = Intent(activity, CreateRecipeActivity::class.java)
-//            startActivity(intent)
-//        }
-//        myAdapter.setOnLongItemClickListener { position->
-//            viewModel.deleteDialog(position,requireContext())
-//            Log.d("sdsasadadsdsasd",viewModel.liveRecipeListModel.value!!.toString())
-//        }
-        binding.myRecipeFab.setOnClickListener {
+        myAdapter.setOnItemClickListener { position ->
             val intent = Intent(activity, CreateRecipeActivity::class.java)
-            intent.putExtra("ID_KEY", -1)
+            intent.putExtra("ID_KEY",viewModel.liveRecipeListModel.value!![position].id)
             startActivity(intent)
         }
-
+        myAdapter.setOnLongItemClickListener { position->
+            viewModel.deleteDialog(viewModel.liveRecipeListModel.value!![position],requireContext())
+        }
+        binding.myRecipeFab.setOnClickListener {
+            val intent = Intent(activity, CreateRecipeActivity::class.java)
+            intent.putExtra("ID_KEY", "NONE")
+            startActivity(intent)
+        }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

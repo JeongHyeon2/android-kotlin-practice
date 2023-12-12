@@ -8,14 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cooking_app.R
 import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.models.RecipeModelWithId
 
 class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
-    private var recipeList: List<RecipeModel> = emptyList()
+    private var recipeList: List<RecipeModelWithId> = emptyList()
     private var itemClickListener: ((position: Int) -> Unit)? = null
     private var longItemClickListener: ((position: Int) -> Unit)? = null
 
 
-    fun submitList(newList: List<RecipeModel>) {
+    fun submitList(newList: List<RecipeModelWithId>) {
         recipeList = newList
         notifyDataSetChanged()
     }
@@ -30,8 +31,8 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
         private val title: TextView = view.findViewById(R.id.my_recipe_rv_item_title)
         private val iv : ImageView = view.findViewById(R.id.my_recipe_rv_item_iv)
 
-        fun bind(item: RecipeModel,position: Int) {
-            title.text = item.title
+        fun bind(item: RecipeModelWithId,position: Int) {
+            title.text = item.model.title
 
             iv.setOnClickListener { itemClickListener?.invoke(position) }
             iv.setOnLongClickListener {
