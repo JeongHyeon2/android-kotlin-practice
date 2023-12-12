@@ -26,10 +26,6 @@ class CreateRecipeViewModel() : ViewModel() {
         val new = RecipeModel(old.title,newList,old.image)
         _mutableRecipeListModel.value = new
     }
-    fun updateItem(item: String) {
-
-
-    }
     fun editTitle(text: String){
         _mutableRecipeListModel.value!!.title = text
     }
@@ -44,7 +40,12 @@ class CreateRecipeViewModel() : ViewModel() {
              Log.e("firebase", "Error getting data", it)
          }
     }
-    fun saveData(id:Int) = viewModelScope.launch(Dispatchers.IO) {
-
+    fun deleteItem(){
+        if(_mutableRecipeListModel.value!!.recipes.size==1) return
+        val old = _mutableRecipeListModel.value!!
+        val newList = _mutableRecipeListModel.value!!.recipes
+        newList.removeLast()
+        val new = RecipeModel(old.title,newList,old.image)
+        _mutableRecipeListModel.value = new
     }
 }

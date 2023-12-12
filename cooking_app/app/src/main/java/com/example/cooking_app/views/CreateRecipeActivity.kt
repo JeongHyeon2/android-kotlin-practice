@@ -1,10 +1,14 @@
 package com.example.cooking_app.views
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -26,14 +30,16 @@ class CreateRecipeActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityCreateRecipeBinding
     private val myAdapter = CreateRecipeRVAdapter()
     private val viewModel: CreateRecipeViewModel by viewModels()
+    private lateinit var key: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val key = intent.getStringExtra("ID_KEY")
-        if(key.equals("NONE")){
+         key = intent.getStringExtra("ID_KEY")!!
+        if(key == "NONE"){
 
         }else{
           viewModel.getData(key!!)
         }
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
         val rv = binding.createRecipeRv
 
@@ -59,18 +65,46 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
         rv.adapter = myAdapter
         rv.layoutManager = LinearLayoutManager(this)
+
         binding.done.setOnClickListener {
-            if(key!! == "NONE"){
-                FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
-            }else{
-                FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
-            }
-            finish()
+            save(key!!)
+        }
+        binding.btnDelete.setOnClickListener {
+            viewModel.deleteItem()
         }
         binding.btnAdd.setOnClickListener {
             viewModel.addItem("")
         }
     }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        Log.d("dsadsdsa","ttttttttttttt")
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
+            .setPositiveButton("저장 후 종료",
+                DialogInterface.OnClickListener { dialog, id ->
+                    save(key!!)
+                })
+            .setNegativeButton("저장하지 않고 종료",
+                DialogInterface.OnClickListener { dialog, id ->
+                    finish()
+                })
+        builder.show()
+    }
+
+    private fun save(key : String){
+        if(key!! == "NONE"){
+            FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
+        }else{
+            FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+        }
+        Toast.makeText(this,"성공적으로 저장하였습니다",Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+
 }
 
 
