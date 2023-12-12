@@ -7,13 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".views.CreateRecipeActivity">
+
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/constraint_bottom">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/create_recipe_et_title"
                     android:layout_width="match_parent"
@@ -21,28 +27,46 @@
                     android:layout_margin="@dimen/cooking_app_padding_small"
                     android:hint="어떤 요리를 만들어 볼까요?"
                     android:textSize="@dimen/cooking_app_text_size_large" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/create_recipe_rv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
         </ScrollView>
-        <Button
-            android:id="@+id/done"
-            android:layout_width="wrap_content"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_bottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="@dimen/cooking_app_padding_middle"
-            android:text="완료" />
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="@dimen/cooking_app_padding_middle"
-            android:text="추가" />
+            android:background="@drawable/rounded_background"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                style="@style/cooking_app_button_style"
+                android:id="@+id/done"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:elevation="100dp"
+                android:text="완료" />
+
+            <Button
+                app:layout_constraintTop_toTopOf="@id/constraint_bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/cooking_app_button_style"
+                android:id="@+id/btn_delete"
+                app:layout_constraintLeft_toLeftOf="@id/btn_add"
+                app:layout_constraintRight_toRightOf="@id/done"
+                android:text="삭제" />
+
+            <Button
+                style="@style/cooking_app_button_style"
+                android:id="@+id/btn_add"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="추가" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
