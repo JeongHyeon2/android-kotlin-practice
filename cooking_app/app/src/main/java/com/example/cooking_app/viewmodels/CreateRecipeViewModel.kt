@@ -19,6 +19,7 @@ class CreateRecipeViewModel() : ViewModel() {
     )
     val liveRecipeListModel : LiveData<RecipeModel> get() =_mutableRecipeListModel
 
+
     fun addItem(item: String) {
         val old = _mutableRecipeListModel.value!!
         val newList = _mutableRecipeListModel.value!!.recipes

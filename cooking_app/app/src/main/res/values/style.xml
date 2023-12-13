@@ -11,4 +11,22 @@
         <item name="android:elevation">32dp</item>
 
     </style>
+    <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/cooking_app_padding_middle</item>
+        <item name="hintTextColor">#808080</item>
+        <item name="boxBackgroundColor">@color/main_color</item>
+        <item name="boxCornerRadiusTopStart">@dimen/cooking_app_padding_middle</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/cooking_app_padding_middle</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/cooking_app_padding_middle</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/cooking_app_padding_middle</item>
+        <item name="boxStrokeColor">#808080</item>
+    </style>
+
+    <style name="MyTextInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

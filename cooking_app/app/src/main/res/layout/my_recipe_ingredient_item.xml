@@ -1,0 +1,60 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ingredient_name"
+                android:scrollHorizontally="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="재료명" />
+
+            <EditText
+                android:id="@+id/ingredient_amount"
+
+                android:scrollHorizontally="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="g수" />
+
+            <EditText
+                android:id="@+id/ingredient_purchase"
+
+                android:scrollHorizontally="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="구입 가격" />
+
+            <EditText
+                android:id="@+id/ingredient_purchase_amount"
+
+                android:scrollHorizontally="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="구입량" />
+
+            <EditText
+                android:id="@+id/ingredient_calorie"
+
+                android:scrollHorizontally="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="100g당 칼로리" />
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

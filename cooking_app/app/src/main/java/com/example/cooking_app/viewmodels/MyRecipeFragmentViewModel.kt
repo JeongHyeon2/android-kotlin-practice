@@ -24,15 +24,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(application){
-    private var _mutableRecipeListModel = MutableLiveData<MutableList<RecipeModelWithId>>(
-     mutableListOf()
-    )
+    private var _mutableRecipeListModel = MutableLiveData<MutableList<RecipeModelWithId>>(mutableListOf())
     val liveRecipeListModel : LiveData<MutableList<RecipeModelWithId>> get() =_mutableRecipeListModel
+
+    private val _loadingState = MutableLiveData<Boolean>()
+    val loadingState: LiveData<Boolean> get() = _loadingState
 
     private fun deleteItem(key:String) = viewModelScope.launch (Dispatchers.IO){
         FBRef.myRecipe.child(key).removeValue()
     }
     fun getData() = viewModelScope.launch(Dispatchers.IO) {
+        _loadingState.postValue(true) // 로딩 상태 시작
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val new = mutableListOf<RecipeModelWithId>()
@@ -43,7 +45,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
                 }
                 new.reverse()
                 _mutableRecipeListModel.value = new
-                Log.d("qwertyuiop",_mutableRecipeListModel.value.toString())
+                _loadingState.postValue(false) // 로딩 상태 종료
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

@@ -26,15 +26,15 @@ class MyRecipeFragment() : Fragment() {
     private var _binding: FragmentMyRecipeBinding? = null
     private val binding get() = _binding!!
     private val myAdapter = MyRecipeRVAdapter()
-    private val viewModel : MyRecipeFragmentViewModel by viewModels()
+    private val viewModel: MyRecipeFragmentViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMyRecipeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,24 +42,32 @@ class MyRecipeFragment() : Fragment() {
         val rv = binding.myRecipeRv
         rv.adapter = myAdapter
         rv.layoutManager = GridLayoutManager(activity, 2)
+        binding.viewModel = viewModel
         viewModel.getData()
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
         })
         myAdapter.setOnItemClickListener { position ->
             val intent = Intent(activity, CreateRecipeActivity::class.java)
-            intent.putExtra("ID_KEY",viewModel.liveRecipeListModel.value!![position].id)
+            intent.putExtra("ID_KEY", viewModel.liveRecipeListModel.value!![position].id)
             startActivity(intent)
         }
-        myAdapter.setOnLongItemClickListener { position->
-            viewModel.deleteDialog(viewModel.liveRecipeListModel.value!![position],requireContext())
+        myAdapter.setOnLongItemClickListener { position ->
+            viewModel.deleteDialog(
+                viewModel.liveRecipeListModel.value!![position],
+                requireContext()
+            )
         }
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            Log.d("qwerqwer", it.toString())
+        })
         binding.myRecipeFab.setOnClickListener {
             val intent = Intent(activity, CreateRecipeActivity::class.java)
             intent.putExtra("ID_KEY", "NONE")
             startActivity(intent)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

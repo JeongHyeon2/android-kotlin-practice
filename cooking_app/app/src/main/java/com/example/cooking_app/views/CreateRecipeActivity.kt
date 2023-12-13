@@ -1,7 +1,9 @@
 package com.example.cooking_app.views
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +12,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +35,13 @@ class CreateRecipeActivity() : AppCompatActivity() {
     private val myAdapter = CreateRecipeRVAdapter()
     private val viewModel: CreateRecipeViewModel by viewModels()
     private lateinit var key: String
+    private var isChanged = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+         var countChanged  = 0
          key = intent.getStringExtra("ID_KEY")!!
         if(key == "NONE"){
-
         }else{
           viewModel.getData(key!!)
         }
@@ -46,6 +52,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         myAdapter.setOnEditTextChangeListener {
             text, position ->
            viewModel.updateText(text,position)
+            isChanged = true
         }
         viewModel.liveRecipeListModel.observe(this, Observer {
             myAdapter.submitList(it.recipes)
@@ -58,6 +65,10 @@ class CreateRecipeActivity() : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val newText = s.toString()
                 viewModel.editTitle(newText)
+                countChanged++
+                if(countChanged>2){
+                    isChanged = true
+                }
             }
             override fun afterTextChanged(s: Editable?) {
             }
@@ -71,27 +82,37 @@ class CreateRecipeActivity() : AppCompatActivity() {
         }
         binding.btnDelete.setOnClickListener {
             viewModel.deleteItem()
+            isChanged = true
         }
         binding.btnAdd.setOnClickListener {
             viewModel.addItem("")
+            isChanged = true
+        }
+        binding.createRecipeIngredient.setOnClickListener {
+            startActivity(Intent(this,DialogActivity::class.java))
+
+
         }
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        Log.d("dsadsdsa","ttttttttttttt")
-        val builder = AlertDialog.Builder(this)
-        builder
-            .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
-            .setPositiveButton("저장 후 종료",
-                DialogInterface.OnClickListener { dialog, id ->
-                    save(key!!)
-                })
-            .setNegativeButton("저장하지 않고 종료",
-                DialogInterface.OnClickListener { dialog, id ->
-                    finish()
-                })
-        builder.show()
+        if(isChanged) {
+            val builder = AlertDialog.Builder(this)
+            builder
+                .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
+                .setPositiveButton("저장 후 종료",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        save(key!!)
+                    })
+                .setNegativeButton("저장하지 않고 종료",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        finish()
+                    })
+            builder.show()
+        }else{
+            finish()
+        }
     }
 
     private fun save(key : String){
@@ -106,6 +127,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
 
 }
+
 
 
 

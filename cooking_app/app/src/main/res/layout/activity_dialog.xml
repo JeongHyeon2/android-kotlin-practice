@@ -1,0 +1,109 @@
+<layout>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:paddingHorizontal="@dimen/cooking_app_padding_middle"
+            android:paddingVertical="@dimen/cooking_app_padding_large"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@color/main_color"
+            android:orientation="vertical"
+            tools:context=".views.DialogActivity">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cooking_app_padding_middle"
+                    android:hint="재료이름을 적어주세요">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:hint="재료명"
+                            android:id="@+id/dialog_ingredient_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="#808080" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cooking_app_padding_middle"
+                    android:hint="재료를 얼마나 사용할 건가요? 단위:g">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:inputType="number"
+                            android:hint="사용량"
+                            android:id="@+id/dialog_ingredient_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="#808080" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cooking_app_padding_middle"
+                    android:hint="재료를 얼마에 사셨나요? 단위:원">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:hint="구입가격"
+                            android:inputType="number"
+                            android:id="@+id/dialog_ingredient_purchase"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="#808080" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cooking_app_padding_middle"
+                    android:hint="재료를 얼마나 사셨나요? 단위:g">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:hint="구입량"
+                            android:inputType="number"
+                            android:id="@+id/dialog_ingredient_purchase_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="#808080" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cooking_app_padding_middle"
+                    android:hint="재료의 칼로리는? 단위:kcal">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:hint="100g당 칼로리"
+                            android:inputType="number"
+                            android:id="@+id/dialog_ingredient_calorie"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="#808080" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/dialog_button_save"
+                    android:layout_marginTop="@dimen/cooking_app_padding_middle"
+                    android:background="@drawable/rounded_background_grey"
+                    android:textSize="@dimen/cooking_app_text_size_middle"
+                    android:textColor="@color/black"
+                    android:text="저장"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+</layout>
