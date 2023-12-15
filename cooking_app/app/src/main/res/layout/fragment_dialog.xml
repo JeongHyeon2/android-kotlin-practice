@@ -62,7 +62,23 @@
                         android:textColorHint="#808080" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
+                    android:hint="재료를 얼마나 사셨나요? 단위:g"
+                    android:textColorHint="@android:color/transparent"
+                    android:textSize="@dimen/cooking_app_padding_middle">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dialog_ingredient_purchase_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구매량"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="#808080" />
+                </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -76,24 +92,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="구입가격"
-                        android:inputType="number"
-                        android:textColor="@color/black"
-                        android:textColorHint="#808080" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/cooking_app_padding_middle"
-                    android:hint="재료를 얼마나 사셨나요? 단위:g"
-                    android:textColorHint="@android:color/transparent"
-                    android:textSize="@dimen/cooking_app_padding_middle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/dialog_ingredient_purchase_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="구입량"
                         android:inputType="number"
                         android:textColor="@color/black"
                         android:textColorHint="#808080" />
@@ -124,6 +122,15 @@
                     android:layout_marginTop="@dimen/cooking_app_padding_middle"
                     android:background="@drawable/rounded_background_grey"
                     android:text="저장"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/cooking_app_text_size_middle" />
+                <Button
+                    android:id="@+id/dialog_button_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/cooking_app_padding_middle"
+                    android:background="@drawable/rounded_background_grey"
+                    android:text="삭제"
                     android:textColor="@color/black"
                     android:textSize="@dimen/cooking_app_text_size_middle" />
             </LinearLayout>

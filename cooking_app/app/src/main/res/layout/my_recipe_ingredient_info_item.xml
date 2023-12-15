@@ -1,11 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginBottom="@dimen/cooking_app_padding_mini"
+    android:background="@color/grey_color"
+    android:id="@+id/ingredient_info_linear"
+    android:paddingBottom="@dimen/cooking_app_padding_mini"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<!--<HorizontalScrollView-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content">-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,5 +49,4 @@
             android:textColor="@color/black"
             android:textSize="@dimen/cooking_app_text_size_middle" />
     </LinearLayout>
-<!--</HorizontalScrollView>-->
 </LinearLayout>

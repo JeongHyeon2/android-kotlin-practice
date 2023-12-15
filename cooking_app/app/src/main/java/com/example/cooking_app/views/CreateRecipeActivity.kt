@@ -46,11 +46,11 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         var countChanged  = 0
-         key = intent.getStringExtra("ID_KEY")!!
-        if(key == "NONE"){
-        }else{
-          viewModel.getData(key!!)
+        var countChanged = 0
+        key = intent.getStringExtra("ID_KEY")!!
+        if (key == "NONE") {
+        } else {
+            viewModel.getData(key!!)
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
@@ -60,11 +60,24 @@ class CreateRecipeActivity() : AppCompatActivity() {
         viewModel.liveRecipeListModel.observe(this, Observer {
             myIngredientAdapter.submitList(it.ingredients)
             myIngredientInfoAdapter.submitList(it.ingredients)
+            binding.createRecipeTvData.text = viewModel.getInformation()
         })
+        myIngredientInfoAdapter.setOnLongItemClickListener {
+            MyDialogFragment(it).show(supportFragmentManager, "dialog")
 
-        myAdapter.setOnEditTextChangeListener {
-            text, position ->
-           viewModel.updateText(text,position)
+        }
+        myIngredientAdapter.setOnItemClickListener {
+            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
+        }
+        myIngredientInfoAdapter.setOnItemClickListener {
+            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
+        }
+        myIngredientAdapter.setOnLongItemClickListener {
+            MyDialogFragment(it).show(supportFragmentManager, "dialog")
+        }
+
+        myAdapter.setOnEditTextChangeListener { text, position ->
+            viewModel.updateText(text, position)
             isChanged = true
         }
         viewModel.liveRecipeListModel.observe(this, Observer {
@@ -75,14 +88,16 @@ class CreateRecipeActivity() : AppCompatActivity() {
         binding.createRecipeEtTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val newText = s.toString()
                 viewModel.editTitle(newText)
                 countChanged++
-                if(countChanged>2){
+                if (countChanged > 2) {
                     isChanged = true
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {
             }
         })
@@ -91,32 +106,50 @@ class CreateRecipeActivity() : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
 
         ingredientRv.adapter = myIngredientAdapter
-        ingredientRv.layoutManager = GridLayoutManager(this,2)
+        ingredientRv.layoutManager = GridLayoutManager(this, 2)
 
 
         binding.done.setOnClickListener {
             save(key!!)
         }
         binding.btnDelete.setOnClickListener {
-            viewModel.deleteItem()
-            isChanged = true
+            if (viewModel.liveRecipeListModel.value!!.recipes.last().trim() != "") {
+                AlertDialog.Builder(this)
+                    .setMessage((viewModel.liveRecipeListModel.value!!.recipes.lastIndex + 1).toString() + "번. "
+                            + viewModel.liveRecipeListModel.value!!.recipes.last()
+                            + "\n 삭제하시겠습니까?")
+                    .setPositiveButton("삭제",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            viewModel.deleteItem()
+                            isChanged = true
+                        })
+                    .setNegativeButton("취소",
+                        DialogInterface.OnClickListener { dialog, id ->
+                        })
+                    .show()
+            }else{
+                viewModel.deleteItem()
+                isChanged = true
+            }
+
+
         }
         binding.btnAdd.setOnClickListener {
             viewModel.addItem("")
             isChanged = true
         }
         binding.createRecipeIngredient.setOnClickListener {
-            MyDialogFragment().show(supportFragmentManager,"dialog")
+            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
         }
         binding.createRecipeTvIngredient.setOnClickListener {
-           it.setBackgroundResource(R.drawable.top_rounded_background_grey)
+            it.setBackgroundResource(R.drawable.top_rounded_background_grey)
             binding.createRecipeTvInfo.setBackgroundResource(R.drawable.top_rounded_background_point)
             ingredientRv.adapter = myIngredientAdapter
-            ingredientRv.layoutManager = GridLayoutManager(this,2)
+            ingredientRv.layoutManager = GridLayoutManager(this, 2)
         }
         binding.createRecipeTvInfo.setOnClickListener {
             binding.createRecipeTvIngredient.setBackgroundResource(R.drawable.top_rounded_background_point)
-           it.setBackgroundResource(R.drawable.top_rounded_background_grey)
+            it.setBackgroundResource(R.drawable.top_rounded_background_grey)
             ingredientRv.adapter = myIngredientInfoAdapter
             ingredientRv.layoutManager = LinearLayoutManager(this)
         }
@@ -124,9 +157,8 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        if(isChanged) {
-            val builder = AlertDialog.Builder(this)
-            builder
+        if (isChanged) {
+            AlertDialog.Builder(this)
                 .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
                 .setPositiveButton("저장 후 종료",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -136,18 +168,19 @@ class CreateRecipeActivity() : AppCompatActivity() {
                     DialogInterface.OnClickListener { dialog, id ->
                         finish()
                     })
-            builder.show()
-        }else{
+                .show()
+        } else {
             finish()
         }
     }
-    private fun save(key : String){
-        if(key!! == "NONE"){
+
+    private fun save(key: String) {
+        if (key!! == "NONE") {
             FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
-        }else{
+        } else {
             FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
         }
-        Toast.makeText(this,"성공적으로 저장하였습니다",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
         finish()
     }
 }

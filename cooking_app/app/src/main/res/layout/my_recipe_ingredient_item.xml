@@ -1,5 +1,8 @@
 <LinearLayout
-    android:layout_marginBottom="@dimen/cooking_app_padding_mini"
+    android:background="@color/grey_color"
+
+    android:id="@+id/ingredient_item_linear"
+    android:paddingBottom="@dimen/cooking_app_padding_mini"
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

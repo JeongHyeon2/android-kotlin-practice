@@ -60,18 +60,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         />
+                    <TextView
+                        android:id="@+id/create_recipe_tv_data"
+                        android:text="정보"
+                        android:gravity="center"
+                        android:textSize="@dimen/cooking_app_text_size_middle"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="vertical"
                     android:id="@+id/create_recipe_ingredient"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background_grey"
                     android:padding="@dimen/cooking_app_padding_small" >
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/create_recipe_ingredient_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         />
                 </LinearLayout>
             </LinearLayout>
