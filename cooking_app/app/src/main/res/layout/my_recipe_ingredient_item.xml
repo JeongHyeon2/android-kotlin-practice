@@ -1,60 +1,64 @@
 <LinearLayout
+    android:layout_marginBottom="@dimen/cooking_app_padding_mini"
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
+                android:textColor="@color/black"
+                android:textSize="@dimen/cooking_app_text_size_middle"
                 android:id="@+id/ingredient_name"
                 android:scrollHorizontally="true"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="재료명" />
 
-            <EditText
+            <TextView
                 android:id="@+id/ingredient_amount"
-
+                android:textColor="@color/black"
+                android:textSize="@dimen/cooking_app_text_size_middle"
                 android:scrollHorizontally="true"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="g수" />
 
-            <EditText
-                android:id="@+id/ingredient_purchase"
+<!--            <TextView-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
+<!--                android:id="@+id/ingredient_purchase"-->
+<!--                android:scrollHorizontally="true"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="구입 가격" />-->
 
-                android:scrollHorizontally="true"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="구입 가격" />
+<!--            <TextView-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
+<!--                android:id="@+id/ingredient_purchase_amount"-->
+<!--                android:scrollHorizontally="true"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="구입량" />-->
 
-            <EditText
-                android:id="@+id/ingredient_purchase_amount"
-
-                android:scrollHorizontally="true"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="구입량" />
-
-            <EditText
-                android:id="@+id/ingredient_calorie"
-
-                android:scrollHorizontally="true"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="100g당 칼로리" />
+<!--            <TextView-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
+<!--                android:id="@+id/ingredient_calorie"-->
+<!--                android:scrollHorizontally="true"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="100g당 칼로리" />-->
         </LinearLayout>
-    </HorizontalScrollView>
 </LinearLayout>

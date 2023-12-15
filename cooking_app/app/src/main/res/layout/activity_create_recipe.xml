@@ -32,7 +32,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/create_recipe_tv_ingredient"
                     android:paddingVertical="@dimen/cooking_app_padding_mini"
                     android:background="@drawable/top_rounded_background_grey"
                     android:text="재료"
@@ -44,19 +48,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
+                    <TextView
+                        android:id="@+id/create_recipe_tv_info"
+                        android:paddingVertical="@dimen/cooking_app_padding_mini"
+                        android:background="@drawable/top_rounded_background_point"
+                        android:text="정보"
+                        android:paddingHorizontal="@dimen/cooking_app_padding_small"
+                        android:textSize="@dimen/cooking_app_text_size_middle"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </LinearLayout>
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:id="@+id/create_recipe_ingredient"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="@drawable/rounded_background_grey"
-                    android:padding="@dimen/cooking_app_padding_large" >
+                    android:padding="@dimen/cooking_app_padding_small" >
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/create_recipe_ingredient_rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         />
-
                 </LinearLayout>
             </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView

@@ -1,6 +1,7 @@
 package com.example.cooking_app.views
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -17,10 +18,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cooking_app.R
 import com.example.cooking_app.adpater.CreateRecipeRVAdapter
+import com.example.cooking_app.adpater.MyRecipeIngredientAdapter
+import com.example.cooking_app.adpater.MyRecipeIngredientInfoAdapter
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
+import com.example.cooking_app.fragments.MyDialogFragment
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
@@ -33,6 +38,8 @@ import com.google.firebase.ktx.Firebase
 class CreateRecipeActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityCreateRecipeBinding
     private val myAdapter = CreateRecipeRVAdapter()
+    private val myIngredientAdapter = MyRecipeIngredientAdapter()
+    private val myIngredientInfoAdapter = MyRecipeIngredientInfoAdapter()
     private val viewModel: CreateRecipeViewModel by viewModels()
     private lateinit var key: String
     private var isChanged = false
@@ -48,6 +55,12 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
         val rv = binding.createRecipeRv
+        val ingredientRv = binding.createRecipeIngredientRv
+
+        viewModel.liveRecipeListModel.observe(this, Observer {
+            myIngredientAdapter.submitList(it.ingredients)
+            myIngredientInfoAdapter.submitList(it.ingredients)
+        })
 
         myAdapter.setOnEditTextChangeListener {
             text, position ->
@@ -77,6 +90,10 @@ class CreateRecipeActivity() : AppCompatActivity() {
         rv.adapter = myAdapter
         rv.layoutManager = LinearLayoutManager(this)
 
+        ingredientRv.adapter = myIngredientAdapter
+        ingredientRv.layoutManager = GridLayoutManager(this,2)
+
+
         binding.done.setOnClickListener {
             save(key!!)
         }
@@ -89,9 +106,19 @@ class CreateRecipeActivity() : AppCompatActivity() {
             isChanged = true
         }
         binding.createRecipeIngredient.setOnClickListener {
-            startActivity(Intent(this,DialogActivity::class.java))
-
-
+            MyDialogFragment().show(supportFragmentManager,"dialog")
+        }
+        binding.createRecipeTvIngredient.setOnClickListener {
+           it.setBackgroundResource(R.drawable.top_rounded_background_grey)
+            binding.createRecipeTvInfo.setBackgroundResource(R.drawable.top_rounded_background_point)
+            ingredientRv.adapter = myIngredientAdapter
+            ingredientRv.layoutManager = GridLayoutManager(this,2)
+        }
+        binding.createRecipeTvInfo.setOnClickListener {
+            binding.createRecipeTvIngredient.setBackgroundResource(R.drawable.top_rounded_background_point)
+           it.setBackgroundResource(R.drawable.top_rounded_background_grey)
+            ingredientRv.adapter = myIngredientInfoAdapter
+            ingredientRv.layoutManager = LinearLayoutManager(this)
         }
     }
 
@@ -114,7 +141,6 @@ class CreateRecipeActivity() : AppCompatActivity() {
             finish()
         }
     }
-
     private fun save(key : String){
         if(key!! == "NONE"){
             FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
@@ -124,8 +150,6 @@ class CreateRecipeActivity() : AppCompatActivity() {
         Toast.makeText(this,"성공적으로 저장하였습니다",Toast.LENGTH_SHORT).show()
         finish()
     }
-
-
 }
 
 

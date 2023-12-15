@@ -3,14 +3,13 @@ package com.example.cooking_app.adpater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cooking_app.R
 import com.example.cooking_app.models.RecipeIngredient
 
 
-class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapter.ViewHolder>() {
+class MyRecipeIngredientInfoAdapter() : RecyclerView.Adapter<MyRecipeIngredientInfoAdapter.ViewHolder>() {
     private var ingredientList: List<RecipeIngredient> =  emptyList()
     fun submitList(newList: List<RecipeIngredient>) {
         ingredientList = newList
@@ -21,16 +20,26 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
 
         private val name: TextView = view.findViewById(R.id.ingredient_name)
         private val amount: TextView = view.findViewById(R.id.ingredient_amount)
-//        private val purchase: TextView = view.findViewById(R.id.ingredient_purchase)
-//        private val purchaseAmount: TextView = view.findViewById(R.id.ingredient_purchase_amount)
-//        private val calorie: TextView = view.findViewById(R.id.ingredient_calorie)
+        private val purchase: TextView = view.findViewById(R.id.ingredient_purchase)
+        private val calorie: TextView = view.findViewById(R.id.ingredient_calorie)
 
         fun bind(item:RecipeIngredient) {
             name.text = "• "+item.name+" "
-            amount.text = item.amount +"g"
-//            purchase.text = item.cost + "원"
-//            purchaseAmount.text = item.amountOfPurchase+"g"
-//            calorie.text = item.calorie +"kcal"
+            amount.text = item.amount +"g "
+            try {
+                purchase.text = ((item.cost.toDouble()/item.amountOfPurchase.toDouble())*item.amount.toDouble()).toInt().toString()+"원 "
+            }
+            catch (e:Exception){
+                purchase.text = "0"
+            }
+            try {
+                calorie.text = (item.calorie.toDouble()*item.amount.toDouble()).toInt().toString() +"kcal"
+
+            }catch (e : Exception){
+                calorie.text = "0"
+            }
+
+
 
         }
     }
@@ -38,7 +47,7 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.my_recipe_ingredient_item, parent, false)
+                .inflate(R.layout.my_recipe_ingredient_info_item, parent, false)
         return ViewHolder(view)
     }
 
