@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+
             android:id="@+id/my_recipe_create_rv_item_tv_count"
             android:layout_marginHorizontal="@dimen/cooking_app_padding_small"
             android:layout_width="wrap_content"

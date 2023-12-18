@@ -43,10 +43,12 @@ class MyRecipeFragment() : Fragment() {
         rv.adapter = myAdapter
         rv.layoutManager = GridLayoutManager(activity, 2)
         binding.viewModel = viewModel
-        viewModel.getData()
+
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
         })
+
+
         myAdapter.setOnItemClickListener { position ->
             val intent = Intent(activity, CreateRecipeActivity::class.java)
             intent.putExtra("ID_KEY", viewModel.liveRecipeListModel.value!![position].id)
@@ -58,14 +60,18 @@ class MyRecipeFragment() : Fragment() {
                 requireContext()
             )
         }
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            Log.d("qwerqwer", it.toString())
-        })
+
         binding.myRecipeFab.setOnClickListener {
             val intent = Intent(activity, CreateRecipeActivity::class.java)
             intent.putExtra("ID_KEY", "NONE")
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        viewModel.getData()
+
+        super.onResume()
     }
 
     override fun onDestroyView() {

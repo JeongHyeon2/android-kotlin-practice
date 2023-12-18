@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="@dimen/cooking_app_padding_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".views.CreateRecipeActivity">
@@ -12,22 +13,53 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/constraint_bottom">
+            app:layout_constraintBottom_toBottomOf="parent"
+           >
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <EditText
-
+                    android:padding="@dimen/cooking_app_padding_small"
+                    android:background="@drawable/rounded_background_grey"
                     android:id="@+id/create_recipe_et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/cooking_app_padding_small"
                     android:hint="어떤 요리를 만들어 볼까요?"
                     android:textSize="@dimen/cooking_app_text_size_large" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_marginHorizontal="@dimen/cooking_app_padding_small"
+                        android:id="@+id/create_recipe_add_photo"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/icons_add_image"/>
+                    <ImageView
+                        android:id="@+id/create_recipe_view_photo"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/icons_not_image"/>
+
+                </LinearLayout>
+
+
+
+                <ImageView
+                    android:layout_marginHorizontal="@dimen/cooking_app_padding_mini"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/create_recipe_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             <LinearLayout
+                android:layout_marginTop="@dimen/cooking_app_padding_middle"
                 android:layout_marginBottom="@dimen/cooking_app_padding_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,6 +107,7 @@
                     android:orientation="vertical"
                     android:id="@+id/create_recipe_ingredient"
                     android:layout_width="match_parent"
+                    android:minHeight="50dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background_grey"
                     android:padding="@dimen/cooking_app_padding_small" >
@@ -85,45 +118,47 @@
                         />
                 </LinearLayout>
             </LinearLayout>
+                <TextView
+                    android:paddingVertical="@dimen/cooking_app_padding_mini"
+                    android:background="@drawable/top_rounded_background_grey"
+                    android:text="레시피"
+                    android:layout_marginLeft="@dimen/cooking_app_padding_middle"
+                    android:paddingHorizontal="@dimen/cooking_app_padding_small"
+                    android:textSize="@dimen/cooking_app_text_size_middle"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:background="@drawable/rounded_background_grey"
+                    android:padding="@dimen/cooking_app_padding_small"
                     android:id="@+id/create_recipe_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_add"
+                    android:background="@drawable/rounded_background_grey"
+                    android:layout_marginVertical="@dimen/cooking_app_padding_small"
+                    android:text="레시피 추가"
+                    android:textSize="@dimen/cooking_app_text_size_middle"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    style="@style/cooking_app_button_style"
+                    android:id="@+id/done"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="추가" />
             </LinearLayout>
+
         </ScrollView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_background"
-            app:layout_constraintBottom_toBottomOf="parent">
 
-            <Button
-                style="@style/cooking_app_button_style"
-                android:id="@+id/done"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:elevation="100dp"
-                android:text="완료" />
 
-            <Button
-                app:layout_constraintTop_toTopOf="@id/constraint_bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/cooking_app_button_style"
-                android:id="@+id/btn_delete"
-                app:layout_constraintLeft_toLeftOf="@id/btn_add"
-                app:layout_constraintRight_toRightOf="@id/done"
-                android:text="삭제" />
-
-            <Button
-                style="@style/cooking_app_button_style"
-                android:id="@+id/btn_add"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="추가" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

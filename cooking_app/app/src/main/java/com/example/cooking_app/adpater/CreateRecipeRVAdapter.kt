@@ -13,9 +13,13 @@ import com.example.cooking_app.models.RecipeModel
 class CreateRecipeRVAdapter() : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewHolder>() {
     private var recipe: List<String> =  emptyList()
     private var editTextChangeListener: ((text: String,position: Int) -> Unit)? = null
+    private var itemClickListener: ((position:Int) -> Unit)? = null
     fun submitList(newList: List<String>) {
         recipe = newList
         notifyDataSetChanged()
+    }
+    fun setOnItemClickListener(listener: (position:Int)-> Unit) {
+        itemClickListener = listener
     }
 
     fun setOnEditTextChangeListener(listener: (text: String,position: Int)  -> Unit) {
@@ -28,6 +32,9 @@ class CreateRecipeRVAdapter() : RecyclerView.Adapter<CreateRecipeRVAdapter.ViewH
 
         fun bind(item: String, position: Int) {
             number.text = (position + 1).toString() + "."
+            number.setOnClickListener {
+                itemClickListener?.invoke(position)
+            }
             content.setText(item)
             content.addTextChangedListener {
                 editTextChangeListener?.invoke(content.text.toString(),position)

@@ -3,15 +3,22 @@ package com.example.cooking_app.viewmodels
 import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airbnb.lottie.model.content.ContentModel
+import com.bumptech.glide.Glide
 import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBRef
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,6 +39,11 @@ class CreateRecipeViewModel() : ViewModel() {
         val newList = _mutableRecipeListModel.value!!.recipes
         newList.add(item)
         val new = RecipeModel(old.title, newList, old.ingredients, old.image)
+        _mutableRecipeListModel.value = new
+    }
+    fun editImage(src:String){
+        val old = _mutableRecipeListModel.value!!
+        val new = RecipeModel(old.title, old.recipes, old.ingredients, src)
         _mutableRecipeListModel.value = new
     }
 
@@ -60,19 +72,33 @@ class CreateRecipeViewModel() : ViewModel() {
         currentList[position] = text
     }
 
-    fun getData(key: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun getData(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
         FBRef.myRecipe.child(key).get().addOnSuccessListener {
             _mutableRecipeListModel.value = it.getValue(RecipeModel::class.java)
+            val link = liveRecipeListModel.value!!.image
+            if(!(link=="" || link==null)) {
+                val storageRef = Firebase.storage.reference.child(liveRecipeListModel.value!!.image)
+                storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Glide.with(App.context()).load(task.result)
+                            .into(iv)
+                        iv.visibility = View.GONE
+                    }
+                })
+            }
         }.addOnFailureListener {
             Log.e("firebase", "Error getting data", it)
         }
     }
+    fun setImage(iv:ImageView) = viewModelScope.launch (Dispatchers.IO){
 
-    fun deleteItem() {
+    }
+
+    fun deleteItem(position: Int) {
         if (_mutableRecipeListModel.value!!.recipes.size == 1) return
         val old = _mutableRecipeListModel.value!!
         val newList = _mutableRecipeListModel.value!!.recipes
-        newList.removeLast()
+        newList.removeAt(position)
         val new = RecipeModel(old.title, newList, old.ingredients, old.image)
         _mutableRecipeListModel.value = new
     }
@@ -96,7 +122,7 @@ class CreateRecipeViewModel() : ViewModel() {
             } catch (e: Exception) {
             }
         }
-        return "가격: "+cost.toString() + "원 열량: "+cal.toString() +"kcal"
+        return "가격: "+cost.toString() + "원  열량: "+cal.toString() +"kcal"
 
     }
 }

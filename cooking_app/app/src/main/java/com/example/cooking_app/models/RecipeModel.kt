@@ -4,5 +4,5 @@ data class RecipeModel (
     var title: String ="",
     var recipes : MutableList<String> = mutableListOf(),
     var ingredients: MutableList<RecipeIngredient> = mutableListOf(),
-    val image : String = "",
+    var image : String = "",
 )

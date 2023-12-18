@@ -1,22 +1,22 @@
 package com.example.cooking_app.views
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Dialog
 import android.content.DialogInterface
-import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,13 +26,16 @@ import com.example.cooking_app.adpater.MyRecipeIngredientAdapter
 import com.example.cooking_app.adpater.MyRecipeIngredientInfoAdapter
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
 import com.example.cooking_app.fragments.MyDialogFragment
-import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 
 class CreateRecipeActivity() : AppCompatActivity() {
@@ -41,30 +44,89 @@ class CreateRecipeActivity() : AppCompatActivity() {
     private val myIngredientAdapter = MyRecipeIngredientAdapter()
     private val myIngredientInfoAdapter = MyRecipeIngredientInfoAdapter()
     private val viewModel: CreateRecipeViewModel by viewModels()
+    private val viewModelFragment : MyRecipeFragmentViewModel by viewModels()
+    private lateinit var imageView: ImageView
+    private lateinit var viewPhoto: ImageView
+
     private lateinit var key: String
     private var isChanged = false
+    private var isChangedImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var countChanged = 0
         key = intent.getStringExtra("ID_KEY")!!
-        if (key == "NONE") {
-        } else {
-            viewModel.getData(key!!)
-        }
+
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
+        if (key == "NONE") {
+        } else {
+            viewModel.getData(key!!,binding.createRecipeImageview)
+        }
         val rv = binding.createRecipeRv
         val ingredientRv = binding.createRecipeIngredientRv
+        imageView = binding.createRecipeImageview
+        viewPhoto = binding.createRecipeViewPhoto
+
+        val getAction = registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+            ActivityResultCallback { uri ->
+                if (uri != null) {
+                    isChangedImage = true
+                    isChanged = true
+                    imageView.setImageURI(uri)
+                    viewPhoto.setImageResource(R.drawable.icons_view_image)
+                    imageView.visibility = View.VISIBLE
+
+                }
+            }
+        )
+        viewPhoto.setOnClickListener {
+            if (viewPhoto.drawable != null && viewPhoto.drawable.constantState?.equals(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.icons_view_image
+                    )?.constantState
+                ) == true
+            ) {
+                viewPhoto.setImageResource(R.drawable.icons_not_image)
+                imageView.visibility = View.GONE
+            } else {
+                viewPhoto.setImageResource(R.drawable.icons_view_image)
+                imageView.visibility = View.VISIBLE
+            }
+        }
 
         viewModel.liveRecipeListModel.observe(this, Observer {
             myIngredientAdapter.submitList(it.ingredients)
             myIngredientInfoAdapter.submitList(it.ingredients)
             binding.createRecipeTvData.text = viewModel.getInformation()
         })
+        myAdapter.setOnItemClickListener {
+            if (viewModel.liveRecipeListModel.value!!.recipes[it] != "") {
+                AlertDialog.Builder(this)
+                    .setMessage(
+                        (it + 1).toString() + "번. "
+                                + viewModel.liveRecipeListModel.value!!.recipes[it]
+                                + "\n 삭제하시겠습니까?"
+                    )
+                    .setPositiveButton("삭제",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            viewModel.deleteItem(it)
+                            isChanged = true
+                        })
+                    .setNegativeButton("취소",
+                        DialogInterface.OnClickListener { dialog, id ->
+                        })
+                    .show()
+            } else {
+                viewModel.deleteItem(it)
+                isChanged = true
+            }
+        }
+
         myIngredientInfoAdapter.setOnLongItemClickListener {
             MyDialogFragment(it).show(supportFragmentManager, "dialog")
-
         }
         myIngredientAdapter.setOnItemClickListener {
             MyDialogFragment(-1).show(supportFragmentManager, "dialog")
@@ -84,6 +146,8 @@ class CreateRecipeActivity() : AppCompatActivity() {
             myAdapter.submitList(it.recipes)
             binding.createRecipeEtTitle.setText(it.title)
         })
+
+
 
         binding.createRecipeEtTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -112,28 +176,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         binding.done.setOnClickListener {
             save(key!!)
         }
-        binding.btnDelete.setOnClickListener {
-            if (viewModel.liveRecipeListModel.value!!.recipes.last().trim() != "") {
-                AlertDialog.Builder(this)
-                    .setMessage((viewModel.liveRecipeListModel.value!!.recipes.lastIndex + 1).toString() + "번. "
-                            + viewModel.liveRecipeListModel.value!!.recipes.last()
-                            + "\n 삭제하시겠습니까?")
-                    .setPositiveButton("삭제",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            viewModel.deleteItem()
-                            isChanged = true
-                        })
-                    .setNegativeButton("취소",
-                        DialogInterface.OnClickListener { dialog, id ->
-                        })
-                    .show()
-            }else{
-                viewModel.deleteItem()
-                isChanged = true
-            }
 
-
-        }
         binding.btnAdd.setOnClickListener {
             viewModel.addItem("")
             isChanged = true
@@ -142,18 +185,40 @@ class CreateRecipeActivity() : AppCompatActivity() {
             MyDialogFragment(-1).show(supportFragmentManager, "dialog")
         }
         binding.createRecipeTvIngredient.setOnClickListener {
-            it.setBackgroundResource(R.drawable.top_rounded_background_grey)
-            binding.createRecipeTvInfo.setBackgroundResource(R.drawable.top_rounded_background_point)
+            it.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_grey)
+            binding.createRecipeTvInfo.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_point)
             ingredientRv.adapter = myIngredientAdapter
             ingredientRv.layoutManager = GridLayoutManager(this, 2)
         }
         binding.createRecipeTvInfo.setOnClickListener {
-            binding.createRecipeTvIngredient.setBackgroundResource(R.drawable.top_rounded_background_point)
-            it.setBackgroundResource(R.drawable.top_rounded_background_grey)
+            binding.createRecipeTvIngredient.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_point)
+            it.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_grey)
             ingredientRv.adapter = myIngredientInfoAdapter
             ingredientRv.layoutManager = LinearLayoutManager(this)
         }
+        binding.createRecipeAddPhoto.setOnClickListener {
+            getAction.launch("image/*")
+        }
+        imageView.setOnClickListener {
+            getAction.launch("image/*")
+        }
+        imageView.setOnLongClickListener {
+            AlertDialog.Builder(this)
+                .setMessage("사진을 삭제하시겠습니까?")
+                .setPositiveButton("삭제",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        isChanged = true
+                        imageView.setImageResource(0)
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+                .show()
+            true
+        }
+
     }
+
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
@@ -175,13 +240,51 @@ class CreateRecipeActivity() : AppCompatActivity() {
     }
 
     private fun save(key: String) {
-        if (key!! == "NONE") {
-            FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
-        } else {
-            FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+        if (isChanged) {
+            if (isChangedImage) {
+                uploadImage(FBAuth.getUid())
+            } else {
+                // 이미지가 없는 경우에 대한 처리
+                if (key == "NONE") {
+                    FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
+                } else {
+                    FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+                }
+                Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
-        Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    private fun uploadImage(uid: String) {
+        val storage = Firebase.storage
+        val storageRef = storage.reference.child("$uid.png")
+        // Get the data from an ImageView as bytes
+        imageView.isDrawingCacheEnabled = true
+        imageView.buildDrawingCache()
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        var uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+        }.addOnSuccessListener { taskSnapshot ->
+            GlobalScope.launch(Dispatchers.Main) {
+                viewModel.editImage(taskSnapshot.storage.name)
+                if (key == "NONE") {
+                    FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
+                } else {
+                    FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+                }
+
+                Toast.makeText(this@CreateRecipeActivity, "성공적으로 저장하였습니다!!", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+
+        }
     }
 }
 

@@ -77,9 +77,19 @@ dependencies {
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+
+    // CardView
+    implementation("androidx.cardview:cardview:1.0.0")
+
+
     // FireBase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-storage")
+
+
 }
