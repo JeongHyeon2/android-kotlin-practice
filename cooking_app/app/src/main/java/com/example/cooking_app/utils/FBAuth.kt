@@ -9,5 +9,8 @@ class FBAuth {
             auth = FirebaseAuth.getInstance()
             return auth.currentUser?.uid.toString()
         }
+        fun logout()  {
+            auth.signOut()
+        }
     }
 }

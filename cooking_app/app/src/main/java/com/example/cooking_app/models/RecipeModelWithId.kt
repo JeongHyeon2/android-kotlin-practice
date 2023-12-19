@@ -1,6 +1,17 @@
 package com.example.cooking_app.models
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.cooking_app.room.GsonConverter
+
+@Entity("recipe_model_with_id")
+@TypeConverters(GsonConverter::class)
 data class RecipeModelWithId (
-    val id : String,
-    val model :RecipeModel,
+    @PrimaryKey()
+    @ColumnInfo(name = "id")
+    var id : String,
+    @ColumnInfo(name = "model")
+    var model :RecipeModel,
 )

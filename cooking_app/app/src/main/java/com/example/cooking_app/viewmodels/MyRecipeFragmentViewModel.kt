@@ -12,12 +12,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
+import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(application){
     private var _mutableRecipeListModel = MutableLiveData<MutableList<RecipeModelWithId>>(mutableListOf())
@@ -25,6 +27,8 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
 
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> get() = _loadingState
+
+    private val db = MyDatabase.getDatabase(application.baseContext)
 
     private fun deleteItem(key:String) = viewModelScope.launch (Dispatchers.IO){
         FBRef.myRecipe.child(key).removeValue()
@@ -50,12 +54,27 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         }
         FBRef.myRecipe.addListenerForSingleValueEvent(postListener)
     }
+    fun getDataFromDB() = viewModelScope.launch(Dispatchers.IO) {
+        val dataFromDB = db.myDao().getAllDataWithFlow()
+
+        dataFromDB.collect { recipeList ->
+
+            withContext(Dispatchers.Main) {
+                _mutableRecipeListModel.value = recipeList.toMutableList()
+            }
+        }
+    }
+
     fun deleteDialog(position : Int,item: RecipeModelWithId,thisContext : Context){
         val builder = AlertDialog.Builder(thisContext)
         builder.setTitle("삭제 확인")
             .setMessage("정말 "+item.model.title+"을/를 삭제하시겠습니까?")
             .setPositiveButton("확인",
                 DialogInterface.OnClickListener { dialog, id ->
+
+                    viewModelScope.launch(Dispatchers.IO){
+                        db.myDao().delete(item)
+                    }
                     deleteItem(item.id)
                     val list = _mutableRecipeListModel.value!!
                     list.removeAt(position)

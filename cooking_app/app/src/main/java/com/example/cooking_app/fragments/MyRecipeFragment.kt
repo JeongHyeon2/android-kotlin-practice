@@ -71,7 +71,7 @@ class MyRecipeFragment() : Fragment() {
     }
 
     override fun onResume() {
-        viewModel.getData()
+        viewModel.getDataFromDB()
         Log.d("dddddswewe","resume")
 
         super.onResume()

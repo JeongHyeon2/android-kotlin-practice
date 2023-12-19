@@ -29,11 +29,14 @@ import com.example.cooking_app.adpater.MyRecipeIngredientAdapter
 import com.example.cooking_app.adpater.MyRecipeIngredientInfoAdapter
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
 import com.example.cooking_app.fragments.MyDialogFragment
+import com.example.cooking_app.models.RecipeModelWithId
+import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -63,7 +66,8 @@ class CreateRecipeActivity() : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
         if (uniqueKey == "NONE") {
         } else {
-            viewModel.getData(uniqueKey!!, binding.createRecipeImageview)
+           // viewModel.getData(uniqueKey!!, binding.createRecipeImageview)
+            viewModel.getDataFromDB(uniqueKey!!,binding.createRecipeImageview)
         }
         val rv = binding.createRecipeRv
         val ingredientRv = binding.createRecipeIngredientRv
@@ -244,14 +248,28 @@ class CreateRecipeActivity() : AppCompatActivity() {
             if (isChangedImage) {
                 uploadImage(FBAuth.getUid())
             } else {
-                // 이미지가 없는 경우에 대한 처리
+                var toggle = false
                 if (key == "NONE") {
                     uniqueKey = FBRef.myRecipe.push().key.toString()
+                    toggle = true
                 }
                 FBRef.myRecipe.child(uniqueKey).setValue(viewModel.liveRecipeListModel.value)
                 val resultIntent = Intent()
                 resultIntent.putExtra("RESULT", uniqueKey)
                 setResult(Activity.RESULT_OK, resultIntent)
+                val db = MyDatabase.getDatabase(this)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    if(toggle){
+                        db.myDao().insert(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
+
+                    }else{
+                        db.myDao().update(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
+
+                    }
+                }
+
+
                 Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
                 finish()
             }

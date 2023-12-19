@@ -91,5 +91,16 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-storage")
 
+    val room_version = "2.5.0"
+    // ROOM
+    implementation ("androidx.room:room-runtime:$room_version")
+    kapt ("androidx.room:room-compiler:$room_version")
+
+   // optional - Kotlin Extensions and Coroutines support for Room
+    implementation ("androidx.room:room-ktx:$room_version")
+
+    implementation ("com.google.code.gson:gson:2.8.9")
+
+
 
 }

@@ -14,6 +14,7 @@ import com.airbnb.lottie.model.content.ContentModel
 import com.bumptech.glide.Glide
 import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.models.RecipeModel
+import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBRef
 import com.google.android.gms.tasks.OnCompleteListener
@@ -21,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreateRecipeViewModel() : ViewModel() {
     private var _mutableRecipeListModel = MutableLiveData<RecipeModel>(
@@ -32,6 +34,7 @@ class CreateRecipeViewModel() : ViewModel() {
         )
     )
     val liveRecipeListModel: LiveData<RecipeModel> get() = _mutableRecipeListModel
+    private val db = MyDatabase.getDatabase(App.context())
 
 
     fun addItem(item: String) {
@@ -90,7 +93,12 @@ class CreateRecipeViewModel() : ViewModel() {
             Log.e("firebase", "Error getting data", it)
         }
     }
-
+    fun getDataFromDB(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
+        val data = db.myDao().getOneData(key).model
+        withContext(Dispatchers.Main){
+            _mutableRecipeListModel.value = data
+        }
+    }
 
     fun deleteItem(position: Int) {
         if (_mutableRecipeListModel.value!!.recipes.size == 1) return
