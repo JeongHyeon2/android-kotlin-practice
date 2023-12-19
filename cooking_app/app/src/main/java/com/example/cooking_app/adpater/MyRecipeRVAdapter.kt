@@ -65,7 +65,7 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
             iv.setOnClickListener { itemClickListener?.invoke(position) }
             iv.setOnLongClickListener {
                 longItemClickListener?.invoke(position)
-                true // Return true to consume the long click event
+                true
             }
             background.setOnClickListener { itemClickListener?.invoke(position) }
             background.setOnLongClickListener {

@@ -1,5 +1,6 @@
 package com.example.cooking_app.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -52,10 +53,11 @@ class MyRecipeFragment() : Fragment() {
         myAdapter.setOnItemClickListener { position ->
             val intent = Intent(activity, CreateRecipeActivity::class.java)
             intent.putExtra("ID_KEY", viewModel.liveRecipeListModel.value!![position].id)
-            startActivity(intent)
+            startActivityForResult(intent, 100)
         }
         myAdapter.setOnLongItemClickListener { position ->
             viewModel.deleteDialog(
+                position,
                 viewModel.liveRecipeListModel.value!![position],
                 requireContext()
             )
@@ -64,12 +66,13 @@ class MyRecipeFragment() : Fragment() {
         binding.myRecipeFab.setOnClickListener {
             val intent = Intent(activity, CreateRecipeActivity::class.java)
             intent.putExtra("ID_KEY", "NONE")
-            startActivity(intent)
+            startActivityForResult(intent, 100)
         }
     }
 
     override fun onResume() {
         viewModel.getData()
+        Log.d("dddddswewe","resume")
 
         super.onResume()
     }
@@ -77,5 +80,21 @@ class MyRecipeFragment() : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("resulddddt",requestCode.toString())
+        Log.d("resulddddt",resultCode.toString())
+        Log.d("resulddddt",data.toString())
+
+
+
+        if (requestCode == 100 ) {
+            // 처리할 결과가 있을 경우 여기에서 처리
+            if (data != null) {
+                val result = data.getStringExtra("RESULT")
+
+            }
+        }
     }
 }

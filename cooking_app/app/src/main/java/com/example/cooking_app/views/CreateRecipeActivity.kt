@@ -1,12 +1,15 @@
 package com.example.cooking_app.views
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -29,7 +32,6 @@ import com.example.cooking_app.fragments.MyDialogFragment
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
-import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -44,24 +46,24 @@ class CreateRecipeActivity() : AppCompatActivity() {
     private val myIngredientAdapter = MyRecipeIngredientAdapter()
     private val myIngredientInfoAdapter = MyRecipeIngredientInfoAdapter()
     private val viewModel: CreateRecipeViewModel by viewModels()
-    private val viewModelFragment : MyRecipeFragmentViewModel by viewModels()
     private lateinit var imageView: ImageView
     private lateinit var viewPhoto: ImageView
 
-    private lateinit var key: String
+    private lateinit var uniqueKey: String
     private var isChanged = false
     private var isChangedImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var countChanged = 0
-        key = intent.getStringExtra("ID_KEY")!!
+        var countTextChanged = 0
+        uniqueKey = intent.getStringExtra("ID_KEY")!!
 
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_recipe)
-        if (key == "NONE") {
+        if (uniqueKey == "NONE") {
         } else {
-            viewModel.getData(key!!,binding.createRecipeImageview)
+            viewModel.getData(uniqueKey!!, binding.createRecipeImageview)
         }
         val rv = binding.createRecipeRv
         val ingredientRv = binding.createRecipeIngredientRv
@@ -81,6 +83,10 @@ class CreateRecipeActivity() : AppCompatActivity() {
                 }
             }
         )
+        binding.btnAddIngredient.setOnClickListener {
+            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
+
+        }
         viewPhoto.setOnClickListener {
             if (viewPhoto.drawable != null && viewPhoto.drawable.constantState?.equals(
                     ContextCompat.getDrawable(
@@ -125,22 +131,18 @@ class CreateRecipeActivity() : AppCompatActivity() {
             }
         }
 
-        myIngredientInfoAdapter.setOnLongItemClickListener {
+        myIngredientInfoAdapter.setOnItemClickListener {
             MyDialogFragment(it).show(supportFragmentManager, "dialog")
         }
         myIngredientAdapter.setOnItemClickListener {
-            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
-        }
-        myIngredientInfoAdapter.setOnItemClickListener {
-            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
-        }
-        myIngredientAdapter.setOnLongItemClickListener {
             MyDialogFragment(it).show(supportFragmentManager, "dialog")
         }
 
         myAdapter.setOnEditTextChangeListener { text, position ->
             viewModel.updateText(text, position)
-            isChanged = true
+            countTextChanged++
+            if(countTextChanged>=2){ isChanged = true}
+
         }
         viewModel.liveRecipeListModel.observe(this, Observer {
             myAdapter.submitList(it.recipes)
@@ -174,16 +176,14 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
 
         binding.done.setOnClickListener {
-            save(key!!)
+            save(uniqueKey!!)
         }
 
         binding.btnAdd.setOnClickListener {
             viewModel.addItem("")
             isChanged = true
         }
-        binding.createRecipeIngredient.setOnClickListener {
-            MyDialogFragment(-1).show(supportFragmentManager, "dialog")
-        }
+
         binding.createRecipeTvIngredient.setOnClickListener {
             it.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_grey)
             binding.createRecipeTvInfo.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_point)
@@ -227,7 +227,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
                 .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
                 .setPositiveButton("저장 후 종료",
                     DialogInterface.OnClickListener { dialog, id ->
-                        save(key!!)
+                        save(uniqueKey!!)
                     })
                 .setNegativeButton("저장하지 않고 종료",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -246,15 +246,18 @@ class CreateRecipeActivity() : AppCompatActivity() {
             } else {
                 // 이미지가 없는 경우에 대한 처리
                 if (key == "NONE") {
-                    FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
-                } else {
-                    FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+                    uniqueKey = FBRef.myRecipe.push().key.toString()
                 }
+                FBRef.myRecipe.child(uniqueKey).setValue(viewModel.liveRecipeListModel.value)
+                val resultIntent = Intent()
+                resultIntent.putExtra("RESULT", uniqueKey)
+                setResult(Activity.RESULT_OK, resultIntent)
                 Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
                 finish()
             }
+        }else{
+            finish()
         }
-        finish()
     }
 
     private fun uploadImage(uid: String) {
@@ -273,15 +276,27 @@ class CreateRecipeActivity() : AppCompatActivity() {
         }.addOnSuccessListener { taskSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 viewModel.editImage(taskSnapshot.storage.name)
-                if (key == "NONE") {
-                    FBRef.myRecipe.push().setValue(viewModel.liveRecipeListModel.value)
-                } else {
-                    FBRef.myRecipe.child(key).setValue(viewModel.liveRecipeListModel.value)
+                if (uniqueKey == "NONE") {
+                    uniqueKey = FBRef.myRecipe.push().key.toString()
                 }
+                Log.d("resulddddt","unique : "+uniqueKey)
+                FBRef.myRecipe.child(uniqueKey).setValue(viewModel.liveRecipeListModel.value)
+                    .addOnSuccessListener {
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("RESULT", uniqueKey)
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        Log.d("resulddddt", uniqueKey)
 
-                Toast.makeText(this@CreateRecipeActivity, "성공적으로 저장하였습니다!!", Toast.LENGTH_SHORT)
-                    .show()
-                finish()
+                        Toast.makeText(
+                            this@CreateRecipeActivity,
+                            "성공적으로 저장하였습니다!!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        finish()
+                    }
+
+
             }
 
         }

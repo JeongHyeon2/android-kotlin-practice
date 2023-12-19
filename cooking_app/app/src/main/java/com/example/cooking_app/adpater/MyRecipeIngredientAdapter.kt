@@ -13,15 +13,12 @@ import com.example.cooking_app.models.RecipeIngredient
 
 class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapter.ViewHolder>() {
     private var ingredientList: List<RecipeIngredient> =  emptyList()
-    private var longItemClickListener: ((position: Int) -> Unit)? = null
-    private var itemClickListener: (() -> Unit)? = null
+    private var itemClickListener: ((position: Int) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: ()-> Unit) {
+    fun setOnItemClickListener(listener: (position: Int)-> Unit) {
         itemClickListener = listener
     }
-    fun setOnLongItemClickListener(listener: (position: Int) -> Unit) {
-        longItemClickListener = listener
-    }
+
     fun submitList(newList: List<RecipeIngredient>) {
         ingredientList = newList
         notifyDataSetChanged()
@@ -37,12 +34,9 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
         fun bind(item:RecipeIngredient) {
             name.text = "• "+item.name+" "
             amount.text = item.amount +"g"
-            layout.setOnLongClickListener {
-                longItemClickListener?.invoke(position)
-                true // Return true to consume the long click event
-            }
+
             layout.setOnClickListener {
-                itemClickListener?.invoke()
+                itemClickListener?.invoke(position)
             }
 
         }

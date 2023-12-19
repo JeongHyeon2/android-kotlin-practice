@@ -90,9 +90,7 @@ class CreateRecipeViewModel() : ViewModel() {
             Log.e("firebase", "Error getting data", it)
         }
     }
-    fun setImage(iv:ImageView) = viewModelScope.launch (Dispatchers.IO){
 
-    }
 
     fun deleteItem(position: Int) {
         if (_mutableRecipeListModel.value!!.recipes.size == 1) return

@@ -116,7 +116,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         />
+
                 </LinearLayout>
+                <Button
+                    android:id="@+id/btn_add_ingredient"
+                    android:background="@drawable/rounded_background_grey"
+                    android:layout_marginVertical="@dimen/cooking_app_padding_small"
+                    android:text="재료 추가"
+                    android:textSize="@dimen/cooking_app_text_size_middle"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
                 <TextView
                     android:paddingVertical="@dimen/cooking_app_padding_mini"
