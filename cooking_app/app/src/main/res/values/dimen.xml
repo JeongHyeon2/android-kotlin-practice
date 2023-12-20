@@ -4,6 +4,7 @@
     <dimen name="cooking_app_padding_small">12dp</dimen>
     <dimen name="cooking_app_padding_middle">16dp</dimen>
     <dimen name="cooking_app_padding_large">20dp</dimen>
+    <dimen name="cooking_app_padding_xlarge">24dp</dimen>
     <dimen name="cooking_app_text_size_large">22sp</dimen>
     <dimen name="cooking_app_text_size_middle">18sp</dimen>
     <dimen name="cooking_app_text_size_small">14sp</dimen>

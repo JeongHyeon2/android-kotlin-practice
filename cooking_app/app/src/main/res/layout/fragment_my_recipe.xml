@@ -27,15 +27,17 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
+
             android:paddingTop="@dimen/cooking_app_padding_large"
             android:id="@+id/my_recipe_rv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="@dimen/cooking_app_padding_small"
+            android:layout_gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/my_recipe_fab" />
+            />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/my_recipe_fab"
