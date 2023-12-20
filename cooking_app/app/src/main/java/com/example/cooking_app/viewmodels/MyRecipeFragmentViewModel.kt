@@ -62,10 +62,20 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         val dataFromDB = db.myDao().getAllDataWithFlow()
 
         dataFromDB.collect { recipeList ->
-            recipeList.reversed()
             withContext(Dispatchers.Main) {
                 _mutableRecipeListModel.value = recipeList.toMutableList()
             }
+        }
+    }
+    fun getOneData(id:String)= viewModelScope.launch(Dispatchers.IO) {
+        val data = db.myDao().getOneData(id)
+        withContext(Dispatchers.Main){
+            val old = _mutableRecipeListModel.value
+            val index = old!!.indexOfFirst{ it.id == id}
+            if(index!=-1){
+                old[index] = data
+            }
+            _mutableRecipeListModel.value = old!!
         }
     }
 

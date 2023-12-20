@@ -35,7 +35,19 @@ class CreateRecipeViewModel() : ViewModel() {
         )
     )
     val liveRecipeListModel: LiveData<RecipeModel> get() = _mutableRecipeListModel
+
+    private val _loadingState = MutableLiveData<Boolean>()
+    val loadingState: LiveData<Boolean> get() = _loadingState
+
     private val db = MyDatabase.getDatabase(App.context())
+
+    fun setLoadingStateTrue()=viewModelScope.launch(Dispatchers.Main) {
+        _loadingState.value = true
+    }
+    fun setLoadingStateFalse()=viewModelScope.launch(Dispatchers.Main) {
+        _loadingState.value = false
+    }
+
 
 
     fun addItem(item: String) {
@@ -99,7 +111,12 @@ class CreateRecipeViewModel() : ViewModel() {
         val image = db.imageDao().getOneData(FBAuth.getUid()+"."+key)
         withContext(Dispatchers.Main){
             _mutableRecipeListModel.value = data
-            iv.setImageBitmap(image.image)
+            if(image!=null){
+                if(image.image!=null){
+                    iv.setImageBitmap(image.image)
+                }
+            }
+
             iv.visibility = View.GONE
         }
     }

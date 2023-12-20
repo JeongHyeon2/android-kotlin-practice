@@ -43,6 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 
@@ -54,6 +55,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
     private val viewModel: CreateRecipeViewModel by viewModels()
     private lateinit var imageView: ImageView
     private lateinit var viewPhoto: ImageView
+    private val resultIntent = Intent()
 
     private lateinit var uniqueKey: String
     private var isChanged = false
@@ -76,6 +78,8 @@ class CreateRecipeActivity() : AppCompatActivity() {
         val ingredientRv = binding.createRecipeIngredientRv
         imageView = binding.createRecipeImageview
         viewPhoto = binding.createRecipeViewPhoto
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         val getAction = registerForActivityResult(
             ActivityResultContracts.GetContent(),
@@ -154,6 +158,9 @@ class CreateRecipeActivity() : AppCompatActivity() {
         viewModel.liveRecipeListModel.observe(this, Observer {
             myAdapter.submitList(it.recipes)
             binding.createRecipeEtTitle.setText(it.title)
+        })
+        viewModel.loadingState.observe(this, Observer {
+
         })
 
 
@@ -263,17 +270,19 @@ class CreateRecipeActivity() : AppCompatActivity() {
                 val db = MyDatabase.getDatabase(this)
 
                 CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.setLoadingStateTrue()
                     if(toggle){
                         db.myDao().insert(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
 
                     }else{
                         db.myDao().update(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
-
                     }
                 }
-
-
                 Toast.makeText(this, "성공적으로 저장하였습니다", Toast.LENGTH_SHORT).show()
+
+                resultIntent.putExtra("RESULT", uniqueKey)
+                setResult(Activity.RESULT_OK, resultIntent)
+                viewModel.setLoadingStateFalse()
                 finish()
             }
         }else{
@@ -288,12 +297,12 @@ class CreateRecipeActivity() : AppCompatActivity() {
         val storage = Firebase.storage
         var storageRef :StorageReference? = null
         GlobalScope.launch(Dispatchers.IO) {
+            viewModel.setLoadingStateTrue()
         if (uniqueKey == "NONE") {
                 uniqueKey = FBRef.myRecipe.push().key.toString()
                 toggle = true
             }
             storageRef = storage.reference.child("$uid.$uniqueKey.png")
-
 
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()
@@ -304,26 +313,46 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
 
         var uploadTask = storageRef!!.putBytes(data)
+            GlobalScope.launch(Dispatchers.IO){
+                val targetTimeMillis = System.currentTimeMillis() + 10000 // 현재 시간에 7초(7000밀리초)를 더한 값
 
-        uploadTask.addOnFailureListener {
+                while (System.currentTimeMillis() < targetTimeMillis) {
+
+                }
+                uploadTask.cancel()
+                withContext(Dispatchers.Main){
+                    Toast.makeText(baseContext,"네트워크 연결을 확인해주세요",Toast.LENGTH_SHORT).show()
+                    viewModel.setLoadingStateFalse()
+                    return@withContext
+                }
+
+            }
+            uploadTask.addOnFailureListener {
+
         }.addOnSuccessListener { taskSnapshot ->
+
             GlobalScope.launch(Dispatchers.Main) {
                 viewModel.editImage(taskSnapshot.storage.name)
 
                 FBRef.myRecipe.child(uniqueKey).setValue(viewModel.liveRecipeListModel.value)
                     .addOnSuccessListener {
-
-
                         CoroutineScope(Dispatchers.IO).launch {
                             if(toggle){
                                 db.myDao().insert(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
-                                db.imageDao().insert(ImageEntity("$uid.$uniqueKey",bitmap))
                             }else{
                                 db.myDao().update(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
+                            }
+
+                        }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val image =  db.imageDao().getOneData("$uid.$uniqueKey")
+                            if(image==null){
+                                db.imageDao().insert(ImageEntity("$uid.$uniqueKey",bitmap))
+                            }else{
                                 db.imageDao().update(ImageEntity("$uid.$uniqueKey",bitmap))
                             }
                         }
-                        val resultIntent = Intent()
+
                         resultIntent.putExtra("RESULT", uniqueKey)
                         setResult(Activity.RESULT_OK, resultIntent)
 
@@ -333,12 +362,10 @@ class CreateRecipeActivity() : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         )
                             .show()
+                        viewModel.setLoadingStateFalse()
                         finish()
                     }
-
-
             }
-
         }
         }
     }

@@ -1,5 +1,13 @@
 package com.example.cooking_app.adpater
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,8 +72,22 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
                 CoroutineScope(Dispatchers.IO).launch {
                     val image = db.imageDao().getOneData(FBAuth.getUid() + "." + item.id)
                     withContext(Dispatchers.Main) {
-                        if(image.image!=null) {
-                            iv.setImageBitmap(image.image)
+                        if(image!=null) {
+                            if (image.image != null) {
+                                iv.setImageBitmap(image.image)
+                                val bitmap = image.image
+                                val roundedBitmap = Bitmap.createBitmap(bitmap!!.width, bitmap.height, bitmap.config)
+                                val canvas = Canvas(roundedBitmap)
+                                val paint = Paint()
+                                val rect = Rect(0, 0, bitmap.width, bitmap.height)
+                                val rectF = RectF(rect)
+                                val radius = 30f
+                                paint.isAntiAlias = true
+                                canvas.drawRoundRect(rectF, radius, radius, paint)
+                                paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+                                canvas.drawBitmap(bitmap, rect, rect, paint)
+                                iv.setImageBitmap(roundedBitmap)
+                            }
                         }
                     }
 
