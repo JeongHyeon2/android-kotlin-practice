@@ -14,10 +14,12 @@ import com.example.cooking_app.utils.FBRef
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-@Database(entities = [RecipeModelWithId::class], version = 1)
+@Database(entities = [RecipeModelWithId::class,ImageEntity::class], version = 1)
 abstract class MyDatabase() : RoomDatabase() {
 
     abstract fun myDao(): MyDao
+    abstract fun imageDao(): ImageDao
+
 
     companion object {
 

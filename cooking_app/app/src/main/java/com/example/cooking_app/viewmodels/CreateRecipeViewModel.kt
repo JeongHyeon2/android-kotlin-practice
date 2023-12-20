@@ -16,6 +16,7 @@ import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
+import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.ktx.Firebase
@@ -95,8 +96,11 @@ class CreateRecipeViewModel() : ViewModel() {
     }
     fun getDataFromDB(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
         val data = db.myDao().getOneData(key).model
+        val image = db.imageDao().getOneData(FBAuth.getUid()+"."+key)
         withContext(Dispatchers.Main){
             _mutableRecipeListModel.value = data
+            iv.setImageBitmap(image.image)
+            iv.visibility = View.GONE
         }
     }
 

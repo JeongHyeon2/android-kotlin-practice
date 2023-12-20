@@ -14,15 +14,22 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.cooking_app.R
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
+import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
+import com.example.cooking_app.utils.FBAuth
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
     private var recipeList: List<RecipeModelWithId> = emptyList()
     private var itemClickListener: ((position: Int) -> Unit)? = null
     private var longItemClickListener: ((position: Int) -> Unit)? = null
+    private val db = MyDatabase.getDatabase(App.context())
 
 
     fun submitList(newList: List<RecipeModelWithId>) {
@@ -44,16 +51,27 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
         private val background: LinearLayout = view.findViewById(R.id.my_recipe_rv_item_background)
 
         fun bind(item: RecipeModelWithId, position: Int) {
-            if(item.model.image!="") {
-                val storageRef = Firebase.storage.reference.child("${item.model.image}")
-                storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Glide.with(App.context()).load(task.result)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
-                            .into(iv)
+            if (item.model.image != "") {
+//                val storageRef = Firebase.storage.reference.child("${item.model.image}")
+//                storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        Glide.with(App.context()).load(task.result)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
+//                            .into(iv)
+//                    }
+//                })
+                CoroutineScope(Dispatchers.IO).launch {
+                    val image = db.imageDao().getOneData(FBAuth.getUid() + "." + item.id)
+                    withContext(Dispatchers.Main) {
+                        if(image.image!=null) {
+                            iv.setImageBitmap(image.image)
+                        }
                     }
-                })
+
+                }
+
+
             }
             title.text = item.model.title
             title.setOnClickListener { itemClickListener?.invoke(position) }

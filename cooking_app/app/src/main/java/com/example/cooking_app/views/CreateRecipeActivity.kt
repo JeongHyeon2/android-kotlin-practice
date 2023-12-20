@@ -30,11 +30,14 @@ import com.example.cooking_app.adpater.MyRecipeIngredientInfoAdapter
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
 import com.example.cooking_app.fragments.MyDialogFragment
 import com.example.cooking_app.models.RecipeModelWithId
+import com.example.cooking_app.room.ImageEntity
 import com.example.cooking_app.room.MyDatabase
+import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -279,9 +282,19 @@ class CreateRecipeActivity() : AppCompatActivity() {
     }
 
     private fun uploadImage(uid: String) {
+        val db = MyDatabase.getDatabase(App.context())
+
+        var toggle = false
         val storage = Firebase.storage
-        val storageRef = storage.reference.child("$uid.png")
-        // Get the data from an ImageView as bytes
+        var storageRef :StorageReference? = null
+        GlobalScope.launch(Dispatchers.IO) {
+        if (uniqueKey == "NONE") {
+                uniqueKey = FBRef.myRecipe.push().key.toString()
+                toggle = true
+            }
+            storageRef = storage.reference.child("$uid.$uniqueKey.png")
+
+
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
@@ -289,21 +302,30 @@ class CreateRecipeActivity() : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
 
-        var uploadTask = storageRef.putBytes(data)
+
+        var uploadTask = storageRef!!.putBytes(data)
+
         uploadTask.addOnFailureListener {
         }.addOnSuccessListener { taskSnapshot ->
             GlobalScope.launch(Dispatchers.Main) {
                 viewModel.editImage(taskSnapshot.storage.name)
-                if (uniqueKey == "NONE") {
-                    uniqueKey = FBRef.myRecipe.push().key.toString()
-                }
-                Log.d("resulddddt","unique : "+uniqueKey)
+
                 FBRef.myRecipe.child(uniqueKey).setValue(viewModel.liveRecipeListModel.value)
                     .addOnSuccessListener {
+
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if(toggle){
+                                db.myDao().insert(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
+                                db.imageDao().insert(ImageEntity("$uid.$uniqueKey",bitmap))
+                            }else{
+                                db.myDao().update(RecipeModelWithId( uniqueKey,viewModel.liveRecipeListModel.value!!))
+                                db.imageDao().update(ImageEntity("$uid.$uniqueKey",bitmap))
+                            }
+                        }
                         val resultIntent = Intent()
                         resultIntent.putExtra("RESULT", uniqueKey)
                         setResult(Activity.RESULT_OK, resultIntent)
-                        Log.d("resulddddt", uniqueKey)
 
                         Toast.makeText(
                             this@CreateRecipeActivity,
@@ -317,6 +339,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
             }
 
+        }
         }
     }
 }

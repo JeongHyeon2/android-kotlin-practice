@@ -72,8 +72,6 @@ class MyRecipeFragment() : Fragment() {
 
     override fun onResume() {
         viewModel.getDataFromDB()
-        Log.d("dddddswewe","resume")
-
         super.onResume()
     }
 
@@ -83,12 +81,7 @@ class MyRecipeFragment() : Fragment() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("resulddddt",requestCode.toString())
-        Log.d("resulddddt",resultCode.toString())
-        Log.d("resulddddt",data.toString())
-
-
-
+        viewModel.getDataFromDB()
         if (requestCode == 100 ) {
             // 처리할 결과가 있을 경우 여기에서 처리
             if (data != null) {

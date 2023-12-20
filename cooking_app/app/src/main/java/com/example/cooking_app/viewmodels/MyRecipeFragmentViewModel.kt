@@ -13,10 +13,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
 import com.example.cooking_app.room.MyDatabase
+import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,6 +34,8 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
 
     private fun deleteItem(key:String) = viewModelScope.launch (Dispatchers.IO){
         FBRef.myRecipe.child(key).removeValue()
+        val storageReference = FirebaseStorage.getInstance().reference.child(FBAuth.getUid()+"."+key+".png")
+        storageReference.delete()
     }
     fun getData() = viewModelScope.launch(Dispatchers.IO) {
         _loadingState.postValue(true) // 로딩 상태 시작
@@ -58,7 +62,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         val dataFromDB = db.myDao().getAllDataWithFlow()
 
         dataFromDB.collect { recipeList ->
-
+            recipeList.reversed()
             withContext(Dispatchers.Main) {
                 _mutableRecipeListModel.value = recipeList.toMutableList()
             }
@@ -74,6 +78,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
 
                     viewModelScope.launch(Dispatchers.IO){
                         db.myDao().delete(item)
+                        db.imageDao().deleteById(FBAuth.getUid()+"."+item.id)
                     }
                     deleteItem(item.id)
                     val list = _mutableRecipeListModel.value!!
