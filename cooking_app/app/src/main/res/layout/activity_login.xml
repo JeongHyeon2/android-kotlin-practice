@@ -14,7 +14,16 @@
         tools:context=".views.JoinActivity"
         android:orientation="vertical"
         android:background="@color/main_color">
+        <LinearLayout
+            android:paddingVertical="@dimen/cooking_app_padding_small"
+            android:layout_marginHorizontal="@dimen/cooking_app_padding_mini"
+            android:background="@drawable/rounded_background_grey"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <EditText
+            android:padding="@dimen/cooking_app_padding_small"
+            android:background="@drawable/rounded_background_main_color"
             android:text="@={vm.email}"
             android:layout_margin="@dimen/cooking_app_padding_small"
             android:id="@+id/join_et_email"
@@ -23,6 +32,9 @@
             android:layout_height="wrap_content"
             />
         <EditText
+
+            android:padding="@dimen/cooking_app_padding_small"
+            android:background="@drawable/rounded_background_main_color"
             android:inputType="textPassword"
             android:text="@={vm.pwd}"
             android:layout_margin="@dimen/cooking_app_padding_small"
@@ -30,6 +42,7 @@
             android:hint="비밀번호"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        </LinearLayout>
         <Button
             android:background="@drawable/rounded_background_grey"
             android:onClick="@{()->vm.onLoginButtonClick()}"

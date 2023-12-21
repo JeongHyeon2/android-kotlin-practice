@@ -290,6 +290,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun uploadImage(uid: String) {
         val db = MyDatabase.getDatabase(App.context())
 

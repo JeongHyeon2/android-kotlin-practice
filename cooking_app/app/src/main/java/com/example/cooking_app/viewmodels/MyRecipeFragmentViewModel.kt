@@ -30,6 +30,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> get() = _loadingState
 
+
     private val db = MyDatabase.getDatabase(application.baseContext)
 
     private fun deleteItem(key:String) = viewModelScope.launch (Dispatchers.IO){
@@ -37,6 +38,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         val storageReference = FirebaseStorage.getInstance().reference.child(FBAuth.getUid()+"."+key+".png")
         storageReference.delete()
     }
+    fun isEmpty() = _mutableRecipeListModel.value!!.isEmpty()
     fun getData() = viewModelScope.launch(Dispatchers.IO) {
         _loadingState.postValue(true) // 로딩 상태 시작
         val postListener = object : ValueEventListener {

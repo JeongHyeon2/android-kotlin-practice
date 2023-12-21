@@ -48,6 +48,11 @@ class MyRecipeFragment() : Fragment() {
 
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
+            if(viewModel.isEmpty()){
+                binding.myRecipeTvBase.visibility = View.VISIBLE
+            }else{
+                binding.myRecipeTvBase.visibility = View.GONE
+            }
         })
 
 
