@@ -12,6 +12,7 @@ import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cooking_app.views.CreateRecipeActivity
 import com.example.cooking_app.adpater.MyRecipeRVAdapter
@@ -27,7 +28,7 @@ class MyRecipeFragment() : Fragment() {
     private var _binding: FragmentMyRecipeBinding? = null
     private val binding get() = _binding!!
     private val myAdapter = MyRecipeRVAdapter()
-    private val viewModel: MyRecipeFragmentViewModel by viewModels()
+    private lateinit var viewModel: MyRecipeFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,7 +39,7 @@ class MyRecipeFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel = ViewModelProvider(requireActivity())[MyRecipeFragmentViewModel::class.java]
         binding.lifecycleOwner = this
         val rv = binding.myRecipeRv
         rv.adapter = myAdapter
@@ -82,14 +83,15 @@ class MyRecipeFragment() : Fragment() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 ) {
-            // 처리할 결과가 있을 경우 여기에서 처리
-            if (data != null) {
-                val result = data.getStringExtra("RESULT")
-                viewModel.getOneData(result.toString())
-                Log.d("dddlwllwlewew",result.toString())
-
-            }
-        }
+//        if (requestCode == 100 ) {
+//            // 처리할 결과가 있을 경우 여기에서 처리
+//            if (data != null) {
+//                val result = data.getStringExtra("RESULT")
+//                viewModel.getOneData(result.toString())
+//                Log.d("dddlwllwlewew",result.toString())
+//
+//            }
+//        }
+        viewModel.getDataFromDB()
     }
 }

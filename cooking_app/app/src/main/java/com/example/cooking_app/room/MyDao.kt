@@ -33,5 +33,8 @@ interface MyDao {
     @Delete
     fun delete(item: RecipeModelWithId)
 
+    @Query("DELETE FROM recipe_model_with_id")
+    fun deleteAll()
+
 
 }

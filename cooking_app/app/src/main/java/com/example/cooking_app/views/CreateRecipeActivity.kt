@@ -5,11 +5,11 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
 
@@ -308,21 +309,25 @@ class CreateRecipeActivity() : AppCompatActivity() {
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            val compressedBitmap = compressBitmap(bitmap, 1000) // 1024KB = 1MB
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
         val data = baos.toByteArray()
+            var isSuccess = false
 
 
         var uploadTask = storageRef!!.putBytes(data)
             GlobalScope.launch(Dispatchers.IO){
-                val targetTimeMillis = System.currentTimeMillis() + 10000 // 현재 시간에 7초(7000밀리초)를 더한 값
+                val targetTimeMillis = System.currentTimeMillis() + 10000 // 현재 시간에 10초(10000밀리초)를 더한 값
 
                 while (System.currentTimeMillis() < targetTimeMillis) {
 
                 }
                 uploadTask.cancel()
                 withContext(Dispatchers.Main){
-                    Toast.makeText(baseContext,"네트워크 연결을 확인해주세요",Toast.LENGTH_SHORT).show()
+                  if(!isSuccess) {
+                      Toast.makeText(baseContext, "네트워크 연결을 확인해주세요", Toast.LENGTH_SHORT).show()
+                  }
                     viewModel.setLoadingStateFalse()
                     return@withContext
                 }
@@ -346,11 +351,11 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
                         }
                         CoroutineScope(Dispatchers.IO).launch {
-                            val image =  db.imageDao().getOneData("$uid.$uniqueKey")
+                            val image =  db.imageDao().getOneData(viewModel.liveRecipeListModel.value!!.image)
                             if(image==null){
-                                db.imageDao().insert(ImageEntity("$uid.$uniqueKey",bitmap))
+                                db.imageDao().insert(ImageEntity(viewModel.liveRecipeListModel.value!!.image,bitmap))
                             }else{
-                                db.imageDao().update(ImageEntity("$uid.$uniqueKey",bitmap))
+                                db.imageDao().update(ImageEntity(viewModel.liveRecipeListModel.value!!.image,bitmap))
                             }
                         }
 
@@ -363,12 +368,24 @@ class CreateRecipeActivity() : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         )
                             .show()
+                        isSuccess = true
                         viewModel.setLoadingStateFalse()
                         finish()
                     }
             }
         }
         }
+    }
+    private fun compressBitmap(bitmap: Bitmap, maxSizeKB: Int): Bitmap? {
+        val stream = ByteArrayOutputStream()
+        var quality = 100
+        do {
+            stream.reset()
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, stream)
+            quality -= 5
+        } while (stream.toByteArray().size > maxSizeKB * 1024 && quality > 0)
+
+        return BitmapFactory.decodeStream(ByteArrayInputStream(stream.toByteArray()), null, null)
     }
 }
 

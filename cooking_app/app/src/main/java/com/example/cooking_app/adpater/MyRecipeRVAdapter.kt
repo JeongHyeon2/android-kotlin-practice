@@ -60,17 +60,9 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
 
         fun bind(item: RecipeModelWithId, position: Int) {
             if (item.model.image != "") {
-//                val storageRef = Firebase.storage.reference.child("${item.model.image}")
-//                storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        Glide.with(App.context()).load(task.result)
-//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                            .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
-//                            .into(iv)
-//                    }
-//                })
+
                 CoroutineScope(Dispatchers.IO).launch {
-                    val image = db.imageDao().getOneData(FBAuth.getUid() + "." + item.id)
+                    val image = db.imageDao().getOneData(item.model.image)
                     withContext(Dispatchers.Main) {
                         if(image!=null) {
                             if (image.image != null) {

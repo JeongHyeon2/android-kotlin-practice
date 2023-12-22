@@ -108,7 +108,7 @@ class CreateRecipeViewModel() : ViewModel() {
     }
     fun getDataFromDB(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
         val data = db.myDao().getOneData(key).model
-        val image = db.imageDao().getOneData(FBAuth.getUid()+"."+key)
+        val image = db.imageDao().getOneData(data.image)
         withContext(Dispatchers.Main){
             _mutableRecipeListModel.value = data
             if(image!=null){
