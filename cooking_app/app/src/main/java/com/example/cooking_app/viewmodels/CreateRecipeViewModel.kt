@@ -2,6 +2,8 @@ package com.example.cooking_app.viewmodels
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -18,6 +20,7 @@ import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
+import com.example.cooking_app.utils.ImageSave.Companion.loadBitmapFromFilePath
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -34,6 +37,7 @@ class CreateRecipeViewModel() : ViewModel() {
             ""
         )
     )
+
     val liveRecipeListModel: LiveData<RecipeModel> get() = _mutableRecipeListModel
 
     private val _loadingState = MutableLiveData<Boolean>()
@@ -108,14 +112,12 @@ class CreateRecipeViewModel() : ViewModel() {
     }
     fun getDataFromDB(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
         val data = db.myDao().getOneData(key).model
-        val image = db.imageDao().getOneData(data.image)
+        val image = loadBitmapFromFilePath(data.image)
         withContext(Dispatchers.Main){
             _mutableRecipeListModel.value = data
-            if(image!=null){
-                if(image.image!=null){
-                    iv.setImageBitmap(image.image)
-                }
-            }
+         if(image!=null) {
+             iv.setImageBitmap(image)
+         }
 
             iv.visibility = View.GONE
         }

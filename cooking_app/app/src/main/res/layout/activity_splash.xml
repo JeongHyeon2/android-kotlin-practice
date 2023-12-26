@@ -8,6 +8,7 @@
     android:background="@color/main_color">
 
     <com.airbnb.lottie.LottieAnimationView
+        android:padding="@dimen/cooking_app_padding_large"
         android:id="@+id/lotti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

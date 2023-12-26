@@ -29,6 +29,7 @@ class MyRecipeFragment() : Fragment() {
     private val binding get() = _binding!!
     private val myAdapter = MyRecipeRVAdapter()
     private lateinit var viewModel: MyRecipeFragmentViewModel
+    private var isFirst = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,13 +46,17 @@ class MyRecipeFragment() : Fragment() {
         rv.adapter = myAdapter
         rv.layoutManager = GridLayoutManager(activity, 2)
         binding.viewModel = viewModel
-        viewModel.getDataFromDB()
+        if (isFirst) {
+            viewModel.getDataFromDB()
+            isFirst = false
+        }
+        binding.myRecipeRv.apply { itemAnimator = null }
 
         viewModel.liveRecipeListModel.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
-            if(viewModel.isEmpty()){
+            if (viewModel.isEmpty()) {
                 binding.myRecipeTvBase.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.myRecipeTvBase.visibility = View.GONE
             }
         })
@@ -81,17 +86,18 @@ class MyRecipeFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == 100 ) {
-//            // 처리할 결과가 있을 경우 여기에서 처리
-//            if (data != null) {
-//                val result = data.getStringExtra("RESULT")
-//                viewModel.getOneData(result.toString())
-//                Log.d("dddlwllwlewew",result.toString())
-//
-//            }
-//        }
-        viewModel.getDataFromDB()
+        if (requestCode == 100 ) {
+            // 처리할 결과가 있을 경우 여기에서 처리
+            if (data != null) {
+                val result = data.getStringExtra("RESULT")
+                viewModel.getOneData(result.toString())
+                Log.d("dddlwllwlewew",result.toString())
+
+            }
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.example.cooking_app.adpater
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -15,19 +14,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.cooking_app.R
-import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
 import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
-import com.example.cooking_app.utils.FBAuth
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.example.cooking_app.utils.ImageSave.Companion.loadBitmapFromFilePath
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,26 +51,23 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
 
         fun bind(item: RecipeModelWithId, position: Int) {
             if (item.model.image != "") {
-
                 CoroutineScope(Dispatchers.IO).launch {
-                    val image = db.imageDao().getOneData(item.model.image)
+                    val image = loadBitmapFromFilePath(item.model.image)
                     withContext(Dispatchers.Main) {
-                        if(image!=null) {
-                            if (image.image != null) {
-                                iv.setImageBitmap(image.image)
-                                val bitmap = image.image
-                                val roundedBitmap = Bitmap.createBitmap(bitmap!!.width, bitmap.height, bitmap.config)
-                                val canvas = Canvas(roundedBitmap)
-                                val paint = Paint()
-                                val rect = Rect(0, 0, bitmap.width, bitmap.height)
-                                val rectF = RectF(rect)
-                                val radius = 30f
-                                paint.isAntiAlias = true
-                                canvas.drawRoundRect(rectF, radius, radius, paint)
-                                paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-                                canvas.drawBitmap(bitmap, rect, rect, paint)
-                                iv.setImageBitmap(roundedBitmap)
-                            }
+                        if (image != null) {
+                            iv.setImageBitmap(image)
+                            val roundedBitmap =
+                                Bitmap.createBitmap(image!!.width, image.height, image.config)
+                            val canvas = Canvas(roundedBitmap)
+                            val paint = Paint()
+                            val rect = Rect(0, 0, image.width, image.height)
+                            val rectF = RectF(rect)
+                            val radius = 100f
+                            paint.isAntiAlias = true
+                            canvas.drawRoundRect(rectF, radius, radius, paint)
+                            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+                            canvas.drawBitmap(image, rect, rect, paint)
+                            iv.setImageBitmap(roundedBitmap)
                         }
                     }
 
@@ -122,4 +110,12 @@ class MyRecipeRVAdapter : RecyclerView.Adapter<MyRecipeRVAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return recipeList.size
     }
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
 }

@@ -27,9 +27,7 @@ import kotlinx.coroutines.withContext
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val homeFragmentViewModel : HomeFragmentViewModel by viewModels()
 
-    private lateinit var viewModel: MyRecipeFragmentViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,36 +43,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[MyRecipeFragmentViewModel::class.java]
-        binding.vm = viewModel
-        binding.lifecycleOwner = this
-        binding.homeFragmentLogout.setOnClickListener {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("로그아웃")
-                .setMessage("정말 로그아웃 하시겠습니까?")
-                .setPositiveButton("확인",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        val intent = Intent(requireContext(),LoginActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        FBAuth.logout()
-                        startActivity(intent)
-                    })
-                .setNegativeButton("취소",
-                    DialogInterface.OnClickListener { dialog, id ->
-                    })
-            builder.show()
 
-        }
-        val user = Firebase.auth.currentUser
-        user?.let {
-            binding.homeFragmentId.text   = "ID: "+ it.email
-        }
-        binding.homeFragmentSaveDataToFb.setOnClickListener {
-            viewModel.saveDataToFB()
-        }
-        binding.homeFragmentGetDataFromFb.setOnClickListener {
-            viewModel.getDataFromFB()
-        }
 
     }
     override fun onDestroyView() {

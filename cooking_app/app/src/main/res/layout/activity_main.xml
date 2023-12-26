@@ -19,6 +19,8 @@
             app:navGraph="@navigation/home_nav" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:paddingTop="@dimen/cooking_app_padding_mini"
+            app:labelVisibilityMode="labeled"
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="70dp"

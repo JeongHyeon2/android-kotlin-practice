@@ -18,7 +18,7 @@
         android:layout_marginTop="@dimen/cooking_app_padding_small"
         tools:context=".views.CreateRecipeActivity">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -181,14 +181,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <Button
+
                         android:id="@+id/done"
                         style="@style/cooking_app_button_style"
                         android:visibility="@{viewModel.loadingState ? View.GONE : View.VISIBLE}"
-
-                    android:text="추가" />
+                    android:text="완료" />
 
                     <ProgressBar
                         android:layout_margin="@dimen/cooking_app_padding_middle"
@@ -202,7 +203,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

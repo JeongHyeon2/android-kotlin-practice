@@ -23,6 +23,7 @@
             android:src="@drawable/my_recipe_icon" />
 
         <TextView
+            android:layout_marginBottom="@dimen/cooking_app_padding_small"
             android:id="@+id/my_recipe_rv_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -2,14 +2,15 @@ package com.example.cooking_app.views
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -30,11 +31,11 @@ import com.example.cooking_app.adpater.MyRecipeIngredientInfoAdapter
 import com.example.cooking_app.databinding.ActivityCreateRecipeBinding
 import com.example.cooking_app.fragments.MyDialogFragment
 import com.example.cooking_app.models.RecipeModelWithId
-import com.example.cooking_app.room.ImageEntity
 import com.example.cooking_app.room.MyDatabase
 import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
+import com.example.cooking_app.utils.ImageSave
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -44,8 +45,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
 
 class CreateRecipeActivity() : AppCompatActivity() {
@@ -309,7 +313,6 @@ class CreateRecipeActivity() : AppCompatActivity() {
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-            val compressedBitmap = compressBitmap(bitmap, 1000) // 1024KB = 1MB
         val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos)
         val data = baos.toByteArray()
@@ -351,12 +354,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
 
                         }
                         CoroutineScope(Dispatchers.IO).launch {
-                            val image =  db.imageDao().getOneData(viewModel.liveRecipeListModel.value!!.image)
-                            if(image==null){
-                                db.imageDao().insert(ImageEntity(viewModel.liveRecipeListModel.value!!.image,bitmap))
-                            }else{
-                                db.imageDao().update(ImageEntity(viewModel.liveRecipeListModel.value!!.image,bitmap))
-                            }
+                            ImageSave.saveBitmapToInternalStorage(applicationContext,bitmap,viewModel.liveRecipeListModel.value!!.image)
                         }
 
                         resultIntent.putExtra("RESULT", uniqueKey)
@@ -376,17 +374,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         }
         }
     }
-    private fun compressBitmap(bitmap: Bitmap, maxSizeKB: Int): Bitmap? {
-        val stream = ByteArrayOutputStream()
-        var quality = 100
-        do {
-            stream.reset()
-            bitmap.compress(Bitmap.CompressFormat.PNG, quality, stream)
-            quality -= 5
-        } while (stream.toByteArray().size > maxSizeKB * 1024 && quality > 0)
 
-        return BitmapFactory.decodeStream(ByteArrayInputStream(stream.toByteArray()), null, null)
-    }
 }
 
 
