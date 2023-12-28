@@ -18,5 +18,6 @@ class LoginActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.vm = viewModel
+        binding.lifecycleOwner = this
     }
 }

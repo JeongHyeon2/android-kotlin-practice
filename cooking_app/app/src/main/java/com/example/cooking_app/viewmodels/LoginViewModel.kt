@@ -3,6 +3,7 @@ package com.example.cooking_app.viewmodels
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.cooking_app.utils.App
@@ -16,9 +17,13 @@ class LoginViewModel : ViewModel() {
     var pwd = MutableLiveData("")
     private var auth: FirebaseAuth = Firebase.auth
     private val context = App.context()
+    private val _loadingState = MutableLiveData<Boolean>(false)
+    val loadingState: LiveData<Boolean> get() = _loadingState
     fun onLoginButtonClick() {
+        _loadingState.value = true
         auth.signInWithEmailAndPassword(email.value!!, pwd.value!!)
             .addOnCompleteListener { task ->
+                _loadingState.value = false
                 if (task.isSuccessful) {
                     val intent = Intent(context, MainActivity::class.java)
                     intent.flags =

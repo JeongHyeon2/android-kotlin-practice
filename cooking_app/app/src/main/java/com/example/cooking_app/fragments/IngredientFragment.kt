@@ -45,6 +45,20 @@ class IngredientFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[IngredientFragmentViewModel::class.java]
         viewModel.ingredients.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
+            if (it.size == 0 && !viewModel.loadingState.value!!) {
+                binding.ingredientTextview.visibility = View.VISIBLE
+            } else {
+                binding.ingredientTextview.visibility = View.GONE
+            }
+        })
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.ingredientTextview.visibility = View.GONE
+            }else{
+                if (viewModel.ingredients.value!!.size == 0 && !it) {
+                    binding.ingredientTextview.visibility = View.VISIBLE
+                }
+            }
         })
         binding.vm = viewModel
         binding.lifecycleOwner = this
@@ -66,7 +80,6 @@ class IngredientFragment : Fragment() {
         super.onResume()
         viewModel.getData()
     }
-
 
 
 }

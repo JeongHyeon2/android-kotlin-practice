@@ -23,7 +23,7 @@ class IngredientFragmentViewModel : ViewModel() {
         MutableLiveData<MutableList<RecipeIngredientForDB>>(mutableListOf())
     val ingredients: MutableLiveData<MutableList<RecipeIngredientForDB>> get() = _mutableIngredients
     private val _loadingState = MutableLiveData<Boolean>(false)
-    val loadingState: LiveData<Boolean> get() = _loadingState  //235.74
+    val loadingState: LiveData<Boolean> get() = _loadingState
     fun getData() {
         _loadingState.value = true
         FBRef.myIngredients.addValueEventListener(object : ValueEventListener {

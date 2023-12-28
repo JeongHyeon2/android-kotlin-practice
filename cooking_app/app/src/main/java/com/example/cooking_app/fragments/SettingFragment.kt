@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.example.cooking_app.R
 import com.example.cooking_app.databinding.FragmentSettingBinding
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
@@ -39,7 +40,7 @@ class SettingFragment : Fragment() {
         binding.vm = viewModel
         binding.lifecycleOwner = this
         binding.homeFragmentLogout.setOnClickListener {
-            val builder = AlertDialog.Builder(requireContext())
+            val builder = AlertDialog.Builder(requireContext(), R.style.RoundedDialog)
             builder.setTitle("로그아웃")
                 .setMessage("정말 로그아웃 하시겠습니까?")
                 .setPositiveButton("확인",
