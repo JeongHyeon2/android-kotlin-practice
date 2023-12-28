@@ -45,5 +45,10 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="RoundedDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@drawable/rounded_background_main_color</item>
+    </style>
+
 
 </resources>

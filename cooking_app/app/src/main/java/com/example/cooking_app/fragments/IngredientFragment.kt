@@ -46,6 +46,9 @@ class IngredientFragment : Fragment() {
         viewModel.ingredients.observe(viewLifecycleOwner, Observer {
             myAdapter.submitList(it)
         })
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
+
         binding.ingredientFragmentAdd.setOnClickListener {
             MyDialogFragment(-1, true).show(childFragmentManager, "dialog")
         }

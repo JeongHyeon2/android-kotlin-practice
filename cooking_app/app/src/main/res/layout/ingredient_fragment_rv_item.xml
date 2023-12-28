@@ -14,7 +14,7 @@
         android:id="@+id/ingredient_fragment_item_name"
         style="@style/IngredientRVItemText"
         android:layout_weight="1"
-        android:text="모든 맛있는 돼지고기" />
+       />
 
     <View
         android:layout_width="1dp"

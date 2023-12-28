@@ -1,6 +1,7 @@
 package com.example.cooking_app.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,33 +22,32 @@ class IngredientFragmentViewModel : ViewModel() {
     private var _mutableIngredients =
         MutableLiveData<MutableList<RecipeIngredientForDB>>(mutableListOf())
     val ingredients: MutableLiveData<MutableList<RecipeIngredientForDB>> get() = _mutableIngredients
-    private val db = MyDatabase.getDatabase(App.context())
-
+    private val _loadingState = MutableLiveData<Boolean>(false)
+    val loadingState: LiveData<Boolean> get() = _loadingState  //235.74
     fun getData() {
-
+        _loadingState.value = true
         FBRef.myIngredients.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 viewModelScope.launch(Dispatchers.IO) {
+
                     val list = mutableListOf<RecipeIngredientForDB>()
                     for (postSnapshot in dataSnapshot.children) {
                         val value = postSnapshot.getValue(RecipeIngredientForDB::class.java)
                         list.add(value!!)
-                        Log.d("sddssdsdsd", value.toString())
                     }
                     list.reverse()
                     withContext(Dispatchers.Main) {
                         _mutableIngredients.value = list
+                        _loadingState.value = false
                     }
                 }
             }
-
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // 데이터 읽기가 취소될 때 처리
                 println("Read failed: " + databaseError.toException())
             }
         })
-
     }
 
     fun add(item: RecipeIngredient) {

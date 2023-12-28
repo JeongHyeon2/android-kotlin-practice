@@ -26,17 +26,24 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val name: TextView = view.findViewById(R.id.ingredient_name)
-        private val amount: TextView = view.findViewById(R.id.ingredient_amount)
+        private val name: EditText = view.findViewById(R.id.ingredient_name)
+        private val amount: EditText = view.findViewById(R.id.ingredient_amount)
         private val layout : LinearLayout = view.findViewById(R.id.ingredient_item_linear)
 
 
         fun bind(item:RecipeIngredient) {
-            name.text = "• "+item.name+" "
-            amount.text = item.amount +"g"
+            name.setText(item.name+" ")
+            amount.setText(item.amount +"g")
 
             layout.setOnClickListener {
                 itemClickListener?.invoke(position)
+            }
+            name.setOnClickListener{
+                itemClickListener?.invoke(position)
+            }
+            amount.setOnClickListener {
+                itemClickListener?.invoke(position)
+
             }
 
         }

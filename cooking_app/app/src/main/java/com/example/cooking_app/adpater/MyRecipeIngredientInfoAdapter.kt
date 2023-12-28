@@ -3,6 +3,7 @@ package com.example.cooking_app.adpater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,13 +11,15 @@ import com.example.cooking_app.R
 import com.example.cooking_app.models.RecipeIngredient
 
 
-class MyRecipeIngredientInfoAdapter() : RecyclerView.Adapter<MyRecipeIngredientInfoAdapter.ViewHolder>() {
-    private var ingredientList: List<RecipeIngredient> =  emptyList()
+class MyRecipeIngredientInfoAdapter() :
+    RecyclerView.Adapter<MyRecipeIngredientInfoAdapter.ViewHolder>() {
+    private var ingredientList: List<RecipeIngredient> = emptyList()
     private var itemClickListener: ((position: Int) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (position: Int)-> Unit) {
+    fun setOnItemClickListener(listener: (position: Int) -> Unit) {
         itemClickListener = listener
     }
+
     fun submitList(newList: List<RecipeIngredient>) {
         ingredientList = newList
         notifyDataSetChanged()
@@ -24,30 +27,45 @@ class MyRecipeIngredientInfoAdapter() : RecyclerView.Adapter<MyRecipeIngredientI
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val name: TextView = view.findViewById(R.id.ingredient_name)
-        private val amount: TextView = view.findViewById(R.id.ingredient_amount)
-        private val purchase: TextView = view.findViewById(R.id.ingredient_purchase)
-        private val calorie: TextView = view.findViewById(R.id.ingredient_calorie)
-        private val layout : LinearLayout = view.findViewById(R.id.ingredient_info_linear)
+        private val name: EditText = view.findViewById(R.id.ingredient_name)
+        private val amount: EditText = view.findViewById(R.id.ingredient_amount)
+        private val purchase: EditText = view.findViewById(R.id.ingredient_purchase)
+        private val calorie: EditText = view.findViewById(R.id.ingredient_calorie)
+        private val layout: LinearLayout = view.findViewById(R.id.ingredient_info_linear)
 
-        fun bind(item:RecipeIngredient,position: Int) {
-            name.text = "• "+item.name+" "
-
-
-            amount.text = item.amount +"g "
+        fun bind(item: RecipeIngredient, position: Int) {
+            name.setText(item.name + " ")
+            amount.setText(item.amount + "g ")
             try {
-                purchase.text = ((item.cost.toDouble()/item.amountOfPurchase.toDouble())*item.amount.toDouble()).toInt().toString()+"원 "
-            }
-            catch (e:Exception){
-                purchase.text = "0원"
+                purchase.setText(
+                    ((item.cost.toDouble() / item.amountOfPurchase.toDouble()) * item.amount.toDouble()).toInt()
+                        .toString() + "원 "
+                )
+            } catch (e: Exception) {
+                purchase.setText("0원")
             }
             try {
-                calorie.text = (item.calorie.toDouble()*item.amount.toDouble()/100).toInt().toString() +"kcal"
+                calorie.setText(
+                    (item.calorie.toDouble() * item.amount.toDouble() / 100).toInt()
+                        .toString() + "kcal"
+                )
 
-            }catch (e : Exception){
-                calorie.text = "0g"
+            } catch (e: Exception) {
+                calorie.setText("0g")
             }
             layout.setOnClickListener {
+                itemClickListener?.invoke(position)
+            }
+            name.setOnClickListener {
+                itemClickListener?.invoke(position)
+            }
+            amount.setOnClickListener {
+                itemClickListener?.invoke(position)
+            }
+            purchase.setOnClickListener {
+                itemClickListener?.invoke(position)
+            }
+            calorie.setOnClickListener {
                 itemClickListener?.invoke(position)
             }
         }
@@ -61,12 +79,13 @@ class MyRecipeIngredientInfoAdapter() : RecyclerView.Adapter<MyRecipeIngredientI
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(ingredientList[position],position)
+        holder.bind(ingredientList[position], position)
     }
 
     override fun getItemCount(): Int {
         return ingredientList.size
     }
+
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }

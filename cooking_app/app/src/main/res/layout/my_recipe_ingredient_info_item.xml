@@ -10,43 +10,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <TextView
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textSize="@dimen/cooking_app_text_size_large"
+            android:text=" • "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:gravity="start"
             android:id="@+id/ingredient_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/IngredientRVItemText"
             android:layout_weight="1"
-            android:scrollHorizontally="true"
-            android:text="재료명"
-            android:textColor="@color/black"
-            android:textSize="@dimen/cooking_app_text_size_middle" />
-        <TextView
+            />
+        <EditText
+            android:gravity="start"
             android:id="@+id/ingredient_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/IngredientRVItemText"
             android:layout_weight="1"
-            android:scrollHorizontally="true"
-            android:text="용량"
-            android:textColor="@color/black"
-            android:textSize="@dimen/cooking_app_text_size_middle" />
-        <TextView
+            />
+        <EditText
+            android:gravity="start"
             android:id="@+id/ingredient_purchase"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/IngredientRVItemText"
             android:layout_weight="1"
-            android:scrollHorizontally="true"
-            android:text="얼만큼"
-            android:textColor="@color/black"
-            android:textSize="@dimen/cooking_app_text_size_middle" />
-
-        <TextView
+            />
+        <EditText
+            android:gravity="start"
             android:id="@+id/ingredient_calorie"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/IngredientRVItemText"
             android:layout_weight="1"
-            android:scrollHorizontally="true"
-            android:text="칼로리"
-            android:textColor="@color/black"
-            android:textSize="@dimen/cooking_app_text_size_middle" />
+            />
+
     </LinearLayout>
 </LinearLayout>

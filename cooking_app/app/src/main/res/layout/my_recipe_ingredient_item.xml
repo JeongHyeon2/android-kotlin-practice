@@ -10,58 +10,28 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <TextView
                 android:textColor="@color/black"
-                android:textSize="@dimen/cooking_app_text_size_middle"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textSize="@dimen/cooking_app_text_size_large"
+                android:text=" • "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:gravity="start"
                 android:id="@+id/ingredient_name"
-                android:scrollHorizontally="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/IngredientRVItemText"
                 android:layout_weight="1"
-                android:text="재료명" />
-
-            <TextView
+                />
+            <EditText
+                android:gravity="start"
                 android:id="@+id/ingredient_amount"
-                android:textColor="@color/black"
-                android:textSize="@dimen/cooking_app_text_size_middle"
-                android:scrollHorizontally="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/IngredientRVItemText"
                 android:layout_weight="1"
-                android:text="g수" />
-
-<!--            <TextView-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
-<!--                android:id="@+id/ingredient_purchase"-->
-<!--                android:scrollHorizontally="true"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="구입 가격" />-->
-
-<!--            <TextView-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
-<!--                android:id="@+id/ingredient_purchase_amount"-->
-<!--                android:scrollHorizontally="true"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="구입량" />-->
-
-<!--            <TextView-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="@dimen/cooking_app_text_size_middle"-->
-<!--                android:id="@+id/ingredient_calorie"-->
-<!--                android:scrollHorizontally="true"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="100g당 칼로리" />-->
+                />
         </LinearLayout>
 </LinearLayout>
