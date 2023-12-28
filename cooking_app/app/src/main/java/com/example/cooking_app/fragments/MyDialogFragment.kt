@@ -20,10 +20,14 @@ import com.example.cooking_app.R
 import com.example.cooking_app.databinding.FragmentMyRecipeBinding
 import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
+import com.example.cooking_app.viewmodels.IngredientFragmentViewModel
 
-class MyDialogFragment(private val position: Int) : DialogFragment() {
+class MyDialogFragment(
+    private val position: Int,
+    private var isIngredientFragment: Boolean = false
+) : DialogFragment() {
     private lateinit var viewModel: CreateRecipeViewModel
-
+    private lateinit var viewModelIngredient: IngredientFragmentViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,18 +40,32 @@ class MyDialogFragment(private val position: Int) : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity())[CreateRecipeViewModel::class.java]
+        viewModelIngredient =
+            ViewModelProvider(requireActivity())[IngredientFragmentViewModel::class.java]
         val name = view.findViewById<EditText>(R.id.dialog_ingredient_name)
         val ingredientAmount = view.findViewById<EditText>(R.id.dialog_ingredient_amount)
         val purchase = view.findViewById<EditText>(R.id.dialog_ingredient_purchase)
         val amount = view.findViewById<EditText>(R.id.dialog_ingredient_purchase_amount)
         val cal = view.findViewById<EditText>(R.id.dialog_ingredient_calorie)
+        if (isIngredientFragment) {
+            ingredientAmount.visibility = View.GONE
+        }
         if (position >= 0) {
-            val item = viewModel.liveRecipeListModel.value!!.ingredients[position]
-            name.setText(item.name)
-            ingredientAmount.setText(item.amount)
-            purchase.setText(item.cost)
-            amount.setText(item.amountOfPurchase)
-            cal.setText(item.calorie)
+            if (isIngredientFragment) {
+                val item = viewModelIngredient.ingredients.value!![position]
+                ingredientAmount.setText("0")
+                name.setText(item.name)
+                purchase.setText(item.cost)
+                amount.setText(item.amountOfPurchase)
+                cal.setText(item.calorie)
+            } else {
+                val item = viewModel.liveRecipeListModel.value!!.ingredients[position]
+                name.setText(item.name)
+                ingredientAmount.setText(item.amount)
+                purchase.setText(item.cost)
+                amount.setText(item.amountOfPurchase)
+                cal.setText(item.calorie)
+            }
 
         }
         view.findViewById<Button>(R.id.dialog_button_save).setOnClickListener {
@@ -61,13 +79,21 @@ class MyDialogFragment(private val position: Int) : DialogFragment() {
                     amount.text.toString(),
                     cal.text.toString(),
                 )
-                if (position >= 0) {
-                    viewModel.editIngredient(ingredient, position)
-                } else {
-                    viewModel.addIngredient(
-                        ingredient
 
-                    )
+                if (position >= 0) {
+                    if (isIngredientFragment) {
+                        viewModelIngredient.edit(position, ingredient)
+                    } else {
+                        viewModel.editIngredient(ingredient, position)
+                    }
+                } else {
+                    if (isIngredientFragment) {
+                        viewModelIngredient.add(ingredient)
+                    } else {
+                        viewModel.addIngredient(
+                            ingredient
+                        )
+                    }
                 }
                 Toast.makeText(view.context, "저장되었습니다", Toast.LENGTH_SHORT).show()
                 dismiss()
@@ -78,8 +104,13 @@ class MyDialogFragment(private val position: Int) : DialogFragment() {
             deleteBtn.visibility = View.INVISIBLE
         }
         deleteBtn.setOnClickListener {
-            viewModel.deleteRecipe(position)
+            if(isIngredientFragment){
+                viewModelIngredient.delete(position)
+            }else {
+                viewModel.deleteRecipe(position)
+            }
             Toast.makeText(view.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+
             dismiss()
         }
 

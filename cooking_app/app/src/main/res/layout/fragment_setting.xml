@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".fragments.HomeFragment">
+        tools:context=".fragments.IngredientFragment">
         <LinearLayout
             android:padding="@dimen/cooking_app_padding_mini"
             android:layout_margin="@dimen/cooking_app_padding_small"

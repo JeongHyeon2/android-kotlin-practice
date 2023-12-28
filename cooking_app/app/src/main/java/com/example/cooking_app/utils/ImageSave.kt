@@ -54,7 +54,7 @@ class ImageSave {
 
                 if (files != null) {
                     for (file in files) {
-                        if (file.isFile && file.name.endsWith(".png")) {
+                        if (file.isFile && file.name.endsWith(".jpg")) {
                             file.delete()
                         }
                     }

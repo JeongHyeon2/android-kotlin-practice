@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import com.example.cooking_app.R
-import com.example.cooking_app.databinding.FragmentHomeBinding
 import com.example.cooking_app.databinding.FragmentSettingBinding
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel

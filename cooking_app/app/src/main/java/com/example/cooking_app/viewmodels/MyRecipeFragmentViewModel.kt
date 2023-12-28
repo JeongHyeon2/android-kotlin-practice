@@ -48,7 +48,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     private fun deleteItem(key: String) = viewModelScope.launch(Dispatchers.IO) {
         FBRef.myRecipe.child(key).removeValue()
         val storageReference =
-            FirebaseStorage.getInstance().reference.child(FBAuth.getUid() + "." + key + ".png")
+            FirebaseStorage.getInstance().reference.child(FBAuth.getUid() + "." + key + ".jpg")
         storageReference.delete()
     }
 

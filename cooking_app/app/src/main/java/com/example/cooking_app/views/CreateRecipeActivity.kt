@@ -46,10 +46,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+
 
 
 class CreateRecipeActivity() : AppCompatActivity() {
@@ -148,7 +145,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         }
 
         myIngredientInfoAdapter.setOnItemClickListener {
-            MyDialogFragment(it).show(supportFragmentManager, "dialog")
+            MyDialogFragment(it ).show(supportFragmentManager, "dialog")
         }
         myIngredientAdapter.setOnItemClickListener {
             MyDialogFragment(it).show(supportFragmentManager, "dialog")
@@ -308,7 +305,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
                 uniqueKey = FBRef.myRecipe.push().key.toString()
                 toggle = true
             }
-            storageRef = storage.reference.child("$uid.$uniqueKey.png")
+            storageRef = storage.reference.child("$uid.$uniqueKey.jpg")
 
         imageView.isDrawingCacheEnabled = true
         imageView.buildDrawingCache()

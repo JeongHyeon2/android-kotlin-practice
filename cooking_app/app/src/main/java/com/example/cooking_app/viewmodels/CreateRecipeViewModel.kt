@@ -77,7 +77,7 @@ class CreateRecipeViewModel() : ViewModel() {
     fun editIngredient(ingredient: RecipeIngredient,position: Int){
         val old = _mutableRecipeListModel.value!!
         val newList = _mutableRecipeListModel.value!!.ingredients
-        newList.set(position,ingredient)
+        newList[position] = ingredient
         val new = RecipeModel(old.title, old.recipes, newList, old.image)
         _mutableRecipeListModel.value = new
 

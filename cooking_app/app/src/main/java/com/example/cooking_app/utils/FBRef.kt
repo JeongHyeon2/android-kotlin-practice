@@ -7,6 +7,7 @@ class FBRef {
     companion object{
         private val database = Firebase.database
         val myRecipe = database.reference.child(FBAuth.getUid()).child("my_recipe")
+        val myIngredients = database.reference.child(FBAuth.getUid()).child("my_ingredients")
 
     }
 }

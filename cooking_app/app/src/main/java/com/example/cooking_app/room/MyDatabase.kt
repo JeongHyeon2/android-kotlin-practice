@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import com.example.cooking_app.models.RecipeIngredient
+import com.example.cooking_app.models.RecipeIngredientForDB
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
 import com.example.cooking_app.utils.FBAuth
@@ -14,10 +15,11 @@ import com.example.cooking_app.utils.FBRef
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-@Database(entities = [RecipeModelWithId::class], version = 1)
+@Database(entities = [RecipeModelWithId::class,RecipeIngredientForDB::class], version = 1)
 abstract class MyDatabase() : RoomDatabase() {
 
     abstract fun myDao(): MyDao
+    abstract fun myIngredientDao() : MyIngredientDao
 
 
     companion object {
