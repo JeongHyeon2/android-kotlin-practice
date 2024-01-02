@@ -119,11 +119,11 @@ class CreateRecipeActivity() : AppCompatActivity() {
         viewModel.liveRecipeListModel.observe(this, Observer {
             myIngredientAdapter.submitList(it.ingredients)
             myIngredientInfoAdapter.submitList(it.ingredients)
-            binding.createRecipeTvData.text = viewModel.getInformation()
+            binding.createRecipeTvData.setText( viewModel.getInformation())
         })
         myAdapter.setOnItemClickListener {
             if (viewModel.liveRecipeListModel.value!!.recipes[it] != "") {
-                AlertDialog.Builder(this)
+                AlertDialog.Builder(this,R.style.RoundedDialog)
                     .setMessage(
                         (it + 1).toString() + "번. "
                                 + viewModel.liveRecipeListModel.value!!.recipes[it]
@@ -188,7 +188,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
 
         ingredientRv.adapter = myIngredientAdapter
-        ingredientRv.layoutManager = GridLayoutManager(this, 2)
+        ingredientRv.layoutManager = LinearLayoutManager(this)
 
 
         binding.done.setOnClickListener {
@@ -204,13 +204,12 @@ class CreateRecipeActivity() : AppCompatActivity() {
             it.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_grey)
             binding.createRecipeTvInfo.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_point)
             ingredientRv.adapter = myIngredientAdapter
-            ingredientRv.layoutManager = GridLayoutManager(this, 2)
+
         }
         binding.createRecipeTvInfo.setOnClickListener {
             binding.createRecipeTvIngredient.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_point)
             it.setBackgroundResource(com.example.cooking_app.R.drawable.top_rounded_background_grey)
             ingredientRv.adapter = myIngredientInfoAdapter
-            ingredientRv.layoutManager = LinearLayoutManager(this)
         }
         binding.createRecipeAddPhoto.setOnClickListener {
             getAction.launch("image/*")
@@ -219,7 +218,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
             getAction.launch("image/*")
         }
         imageView.setOnLongClickListener {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this,R.style.RoundedDialog)
                 .setMessage("사진을 삭제하시겠습니까?")
                 .setPositiveButton("삭제",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -239,7 +238,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         if (isChanged) {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this,R.style.RoundedDialog)
                 .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
                 .setPositiveButton("저장 후 종료",
                     DialogInterface.OnClickListener { dialog, id ->

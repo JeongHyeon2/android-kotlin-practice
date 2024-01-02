@@ -14,7 +14,9 @@
        >
 
         <ImageView
-            android:padding="@dimen/cooking_app_padding_small"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:padding="@dimen/cooking_app_padding_middle"
             android:id="@+id/my_recipe_rv_item_iv"
             android:layout_width="160dp"
             android:layout_height="160dp"

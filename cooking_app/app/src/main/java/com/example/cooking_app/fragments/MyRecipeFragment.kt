@@ -94,8 +94,6 @@ class MyRecipeFragment() : Fragment() {
             if (data != null) {
                 val result = data.getStringExtra("RESULT")
                 viewModel.getOneData(result.toString())
-                Log.d("dddlwllwlewew",result.toString())
-
             }
         }
 

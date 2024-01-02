@@ -101,6 +101,8 @@ dependencies {
 
     implementation ("com.google.code.gson:gson:2.8.9")
 
+    implementation ("org.jsoup:jsoup:1.17.2")
+
 
 
 }

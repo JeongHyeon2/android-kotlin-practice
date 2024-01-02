@@ -63,6 +63,9 @@
 
 
                 <ImageView
+                    android:visibility="gone"
+                    android:layout_margin="@dimen/cooking_app_padding_middle"
+                    android:adjustViewBounds="true"
                     android:id="@+id/create_recipe_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,7 +109,9 @@
                             android:textSize="@dimen/cooking_app_text_size_middle"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <EditText
+                            android:layout_gravity="center"
+                            style="@style/IngredientRVItemText"
                             android:id="@+id/create_recipe_tv_data"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
+import com.example.cooking_app.R
 import com.example.cooking_app.models.RecipeModel
 import com.example.cooking_app.models.RecipeModelWithId
 import com.example.cooking_app.room.MyDatabase
@@ -20,7 +21,6 @@ import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.utils.ImageSave
-import com.example.cooking_app.utils.ImageSave.Companion.imageSaveLink
 import com.example.cooking_app.utils.ImageSave.Companion.loadBitmapFromFilePath
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+
 
 class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private var _mutableRecipeListModel =
@@ -172,7 +173,8 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun deleteDialog(position: Int, item: RecipeModelWithId, thisContext: Context) {
-        val builder = AlertDialog.Builder(thisContext)
+
+        val builder = AlertDialog.Builder(thisContext, R.style.RoundedDialog)
         builder.setTitle("삭제 확인")
             .setMessage("정말 " + item.model.title + "을/를 삭제하시겠습니까?")
             .setPositiveButton("확인",
@@ -191,5 +193,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
                 DialogInterface.OnClickListener { dialog, id ->
                 })
         builder.show()
+
+
     }
 }
