@@ -177,7 +177,8 @@ class MyDialogFragment(
                 val extractedText = element.text().split("[주의]")[0]
 
                 // Use regular expressions to extract (100g) and 25 kcal
-                val regex = Regex("""\((\d+g)\).*?(\d+ kcal)""")
+                val regex = Regex("""\((\d+(?:g|ml))\).*?(\d+ kcal)""")
+
                 val matchResult = regex.find(extractedText)
 
                 if (matchResult != null) {

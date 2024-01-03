@@ -25,10 +25,16 @@ class LoginViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 _loadingState.value = false
                 if (task.isSuccessful) {
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags =
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    context.startActivity(intent)
+                    if( auth.currentUser?.isEmailVerified == true){
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        context.startActivity(intent)
+                    }else{
+                        Toast.makeText(context, "이메일 인증이 되지 않았습니다.", Toast.LENGTH_SHORT).show()
+
+                    }
+
                 } else {
                     Toast.makeText(context, "이메일 혹은 패스워드가 올바르지 않습니다", Toast.LENGTH_SHORT).show()
                 }

@@ -16,13 +16,17 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         auth = Firebase.auth
         Handler().postDelayed({
-            var intent : Intent = if(auth.currentUser==null){
+            var intent: Intent = if (auth.currentUser == null) {
                 Intent(this, IntroActivity::class.java)
-            }else {
-                Intent(this, MainActivity::class.java)
+            } else {
+                if (auth.currentUser?.isEmailVerified == true) {
+                    Intent(this, MainActivity::class.java)
+                } else {
+                    Intent(this, IntroActivity::class.java)
+                }
             }
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-        },2000)
+        }, 2000)
     }
 }

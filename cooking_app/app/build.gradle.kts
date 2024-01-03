@@ -90,6 +90,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 
     val room_version = "2.5.0"
     // ROOM

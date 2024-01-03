@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream
 
 
 class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(application) {
+
     private var _mutableRecipeListModel =
         MutableLiveData<MutableList<RecipeModelWithId>>(mutableListOf())
     val liveRecipeListModel: LiveData<MutableList<RecipeModelWithId>> get() = _mutableRecipeListModel
@@ -51,6 +52,7 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         val storageReference =
             FirebaseStorage.getInstance().reference.child(FBAuth.getUid() + "." + key + ".jpg")
         storageReference.delete()
+
     }
 
 
@@ -64,7 +66,6 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
                         val data = dataModel.getValue(RecipeModel::class.java)
                         new.add(RecipeModelWithId(dataModel.key.toString(), data!!))
                     }
-                    new.reverse()
                     withContext(Dispatchers.Main) {
                         _mutableRecipeListModel.value = new
                     }
@@ -77,20 +78,20 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
                             storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     GlobalScope.launch(Dispatchers.IO) {
-                                            Glide.with(App.context()).asBitmap().load(task.result)
-                                                .into(object : CustomTarget<Bitmap>() {
-                                                    override fun onResourceReady(
-                                                        resource: Bitmap,
-                                                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                                                    ) {
-                                                        ImageSave.saveBitmapToInternalStorage(App.context(),resource,data.model.image)
+                                        Glide.with(App.context()).asBitmap().load(task.result)
+                                            .into(object : CustomTarget<Bitmap>() {
+                                                override fun onResourceReady(
+                                                    resource: Bitmap,
+                                                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                                                ) {
+                                                    ImageSave.saveBitmapToInternalStorage(App.context(),resource,data.model.image)
 
-                                                    }
+                                                }
 
-                                                    override fun onLoadCleared(placeholder: Drawable?) {
-                                                        TODO("Not yet implemented")
-                                                    }
-                                                })
+                                                override fun onLoadCleared(placeholder: Drawable?) {
+                                                    TODO("Not yet implemented")
+                                                }
+                                            })
                                     }
                                 }
                             })

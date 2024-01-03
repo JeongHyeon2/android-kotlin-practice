@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".fragments.IngredientFragment">
         <LinearLayout
-            android:background="@drawable/rounded_background_stroke"
+            android:background="@drawable/stroke_rect"
 
             android:id="@+id/ll"
             app:layout_constraintTop_toTopOf="parent"
@@ -62,7 +62,7 @@
             <EditText
                 android:id="@+id/ingredient_fragment_item_calorie"
                 style="@style/IngredientRVItemText"
-                android:text="칼로리" />
+                android:text="100g 칼로리" />
 
 
         </LinearLayout>

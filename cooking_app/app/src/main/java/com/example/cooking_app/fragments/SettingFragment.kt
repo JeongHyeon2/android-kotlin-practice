@@ -13,6 +13,7 @@ import com.example.cooking_app.R
 import com.example.cooking_app.databinding.FragmentSettingBinding
 import com.example.cooking_app.utils.FBAuth
 import com.example.cooking_app.viewmodels.MyRecipeFragmentViewModel
+import com.example.cooking_app.views.IntroActivity
 import com.example.cooking_app.views.LoginActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -45,7 +46,7 @@ class SettingFragment : Fragment() {
                 .setMessage("정말 로그아웃 하시겠습니까?")
                 .setPositiveButton("확인",
                     DialogInterface.OnClickListener { dialog, id ->
-                        val intent = Intent(requireContext(), LoginActivity::class.java)
+                        val intent = Intent(requireContext(), IntroActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         FBAuth.logout()
                         startActivity(intent)

@@ -33,7 +33,6 @@ class WebViewActivity : AppCompatActivity() {
 
         webView.loadUrl("https://www.dietshin.com/calorie/calorie_main.asp")
         findViewById<FloatingActionButton>(R.id.fab_button).setOnClickListener {
-            Log.d("koqwleqwlqew", webView.url.toString())
             val idx = extractIdxFromUrl(webView.url.toString())
             if (idx != null) {
                 val resultIntent = Intent()
