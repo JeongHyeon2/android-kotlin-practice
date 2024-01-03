@@ -6,28 +6,10 @@
     app:startDestination="@id/myRecipeFragment">
 
     <fragment
-        android:id="@+id/comuFragment"
-        android:name="com.example.cooking_app.fragments.ComuFragment"
-        android:label="fragment_comu"
-        tools:layout="@layout/fragment_comu" >
-        <action
-            android:id="@+id/action_comuFragment_to_myRecipeFragment"
-            app:destination="@id/myRecipeFragment" />
-        <action
-            android:id="@+id/action_comuFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-        <action
-            android:id="@+id/action_comuFragment_to_ingredientFragment"
-            app:destination="@id/ingredientFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/myRecipeFragment"
         android:name="com.example.cooking_app.fragments.MyRecipeFragment"
         android:label="fragment_my_recipe"
         tools:layout="@layout/fragment_my_recipe" >
-        <action
-            android:id="@+id/action_myRecipeFragment_to_comuFragment"
-            app:destination="@id/comuFragment" />
         <action
             android:id="@+id/action_myRecipeFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
@@ -44,9 +26,6 @@
             android:id="@+id/action_settingFragment_to_myRecipeFragment"
             app:destination="@id/myRecipeFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_comuFragment"
-            app:destination="@id/comuFragment" />
-        <action
             android:id="@+id/action_settingFragment_to_ingredientFragment"
             app:destination="@id/ingredientFragment" />
     </fragment>
@@ -60,8 +39,5 @@
         <action
             android:id="@+id/action_ingredientFragment_to_myRecipeFragment"
             app:destination="@id/myRecipeFragment" />
-        <action
-            android:id="@+id/action_ingredientFragment_to_comuFragment"
-            app:destination="@id/comuFragment" />
     </fragment>
 </navigation>

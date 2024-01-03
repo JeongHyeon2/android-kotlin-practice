@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.SplashActivity"
-    android:background="@color/main_color">
+    >
 
     <com.airbnb.lottie.LottieAnimationView
         android:padding="@dimen/cooking_app_padding_large"

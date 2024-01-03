@@ -7,11 +7,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_color"
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".views.IntroActivity">
     <Button
+        android:textColor="@color/black"
+
         android:background="@drawable/rounded_background_grey"
         android:id="@+id/intro_btn_login"
         android:padding="@dimen/cooking_app_text_size_middle"
@@ -22,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:textColor="@color/black"
+
         android:background="@drawable/rounded_background_grey"
         android:id="@+id/intro_btn_join"
         android:padding="@dimen/cooking_app_text_size_middle"

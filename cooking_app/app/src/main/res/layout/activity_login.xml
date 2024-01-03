@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         tools:context=".views.JoinActivity"
         android:orientation="vertical"
-        android:background="@color/main_color">
+      >
         <LinearLayout
             android:paddingVertical="@dimen/cooking_app_padding_small"
             android:layout_marginHorizontal="@dimen/cooking_app_padding_mini"
@@ -23,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:padding="@dimen/cooking_app_padding_small"
             android:background="@drawable/rounded_background_main_color"
             android:text="@={vm.email}"
@@ -33,6 +35,8 @@
             android:layout_height="wrap_content"
             />
         <EditText
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
 
             android:padding="@dimen/cooking_app_padding_small"
             android:background="@drawable/rounded_background_main_color"
@@ -45,6 +49,8 @@
             android:layout_height="wrap_content"/>
         </LinearLayout>
         <Button
+            android:textColor="@color/black"
+
             android:visibility="@{vm.loadingState ? View.GONE : View.VISIBLE}"
             android:background="@drawable/rounded_background_grey"
             android:onClick="@{()->vm.onLoginButtonClick()}"

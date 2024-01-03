@@ -32,6 +32,7 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:textColor="@color/black"
                     android:id="@+id/create_recipe_et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,6 +141,7 @@
                     </LinearLayout>
 
                     <Button
+                        android:textColor="@color/black"
                         android:id="@+id/btn_add_ingredient"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -165,6 +167,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/create_recipe_rv"
+                    android:textColor="@color/black"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -173,6 +176,8 @@
                     android:padding="@dimen/cooking_app_padding_small" />
 
                 <Button
+                    android:textColor="@color/black"
+
                     android:id="@+id/btn_add"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

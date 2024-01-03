@@ -37,6 +37,7 @@
                 android:text="ID"
                 />
             <Button
+                android:textColor="@color/black"
                 android:layout_margin="@dimen/cooking_app_padding_middle"
                 android:background="@drawable/rounded_button"
                 android:textStyle="bold"
@@ -56,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
+                android:textColor="@color/black"
                 android:visibility="@{vm.loadingState ? View.GONE : View.VISIBLE}"
                 android:layout_margin="@dimen/cooking_app_padding_middle"
                 android:background="@drawable/rounded_button"
@@ -67,6 +69,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent" />
             <Button
+                android:textColor="@color/black"
                 android:visibility="@{vm.loadingState ? View.GONE : View.VISIBLE}"
                 android:layout_margin="@dimen/cooking_app_padding_middle"
                 android:background="@drawable/rounded_button"

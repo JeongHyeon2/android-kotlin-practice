@@ -11,10 +11,6 @@
         android:icon="@drawable/ingredient_icon" />
 
     <item
-        android:id="@+id/comuFragment"
-        android:title="커뮤니티"
-        android:icon="@drawable/community_icon"/>
-    <item
         android:id="@+id/settingFragment"
         android:title="설정"
         android:icon="@drawable/setting_icon"/>
