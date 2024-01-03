@@ -15,7 +15,7 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:src="@drawable/plus"
+        android:src="@drawable/icon_return"
         app:tint="@color/main_color"
         android:backgroundTint="@color/point_color"
         android:background="@drawable/rounded_background_main_color"

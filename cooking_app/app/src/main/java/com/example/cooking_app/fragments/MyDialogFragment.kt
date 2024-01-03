@@ -160,42 +160,10 @@ class MyDialogFragment(
             dismiss()
         }
         view.findViewById<ImageView>(R.id.dialog_fragment_webview).setOnClickListener {
-            startActivityForResult(Intent(requireContext(), WebViewActivity::class.java), 10)
+            val intent = Intent(requireContext(), WebViewActivity::class.java)
+            intent.putExtra("name",name.text.toString())
+            startActivity(intent)
         }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 10 && resultCode == Activity.RESULT_OK){
-            GlobalScope.launch(Dispatchers.IO) {
-                val docs = Jsoup.connect(data!!.getStringExtra("link")).get().body()
-                // Select the specific div
-                val element = docs.select("div.tble1pad")
-
-                // Extract only the text content from the selected div
-                val extractedText = element.text().split("[주의]")[0]
-
-                // Use regular expressions to extract (100g) and 25 kcal
-                val regex = Regex("""\((\d+(?:g|ml))\).*?(\d+ kcal)""")
-
-                val matchResult = regex.find(extractedText)
-
-                if (matchResult != null) {
-                    val unit = matchResult.groupValues[1] // (100g)
-                    val calorie = matchResult.groupValues[2] // 25 kcal
-                    withContext(Dispatchers.Main){
-                        cal.setText(calorie.replace("[^0-9]".toRegex(), ""))
-                        calGram.setText(unit.replace("[^0-9]".toRegex(),""))
-
-                    }
-
-                }
-
-            }
-        }
-
-
 
     }
 

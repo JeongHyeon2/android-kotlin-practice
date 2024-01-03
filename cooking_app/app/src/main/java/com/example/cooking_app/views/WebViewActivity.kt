@@ -29,29 +29,15 @@ class WebViewActivity : AppCompatActivity() {
 
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
+        val name = intent.getStringExtra("name")
 
 
-        webView.loadUrl("https://www.dietshin.com/calorie/calorie_main.asp")
+        webView.loadUrl("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${name}+칼로리")
         findViewById<FloatingActionButton>(R.id.fab_button).setOnClickListener {
-            val idx = extractIdxFromUrl(webView.url.toString())
-            if (idx != null) {
-                val resultIntent = Intent()
-                resultIntent.putExtra("link", webView.url)
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
-            }else{
-                Toast.makeText(this,"재료를 선택해주세요",Toast.LENGTH_SHORT).show()
-            }
-
-
+            finish()
         }
     }
 
-    private fun extractIdxFromUrl(url: String): Int? {
-        val idxRegex = Regex("""idx=(\d+)""")
-        val matchResult = idxRegex.find(url)
-        return matchResult?.groupValues?.getOrNull(1)?.toIntOrNull()
-    }
 
     override fun onBackPressed() {
         if (webView.canGoBack()) {

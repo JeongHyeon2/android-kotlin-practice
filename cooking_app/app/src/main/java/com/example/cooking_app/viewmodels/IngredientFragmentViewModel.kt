@@ -47,6 +47,7 @@ class IngredientFragmentViewModel : ViewModel() {
                 // 데이터 읽기가 취소될 때 처리
                 println("Read failed: " + databaseError.toException())
             }
+
         })
     }
 
