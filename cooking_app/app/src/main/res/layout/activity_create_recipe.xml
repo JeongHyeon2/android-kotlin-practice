@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/cooking_app_padding_small"
                     android:background="@drawable/rounded_background_grey"
+                    android:textColorHint="@color/black"
                     android:hint="어떤 요리를 만들어 볼까요?"
                     android:padding="@dimen/cooking_app_padding_small"
                     android:textSize="@dimen/cooking_app_text_size_large" />

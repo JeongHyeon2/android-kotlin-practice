@@ -95,6 +95,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
+                        android:textColor="@color/black"
                         android:id="@+id/dialog_ingredient_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -129,6 +130,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
+                        android:textColor="@color/black"
+
                         android:id="@+id/dialog_ingredient_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -174,6 +177,7 @@
 
                     <EditText
                         android:id="@+id/dialog_ingredient_purchase"
+                        android:textColor="@color/black"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -228,6 +232,7 @@
 
                     <EditText
                         android:id="@+id/dialog_ingredient_purchase_amount"
+                        android:textColor="@color/black"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -272,6 +277,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
+                        android:textColor="@color/black"
+
                         android:id="@+id/dialog_ingredient_calorie_gram"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -309,6 +316,8 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <EditText
+                            android:textColor="@color/black"
+
                             android:inputType="number"
                             android:id="@+id/dialog_ingredient_calorie"
                             android:layout_width="wrap_content"

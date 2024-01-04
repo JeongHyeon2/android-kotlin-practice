@@ -31,6 +31,7 @@
             android:id="@+id/my_recipe_create_rv_item_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/black"
             android:hint="글을 입력하세요                                                         "
             android:textSize="@dimen/cooking_app_text_size_middle"
             app:layout_constraintBottom_toBottomOf="parent"
