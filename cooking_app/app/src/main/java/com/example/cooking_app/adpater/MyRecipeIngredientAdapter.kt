@@ -12,10 +12,10 @@ import com.example.cooking_app.models.RecipeIngredient
 
 
 class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapter.ViewHolder>() {
-    private var ingredientList: List<RecipeIngredient> =  emptyList()
+    private var ingredientList: List<RecipeIngredient> = emptyList()
     private var itemClickListener: ((position: Int) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (position: Int)-> Unit) {
+    fun setOnItemClickListener(listener: (position: Int) -> Unit) {
         itemClickListener = listener
     }
 
@@ -28,17 +28,21 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
 
         private val name: EditText = view.findViewById(R.id.ingredient_name)
         private val amount: EditText = view.findViewById(R.id.ingredient_amount)
-        private val layout : LinearLayout = view.findViewById(R.id.ingredient_item_linear)
+        private val layout: LinearLayout = view.findViewById(R.id.ingredient_item_linear)
 
 
-        fun bind(item:RecipeIngredient) {
-            name.setText(item.name+" ")
-            amount.setText(item.amount +"g")
+        fun bind(item: RecipeIngredient) {
+            name.setText(item.name + " ")
+            if (item.amount.contains("개")) {
+                amount.setText(if (item.amount == "개") "0개" else item.amount)
+            } else {
+                amount.setText(item.amount + "g")
+            }
 
             layout.setOnClickListener {
                 itemClickListener?.invoke(position)
             }
-            name.setOnClickListener{
+            name.setOnClickListener {
                 itemClickListener?.invoke(position)
             }
             amount.setOnClickListener {
@@ -63,6 +67,7 @@ class MyRecipeIngredientAdapter() : RecyclerView.Adapter<MyRecipeIngredientAdapt
     override fun getItemCount(): Int {
         return ingredientList.size
     }
+
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }

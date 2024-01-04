@@ -32,7 +32,7 @@ class WebViewActivity : AppCompatActivity() {
         val name = intent.getStringExtra("name")
 
 
-        webView.loadUrl("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${name}+칼로리")
+        webView.loadUrl("https://www.google.com/search?q=${name}+칼로리")
         findViewById<FloatingActionButton>(R.id.fab_button).setOnClickListener {
             finish()
         }

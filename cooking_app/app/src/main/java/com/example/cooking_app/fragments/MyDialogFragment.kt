@@ -17,18 +17,25 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.cooking_app.R
+import com.example.cooking_app.databinding.FragmentDialogBinding
+import com.example.cooking_app.databinding.FragmentMyRecipeBinding
 import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.models.RecipeIngredientForDB
 import com.example.cooking_app.utils.FBRef
 import com.example.cooking_app.viewmodels.CreateRecipeViewModel
 import com.example.cooking_app.viewmodels.IngredientFragmentViewModel
 import com.example.cooking_app.views.WebViewActivity
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -43,17 +50,14 @@ class MyDialogFragment(
     private val position: Int,
     private var isIngredientFragment: Boolean = false
 ) : DialogFragment() {
+    private var _binding: FragmentDialogBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: CreateRecipeViewModel
     private lateinit var viewModelIngredient: IngredientFragmentViewModel
-    private lateinit var name: EditText
-    private lateinit var ingredientAmount: EditText
-    private lateinit var purchase: EditText
-    private lateinit var amount: EditText
-    private lateinit var calGram: EditText
-    private lateinit var cal: EditText
-
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var getIngredientBtn: Button
+
+
 
 
     override fun onCreateView(
@@ -62,7 +66,9 @@ class MyDialogFragment(
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        return inflater.inflate(R.layout.fragment_dialog, container, false)
+
+        _binding = FragmentDialogBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,53 +76,82 @@ class MyDialogFragment(
         viewModel = ViewModelProvider(requireActivity())[CreateRecipeViewModel::class.java]
         viewModelIngredient =
             ViewModelProvider(requireActivity())[IngredientFragmentViewModel::class.java]
-        name = view.findViewById<EditText>(R.id.dialog_ingredient_name)
-        ingredientAmount = view.findViewById<EditText>(R.id.dialog_ingredient_amount)
-        purchase = view.findViewById<EditText>(R.id.dialog_ingredient_purchase)
-        amount = view.findViewById<EditText>(R.id.dialog_ingredient_purchase_amount)
-        calGram = view.findViewById<EditText>(R.id.dialog_ingredient_calorie_gram)
-        cal = view.findViewById(R.id.dialog_ingredient_calorie)
         loadingProgressBar = view.findViewById(R.id.loadingProgressBar_dialog)
         getIngredientBtn = view.findViewById<Button>(R.id.dialog_button_get_ingredient)
+        binding.vm = viewModelIngredient
+        binding.lifecycleOwner = this
+
+        binding.dialogIngredientChange.setOnClickListener {
+            viewModelIngredient.setIsCountStateO()
+        }
         if (isIngredientFragment) {
-            ingredientAmount.visibility = View.GONE
+            binding.amountConstraint.visibility = View.GONE
         }
         if (position >= 0) {
             if (isIngredientFragment) {
                 val item = viewModelIngredient.ingredients.value!![position]
-                ingredientAmount.setText("0")
-                name.setText(item.name)
-                purchase.setText(item.cost)
-                amount.setText(item.amountOfPurchase)
-                cal.setText(item.calorie)
-                calGram.setText("100")
+                if(item.amountOfPurchase.contains("개")){
+                    viewModelIngredient.setIsCountStateTrue()
+                    binding.dialogIngredientCalorieGram.setText("1")
+                }else{
+                    viewModelIngredient.setIsCountStateFalse()
+                    binding.dialogIngredientCalorieGram.setText("100")
+                }
+                binding.dialogIngredientAmount.setText("0")
+                binding.dialogIngredientName.setText(item.name)
+                binding.dialogIngredientPurchaseAmount.setText(item.cost)
+                binding.dialogIngredientPurchase.setText(item.amountOfPurchase.replace("개",""))
+                binding.dialogIngredientCalorie.setText(item.calorie)
+
+
             } else {
                 val item = viewModel.liveRecipeListModel.value!!.ingredients[position]
-                name.setText(item.name)
-                ingredientAmount.setText(item.amount)
-                purchase.setText(item.cost)
-                amount.setText(item.amountOfPurchase)
-                cal.setText(item.calorie)
-                calGram.setText("100")
+                if(item.amountOfPurchase.contains("개")){
+                    viewModelIngredient.setIsCountStateTrue()
+                    binding.dialogIngredientCalorieGram.setText("1")
+                }else{
+                    viewModelIngredient.setIsCountStateFalse()
+                    binding.dialogIngredientCalorieGram.setText("100")
+                }
+                binding.dialogIngredientName.setText(item.name)
+                binding.dialogIngredientAmount.setText(item.amount.replace("개",""))
+                binding.dialogIngredientPurchaseAmount.setText(item.cost.replace("개",""))
+                binding.dialogIngredientPurchase.setText(item.amountOfPurchase.replace("개",""))
+                binding.dialogIngredientCalorie.setText(item.calorie)
+            }
+        }
+
+        viewModelIngredient.isCountState.observe(this, Observer {
+            if(it){
+                binding.dialogTextviewUnit.text = "단위:개수"
+
+            }else{
+                binding.dialogTextviewUnit.text = "단위:무게(g)"
 
             }
+        })
 
-        }
         view.findViewById<Button>(R.id.dialog_button_save).setOnClickListener {
             if (view.findViewById<EditText>(R.id.dialog_ingredient_name).text.toString() == "") {
                 Toast.makeText(view.context, "재료명을 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
                 var calorie = try {
-                    ((cal.text.toString().toDouble() / calGram.text.toString()
-                        .toDouble()) * 100).toInt().toString()
+                    if(viewModelIngredient.isCountState.value!!){
+                        ((binding.dialogIngredientCalorie.text.toString().toDouble() /   binding.dialogIngredientCalorieGram.text.toString()
+                            .toDouble())).toInt().toString()
+                    }else{
+                        ((binding.dialogIngredientCalorie.text.toString().toDouble() /   binding.dialogIngredientCalorieGram.text.toString()
+                            .toDouble()) * 100).toInt().toString()
+                    }
+
                 } catch (e: Exception) {
                     ""
                 }
                 val ingredient = RecipeIngredient(
-                    name.text.toString(),
-                    ingredientAmount.text.toString().ifEmpty { "0" },
-                    purchase.text.toString(),
-                    amount.text.toString(),
+                    binding.dialogIngredientName.text.toString(),
+                    if(viewModelIngredient.isCountState.value!!)    binding.dialogIngredientAmount.text.toString()+"개".ifEmpty { "0개" } else    binding.dialogIngredientAmount.text.toString().ifEmpty { "0" },
+                    binding.dialogIngredientPurchaseAmount.text.toString().ifEmpty { "0" },
+                    if(viewModelIngredient.isCountState.value!!)  binding.dialogIngredientPurchase.text.toString()+"개".ifEmpty { "0개" } else   binding.dialogIngredientPurchase.text.toString().ifEmpty { "0" },
                     calorie,
                 )
 
@@ -139,6 +174,7 @@ class MyDialogFragment(
                 dismiss()
             }
         }
+
         val deleteBtn = view.findViewById<Button>(R.id.dialog_button_delete)
         if (position < 0) {
             deleteBtn.visibility = View.GONE
@@ -161,7 +197,7 @@ class MyDialogFragment(
         }
         view.findViewById<ImageView>(R.id.dialog_fragment_webview).setOnClickListener {
             val intent = Intent(requireContext(), WebViewActivity::class.java)
-            intent.putExtra("name",name.text.toString())
+            intent.putExtra("name",binding.dialogIngredientName.text.toString())
             startActivity(intent)
         }
 
@@ -212,13 +248,21 @@ class MyDialogFragment(
 
                         listView.setOnItemClickListener { _, _, position, _ ->
                             val selectedItem = list[position]
-                            name.setText(selectedItem.name)
-                            amount.setText(selectedItem.amountOfPurchase)
-                            purchase.setText(selectedItem.cost)
-                            cal.setText(selectedItem.calorie)
-                            calGram.setText("100")
+                            if (selectedItem.amountOfPurchase.contains("개")){
+                                viewModelIngredient.setIsCountStateTrue()
+                                binding.dialogIngredientCalorieGram.setText("1")
+                            }else{
+                                viewModelIngredient.setIsCountStateFalse()
+                                binding.dialogIngredientCalorieGram.setText("100")
+                            }
+                            binding.dialogIngredientName.setText(selectedItem.name)
+                            binding.dialogIngredientPurchase.setText(selectedItem.amountOfPurchase.replace("개",""))
+                            binding.dialogIngredientPurchaseAmount.setText(selectedItem.cost)
+                            binding.dialogIngredientCalorie.setText(selectedItem.calorie)
+
+
                             dialog.dismiss()
-                            ingredientAmount.requestFocus()
+                            binding.dialogIngredientAmount.requestFocus()
                         }
 
                     }

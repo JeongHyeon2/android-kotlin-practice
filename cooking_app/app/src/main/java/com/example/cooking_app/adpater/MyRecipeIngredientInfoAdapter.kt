@@ -1,5 +1,6 @@
 package com.example.cooking_app.adpater
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,23 +36,45 @@ class MyRecipeIngredientInfoAdapter() :
 
         fun bind(item: RecipeIngredient, position: Int) {
             name.setText(item.name + " ")
-            amount.setText(item.amount + "g ")
+            if (item.amountOfPurchase.contains("개")) {
+                amount.setText(if(item.amount=="개")"0개" else item.amount)
+            } else {
+                amount.setText(item.amount + "g ")
+            }
+
             try {
-                purchase.setText(
-                    ((item.cost.toDouble() / item.amountOfPurchase.toDouble()) * item.amount.toDouble()).toInt()
-                        .toString() + "원 "
-                )
+                if (item.amountOfPurchase.contains("개")) {
+                    purchase.setText(
+                        ((item.cost.toDouble() / item.amountOfPurchase.replace("개", "")
+                            .toDouble()) * item.amount.replace("개", "").toDouble()).toInt()
+                            .toString() + "원 "
+                    )
+                } else {
+                    purchase.setText(
+                        ((item.cost.toDouble() / item.amountOfPurchase.toDouble()) * item.amount.toDouble()).toInt()
+                            .toString() + "원 "
+                    )
+                }
+
             } catch (e: Exception) {
                 purchase.setText("0원")
             }
             try {
-                calorie.setText(
-                    (item.calorie.toDouble() * item.amount.toDouble() / 100).toInt()
-                        .toString() + "kcal"
-                )
+                if (item.amountOfPurchase.contains("개")) {
+                    calorie.setText(
+                        (item.calorie.toDouble() * item.amount.replace("개","").toDouble()).toInt()
+                            .toString() + "kcal"
+                    )
+                }else{
+                    calorie.setText(
+                        (item.calorie.toDouble() * item.amount.toDouble() / 100).toInt()
+                            .toString() + "kcal"
+                    )
+                }
+
 
             } catch (e: Exception) {
-                calorie.setText("0g")
+                calorie.setText("0kcal")
             }
             layout.setOnClickListener {
                 itemClickListener?.invoke(position)

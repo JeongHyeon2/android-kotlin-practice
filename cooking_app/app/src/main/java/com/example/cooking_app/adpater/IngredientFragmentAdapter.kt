@@ -38,9 +38,15 @@ class IngredientFragmentAdapter : RecyclerView.Adapter<IngredientFragmentAdapter
                 ingredient.cost + "원"
             }
             amountPurchase.text = if (ingredient.amountOfPurchase.isEmpty()) {
+
                 "0g"
             } else {
-                ingredient.amountOfPurchase + "g"
+                if (!ingredient.amountOfPurchase.contains("개")){
+                    ingredient.amountOfPurchase + "g"
+                }else{
+                    ingredient.amountOfPurchase
+                }
+
             }
             calorie.text = if (ingredient.calorie.isEmpty()) {
                 "0kcal"

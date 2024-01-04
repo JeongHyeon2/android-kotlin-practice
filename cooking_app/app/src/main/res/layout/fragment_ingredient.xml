@@ -62,7 +62,7 @@
             <EditText
                 android:id="@+id/ingredient_fragment_item_calorie"
                 style="@style/IngredientRVItemText"
-                android:text="100g 칼로리" />
+                android:text="칼로리" />
 
 
         </LinearLayout>
