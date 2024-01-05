@@ -1,6 +1,7 @@
 package com.example.cooking_app.fragments
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -186,14 +187,28 @@ class MyDialogFragment(
             showListPopup()
         }
         deleteBtn.setOnClickListener {
-            if (isIngredientFragment) {
-                viewModelIngredient.delete(position)
-            } else {
-                viewModel.deleteRecipe(position)
-            }
-            Toast.makeText(view.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(requireContext(), R.style.RoundedDialog)
+            builder.setTitle("재료 삭제")
+                .setMessage("삭제하시겠습니까?")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        if (isIngredientFragment) {
+                            viewModelIngredient.delete(position)
+                        } else {
+                            viewModel.deleteRecipe(position)
+                        }
+                        Toast.makeText(view.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
 
-            dismiss()
+                        dismiss()
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
+
         }
         view.findViewById<ImageView>(R.id.dialog_fragment_webview).setOnClickListener {
             val intent = Intent(requireContext(), WebViewActivity::class.java)
@@ -241,8 +256,10 @@ class MyDialogFragment(
                             .setNegativeButton("취소") { dialog, _ ->
                                 dialog.dismiss()
                             }
-                        val dialog = builder.create()
-                        dialog.show()
+                        val alertDialog = builder.create()
+                        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                        alertDialog.show()
                         loadingProgressBar.visibility = View.GONE
                         getIngredientBtn.visibility = View.VISIBLE
 
@@ -260,8 +277,7 @@ class MyDialogFragment(
                             binding.dialogIngredientPurchaseAmount.setText(selectedItem.cost)
                             binding.dialogIngredientCalorie.setText(selectedItem.calorie)
 
-
-                            dialog.dismiss()
+                            alertDialog.dismiss()
                             binding.dialogIngredientAmount.requestFocus()
                         }
 

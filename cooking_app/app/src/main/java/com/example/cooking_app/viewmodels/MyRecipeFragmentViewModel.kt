@@ -4,7 +4,10 @@ import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.AndroidViewModel
@@ -84,7 +87,11 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
                                                     resource: Bitmap,
                                                     transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                                                 ) {
-                                                    ImageSave.saveBitmapToInternalStorage(App.context(),resource,data.model.image)
+                                                    ImageSave.saveBitmapToInternalStorage(
+                                                        App.context(),
+                                                        resource,
+                                                        data.model.image
+                                                    )
 
                                                 }
 
@@ -160,7 +167,6 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
 
-
     fun getOneData(id: String) = viewModelScope.launch(Dispatchers.IO) {
         val data = db.myDao().getOneData(id)
         withContext(Dispatchers.Main) {
@@ -174,7 +180,6 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun deleteDialog(position: Int, item: RecipeModelWithId, thisContext: Context) {
-
         val builder = AlertDialog.Builder(thisContext, R.style.RoundedDialog)
         builder.setTitle("삭제 확인")
             .setMessage("정말 " + item.model.title + "을/를 삭제하시겠습니까?")
@@ -193,8 +198,10 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
             .setNegativeButton("취소",
                 DialogInterface.OnClickListener { dialog, id ->
                 })
-        builder.show()
-
+        val alertDialog = builder.create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.show()
 
     }
 }

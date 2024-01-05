@@ -2,11 +2,14 @@ package com.example.cooking_app.fragments
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.example.cooking_app.R
@@ -54,7 +57,10 @@ class SettingFragment : Fragment() {
                 .setNegativeButton("취소",
                     DialogInterface.OnClickListener { dialog, id ->
                     })
-            builder.show()
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
 
         }
         val user = Firebase.auth.currentUser
@@ -62,10 +68,38 @@ class SettingFragment : Fragment() {
             binding.homeFragmentId.text   = "ID: "+ it.email
         }
         binding.homeFragmentSaveDataToFb.setOnClickListener {
-            viewModel.saveDataToFB()
+            val builder = AlertDialog.Builder(requireContext(), R.style.RoundedDialog)
+            builder.setTitle("데이터 저장하기")
+                .setMessage("서버에 현재 내 폰에 있는 데이터를 저장합니다.\n기존 서버에 저장된 데이터는 삭제됩니다.")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        viewModel.saveDataToFB()
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
+
         }
         binding.homeFragmentGetDataFromFb.setOnClickListener {
-            viewModel.getDataFromFB()
+            val builder = AlertDialog.Builder(requireContext(), R.style.RoundedDialog)
+            builder.setTitle("데이터 가져오기")
+                .setMessage("서버로부터 데이터를 가져옵니다.\n현재 내 폰에 저장된 데이터는 삭제됩니다.")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        viewModel.getDataFromFB()
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
+
         }
 
     }

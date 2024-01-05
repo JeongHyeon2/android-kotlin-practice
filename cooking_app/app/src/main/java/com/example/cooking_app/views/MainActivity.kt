@@ -3,8 +3,11 @@ package com.example.cooking_app.views
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -41,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("취소",
                 DialogInterface.OnClickListener { dialog, id ->
                 })
-        builder.show()
+        val alertDialog = builder.create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.show()
     }
 }

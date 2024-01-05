@@ -6,12 +6,15 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
@@ -123,7 +126,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
         })
         myAdapter.setOnItemClickListener {
             if (viewModel.liveRecipeListModel.value!!.recipes[it] != "") {
-                AlertDialog.Builder(this,R.style.RoundedDialog)
+                val builder=  AlertDialog.Builder(this,R.style.RoundedDialog)
                     .setMessage(
                         (it + 1).toString() + "번. "
                                 + viewModel.liveRecipeListModel.value!!.recipes[it]
@@ -137,7 +140,10 @@ class CreateRecipeActivity() : AppCompatActivity() {
                     .setNegativeButton("취소",
                         DialogInterface.OnClickListener { dialog, id ->
                         })
-                    .show()
+                val alertDialog = builder.create()
+                alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+                alertDialog.show()
             } else {
                 viewModel.deleteItem(it)
                 isChanged = true
@@ -218,7 +224,7 @@ class CreateRecipeActivity() : AppCompatActivity() {
             getAction.launch("image/*")
         }
         imageView.setOnLongClickListener {
-            AlertDialog.Builder(this,R.style.RoundedDialog)
+            val builder =AlertDialog.Builder(this,R.style.RoundedDialog)
                 .setMessage("사진을 삭제하시겠습니까?")
                 .setPositiveButton("삭제",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -228,17 +234,20 @@ class CreateRecipeActivity() : AppCompatActivity() {
                 .setNegativeButton("취소",
                     DialogInterface.OnClickListener { dialog, id ->
                     })
-                .show()
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
             true
+        }
+        binding.createRecipeBackIcon.setOnClickListener {
+            backPressed()
         }
 
     }
-
-
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
+    private fun backPressed(){
         if (isChanged) {
-            AlertDialog.Builder(this,R.style.RoundedDialog)
+           val builder= AlertDialog.Builder(this,R.style.RoundedDialog)
                 .setMessage("레시피를 저장하지 않았습니다.\n저장 하시겠습니까?")
                 .setPositiveButton("저장 후 종료",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -248,10 +257,19 @@ class CreateRecipeActivity() : AppCompatActivity() {
                     DialogInterface.OnClickListener { dialog, id ->
                         finish()
                     })
-                .show()
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
         } else {
             finish()
         }
+    }
+
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        backPressed()
     }
 
     private fun save(key: String) {

@@ -44,7 +44,12 @@ class IngredientFragmentAdapter : RecyclerView.Adapter<IngredientFragmentAdapter
                 if (!ingredient.amountOfPurchase.contains("개")){
                     ingredient.amountOfPurchase + "g"
                 }else{
-                    ingredient.amountOfPurchase
+                    if(ingredient.amountOfPurchase=="개"){
+                        "0개"
+                    }else{
+                        ingredient.amountOfPurchase
+
+                    }
                 }
 
             }
