@@ -5,4 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="windowNoTitle" >true</item>
     </style>
+
 </resources>

@@ -132,6 +132,16 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
         db.myDao().deleteAll()
         getData()
     }
+    fun findDataByName(name : String) : Int{
+        var position = 0
+        _mutableRecipeListModel.value!!.map {
+            if(it.model.title.replace(" ","")==(name.replace(" ",""))){
+               return position
+            }
+            position++
+        }
+        return -1
+    }
 
 
     fun getDataFromDB() = viewModelScope.launch(Dispatchers.IO) {

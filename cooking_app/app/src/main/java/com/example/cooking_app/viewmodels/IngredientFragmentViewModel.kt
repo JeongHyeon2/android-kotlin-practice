@@ -1,20 +1,16 @@
 package com.example.cooking_app.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cooking_app.models.RecipeIngredient
 import com.example.cooking_app.models.RecipeIngredientForDB
-import com.example.cooking_app.room.MyDatabase
-import com.example.cooking_app.utils.App
 import com.example.cooking_app.utils.FBRef
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -61,6 +57,16 @@ class IngredientFragmentViewModel : ViewModel() {
             }
 
         })
+    }
+    fun findDataByName(name : String) : Int{
+        var position = 0
+        _mutableIngredients.value!!.map {
+            if(it.name.replace(" ","")==name.replace(" ","")){
+                return position
+            }
+            position++
+        }
+        return -1
     }
 
     fun add(item: RecipeIngredient) {

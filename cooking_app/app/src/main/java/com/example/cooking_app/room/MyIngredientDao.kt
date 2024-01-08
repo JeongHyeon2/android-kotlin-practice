@@ -1,6 +1,5 @@
 package com.example.cooking_app.room
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.cooking_app.models.RecipeIngredientForDB
-import com.example.cooking_app.models.RecipeModelWithId
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,13 +22,10 @@ interface MyIngredientDao {
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(item : RecipeIngredientForDB){
-        Log.d("sdsdasdsasddsa-",item.toString())
-    }
+    fun insert(item : RecipeIngredientForDB)
 
     @Update
     fun update(item: RecipeIngredientForDB){
-        Log.d("sdsdasdsasddsa_",item.toString())
     }
     @Query("UPDATE recipe_ingredient SET name = :value1, cost = :value2,  amountOfPurchase = :value3 , calorie = :value4 WHERE id = :itemId")
     fun updateById(itemId: Long, value1:String, value2:String, value3:String, value4:String)

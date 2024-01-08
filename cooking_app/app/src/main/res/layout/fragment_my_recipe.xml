@@ -13,6 +13,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.MyRecipeFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingVertical="@dimen/cooking_app_padding_mini"
+        app:layout_constraintBottom_toTopOf="@+id/my_recipe_rv"
+        android:background="@drawable/appbar_background"
+        android:id="@+id/search_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".views.CreateRecipeActivity">
+
+        <EditText
+            android:id="@+id/my_recipe_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/cooking_app_padding_mini"
+            android:background="@drawable/rounded_background_main_color"
+            android:hint="요리명을 입력하여 검색"
+            android:maxLines="1"
+            android:padding="@dimen/cooking_app_padding_mini"
+            android:textColorHint="@color/black"
+            android:textSize="@dimen/cooking_app_text_size_middle"
+             />
+
+        <ImageView
+            android:id="@+id/my_recipe_search_btn"
+            android:layout_marginRight="@dimen/cooking_app_padding_mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_search"
+          />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/my_recipe_tv_base"
@@ -41,19 +75,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
 
-            android:paddingTop="@dimen/cooking_app_padding_large"
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/my_recipe_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/cooking_app_padding_small"
+            android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/cooking_app_padding_small"
+            android:paddingTop="@dimen/cooking_app_padding_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
+            app:layout_constraintTop_toBottomOf="@+id/search_bar"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/my_recipe_fab"

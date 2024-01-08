@@ -1,10 +1,11 @@
 package com.example.cooking_app.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,7 @@ class IngredientFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentIngredientBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -68,6 +69,15 @@ class IngredientFragment : Fragment() {
                 childFragmentManager,
                 "dialog"
             )
+        }
+        binding.myIngredientSearchBtn.setOnClickListener {
+            val position =  viewModel.findDataByName(binding.myIngredientSearch.text.toString())
+            if(position>=0){
+                binding.ingredientFragmentRv.scrollToPosition(position)
+            }else{
+                Toast.makeText(requireContext(), "존재하지 않는 재료명입니다.", Toast.LENGTH_SHORT).show()
+
+            }
         }
     }
 
