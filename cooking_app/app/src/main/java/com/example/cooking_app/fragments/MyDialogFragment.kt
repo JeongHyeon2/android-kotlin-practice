@@ -221,6 +221,37 @@ class MyDialogFragment(
         } catch (e: Exception) {
             Log.d("MyDialogFragment", e.toString())
         }
+        binding.ivInfo.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext(), R.style.RoundedDialog)
+                .setMessage(
+          "1큰술(1T, 1Ts)= 1숟가락\t15ml = 3t(계량스푼이 없는 경우 밥숟가락으로 볼록하게 가득 담으면 1큰술)\n" +
+                  "\n1작은술(1t, 1ts)\t5ml(티스푼으로는 2스푼이 1작은술)\n" +
+                  "\n1컵(1Cup, 1C)\t200ml = 16T(한국,중국,일본)(미국 및 서양의 경우 1C가 240~250ml이므로 계량컵 구매 사용시 주의)\n" +
+                  "\n1종이컵\t180ml\n" +
+                  "\n1oz\t28.3g\n" +
+                  "\n1파운드(lb)\t약 0.453 킬로그램(kg)\n" +
+                  "\n1갤런(gallon)\t약 3.78 리터(ℓ)\n" +
+                  "\n1꼬집\t약 2g 정도이며 '약간'이라고 표현하기도 함\n" +
+                  "\n1줌\t한손 가득 넘치게 쥐어진 정도(예시 : 멸치 1줌 = 국멸치인 경우 12~15마리, 나물 1줌은 50g)\n" +
+                  "크게 1줌 = 2줌\t1줌의 두배\n" +
+                  "\n1주먹\t여자 어른의 주먹크기, 고기로는 100g\n" +
+                  "\n1토막\t2~3cm두께 정도의 분량\n" +
+                  "\n마늘 1톨\t깐 마늘 한쪽\n" +
+                  "\n생강 1쪽\t마늘 1톨의 크기와 비슷\n" +
+                  "\n생강 1톨\t아기 손바닥만한 크기의 통생강 1개\n" +
+                  "\n고기 1근\t600g\n" +
+                  "\n채소 1근\t400g\n" +
+                  "\n채소 1봉지\t200g 정도"
+                )
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, id ->
+
+                    })
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
+        }
 
     }
 

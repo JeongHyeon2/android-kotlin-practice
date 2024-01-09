@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,6 +26,8 @@ class JoinViewModel : ViewModel() {
     var pwdCheck = MutableLiveData("")
     private var auth: FirebaseAuth = Firebase.auth
     private val context = App.context()
+    private val _loadingState = MutableLiveData<Boolean>(false)
+    val loadingState: LiveData<Boolean> get() = _loadingState
 
     private fun checkValidator(): Boolean {
 
@@ -54,9 +57,11 @@ class JoinViewModel : ViewModel() {
 
     fun onClickJoinBtn() {
         try {
+                _loadingState.value = true
             if (checkValidator()) {
                 auth.createUserWithEmailAndPassword(email.value.toString(), pwd.value.toString())
                     .addOnCompleteListener { task ->
+                        _loadingState.value = false
                         if (task.isSuccessful) {
                             sendEmailVerification()
 
@@ -79,7 +84,7 @@ class JoinViewModel : ViewModel() {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // 이메일 확인 이메일이 성공적으로 보내진 경우
-                    Toast.makeText(context, "인즐메일을 보냈습니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${email.value.toString()}로 \n인증메일을 보냈습니다", Toast.LENGTH_SHORT).show()
                     val intent = Intent(context, IntroActivity::class.java)
                     intent.flags =
                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

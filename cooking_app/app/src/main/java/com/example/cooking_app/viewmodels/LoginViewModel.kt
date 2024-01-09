@@ -32,7 +32,7 @@ class LoginViewModel : ViewModel() {
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         context.startActivity(intent)
                     }else{
-                        Toast.makeText(context, "이메일 인증이 되지 않았습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "이메일 인증이 되지 않았습니다.", Toast.LENGTH_LONG).show()
 
                     }
 
