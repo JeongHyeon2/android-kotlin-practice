@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -100,6 +101,10 @@ class SettingFragment : Fragment() {
             alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
             alertDialog.show()
 
+        }
+        binding.getHint.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://jeonghyeon2.notion.site/71bad9f6830c411bb1473e11bd70b4ca?pvs=4"))
+            startActivity(intent)
         }
 
     }

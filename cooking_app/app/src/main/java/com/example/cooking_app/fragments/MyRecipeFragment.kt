@@ -85,6 +85,7 @@ class MyRecipeFragment() : Fragment() {
                 Toast.makeText(requireContext(), "존재하지 않는 요리명입니다.", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     override fun onDestroyView() {
