@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -51,167 +52,197 @@ class MyRecipeFragmentViewModel(application: Application) : AndroidViewModel(app
     private val db = MyDatabase.getDatabase(application.baseContext)
 
     private fun deleteItem(key: String) = viewModelScope.launch(Dispatchers.IO) {
-        FBRef.myRecipe.child(key).removeValue()
-        val storageReference =
-            FirebaseStorage.getInstance().reference.child(FBAuth.getUid() + "." + key + ".jpg")
-        storageReference.delete()
-
+        try {
+            FBRef.myRecipe.child(key).removeValue()
+            val storageReference =
+                FirebaseStorage.getInstance().reference.child(FBAuth.getUid() + "." + key + ".jpg")
+            storageReference.delete()
+        }catch (e:Exception){
+            Log.d("IngredientFragmentViewModel",e.toString())
+        }
     }
 
 
     fun isEmpty() = _mutableRecipeListModel.value!!.isEmpty()
     private fun getData() {
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val new = mutableListOf<RecipeModelWithId>()
-                    for (dataModel in dataSnapshot.children) {
-                        val data = dataModel.getValue(RecipeModel::class.java)
-                        new.add(RecipeModelWithId(dataModel.key.toString(), data!!))
-                    }
-                    withContext(Dispatchers.Main) {
-                        _mutableRecipeListModel.value = new
-                    }
-
-                    for (data in _mutableRecipeListModel.value!!) {
-                        db.myDao().insert(data)
-                        if (data.model.image != "") {
-                            val storageRef =
-                                Firebase.storage.reference.child(data.model.image)
-                            storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    GlobalScope.launch(Dispatchers.IO) {
-                                        Glide.with(App.context()).asBitmap().load(task.result)
-                                            .into(object : CustomTarget<Bitmap>() {
-                                                override fun onResourceReady(
-                                                    resource: Bitmap,
-                                                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                                                ) {
-                                                    ImageSave.saveBitmapToInternalStorage(
-                                                        App.context(),
-                                                        resource,
-                                                        data.model.image
-                                                    )
-
-                                                }
-
-                                                override fun onLoadCleared(placeholder: Drawable?) {
-                                                    TODO("Not yet implemented")
-                                                }
-                                            })
-                                    }
-                                }
-                            })
+        try {
+            val postListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val new = mutableListOf<RecipeModelWithId>()
+                        for (dataModel in dataSnapshot.children) {
+                            val data = dataModel.getValue(RecipeModel::class.java)
+                            new.add(RecipeModelWithId(dataModel.key.toString(), data!!))
                         }
-                    }
+                        withContext(Dispatchers.Main) {
+                            _mutableRecipeListModel.value = new
+                        }
 
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(App.context(), "서버로부터 데이터를 가져왔습니다.", Toast.LENGTH_SHORT)
-                            .show()
-                        _loadingState.value = false
-                    }
+                        for (data in _mutableRecipeListModel.value!!) {
+                            db.myDao().insert(data)
+                            if (data.model.image != "") {
+                                val storageRef =
+                                    Firebase.storage.reference.child(data.model.image)
+                                storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        GlobalScope.launch(Dispatchers.IO) {
+                                            Glide.with(App.context()).asBitmap().load(task.result)
+                                                .into(object : CustomTarget<Bitmap>() {
+                                                    override fun onResourceReady(
+                                                        resource: Bitmap,
+                                                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                                                    ) {
+                                                        ImageSave.saveBitmapToInternalStorage(
+                                                            App.context(),
+                                                            resource,
+                                                            data.model.image
+                                                        )
 
+                                                    }
+
+                                                    override fun onLoadCleared(placeholder: Drawable?) {
+                                                        TODO("Not yet implemented")
+                                                    }
+                                                })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(App.context(), "서버로부터 데이터를 가져왔습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                            _loadingState.value = false
+                        }
+
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Handle onCancelled if needed
                 }
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle onCancelled if needed
-            }
+            FBRef.myRecipe.addListenerForSingleValueEvent(postListener)
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
         }
-
-        FBRef.myRecipe.addListenerForSingleValueEvent(postListener)
-
 
     }
 
     fun getDataFromFB() = viewModelScope.launch(Dispatchers.IO) {
-        withContext(Dispatchers.Main) {
-            _loadingState.value = true
-        }
-        ImageSave.deletePngFilesInDirectory()
-        db.myDao().deleteAll()
-        getData()
-    }
-    fun findDataByName(name : String) : Int{
-        var position = 0
-        _mutableRecipeListModel.value!!.map {
-            if(it.model.title.replace(" ","")==(name.replace(" ",""))){
-               return position
+        try {
+            withContext(Dispatchers.Main) {
+                _loadingState.value = true
             }
-            position++
+            ImageSave.deletePngFilesInDirectory()
+            db.myDao().deleteAll()
+            getData()
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
+        }
+    }
+
+    fun findDataByName(name: String): Int {
+        try {
+            var position = 0
+            _mutableRecipeListModel.value!!.map {
+                if (it.model.title.replace(" ", "") == (name.replace(" ", ""))) {
+                    return position
+                }
+                position++
+            }
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
         }
         return -1
     }
 
 
     fun getDataFromDB() = viewModelScope.launch(Dispatchers.IO) {
-        val dataFromDB = db.myDao().getAllDataWithFlow()
+        try {
+            val dataFromDB = db.myDao().getAllDataWithFlow()
 
-        dataFromDB.collect { recipeList ->
-            withContext(Dispatchers.Main) {
-                _mutableRecipeListModel.value = recipeList.toMutableList()
+            dataFromDB.collect { recipeList ->
+                withContext(Dispatchers.Main) {
+                    _mutableRecipeListModel.value = recipeList.toMutableList()
+                }
             }
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
         }
     }
 
     fun saveDataToFB() = viewModelScope.launch(Dispatchers.IO) {
-        withContext(Dispatchers.Main) {
-            _loadingState.value = true
-        }
-        val recipeData = db.myDao().getAllData()
-        for (recipe in recipeData) {
-            FBRef.myRecipe.child(recipe.id).setValue(recipe.model)
-            val image =
-                loadBitmapFromFilePath(recipe.model.image)
-            var storageRef = Firebase.storage.reference.child(recipe.model.image)
-            val baos = ByteArrayOutputStream()
-            image!!.compress(Bitmap.CompressFormat.JPEG, 10, baos)
-            val data = baos.toByteArray()
-            storageRef.putBytes(data)
-        }
+        try {
+            withContext(Dispatchers.Main) {
+                _loadingState.value = true
+            }
+            val recipeData = db.myDao().getAllData()
+            for (recipe in recipeData) {
+                FBRef.myRecipe.child(recipe.id).setValue(recipe.model)
+                val image =
+                    loadBitmapFromFilePath(recipe.model.image)
+                var storageRef = Firebase.storage.reference.child(recipe.model.image)
+                val baos = ByteArrayOutputStream()
+                image!!.compress(Bitmap.CompressFormat.JPEG, 10, baos)
+                val data = baos.toByteArray()
+                storageRef.putBytes(data)
+            }
 
-        withContext(Dispatchers.Main) {
-            Toast.makeText(App.context(), "서버에 데이터를 저장했습니다.", Toast.LENGTH_SHORT).show()
-            _loadingState.value = false
+            withContext(Dispatchers.Main) {
+                Toast.makeText(App.context(), "서버에 데이터를 저장했습니다.", Toast.LENGTH_SHORT).show()
+                _loadingState.value = false
+            }
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
         }
     }
 
 
     fun getOneData(id: String) = viewModelScope.launch(Dispatchers.IO) {
-        val data = db.myDao().getOneData(id)
-        withContext(Dispatchers.Main) {
-            val old = _mutableRecipeListModel.value
-            val index = old!!.indexOfFirst { it.id == id }
-            if (index != -1) {
-                old[index] = data
+        try {
+            val data = db.myDao().getOneData(id)
+            withContext(Dispatchers.Main) {
+                val old = _mutableRecipeListModel.value
+                val index = old!!.indexOfFirst { it.id == id }
+                if (index != -1) {
+                    old[index] = data
+                }
+                _mutableRecipeListModel.value = old!!
             }
-            _mutableRecipeListModel.value = old!!
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
         }
     }
 
     fun deleteDialog(position: Int, item: RecipeModelWithId, thisContext: Context) {
-        val builder = AlertDialog.Builder(thisContext, R.style.RoundedDialog)
-        builder.setTitle("삭제 확인")
-            .setMessage("정말 " + item.model.title + "을/를 삭제하시겠습니까?")
-            .setPositiveButton("확인",
-                DialogInterface.OnClickListener { dialog, id ->
+        try {
+            val builder = AlertDialog.Builder(thisContext, R.style.RoundedDialog)
+            builder.setTitle("삭제 확인")
+                .setMessage("정말 " + item.model.title + "을/를 삭제하시겠습니까?")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialog, id ->
 
-                    viewModelScope.launch(Dispatchers.IO) {
-                        db.myDao().delete(item)
-                    }
-                    deleteItem(item.id)
-                    val list = _mutableRecipeListModel.value!!
-                    list.removeAt(position)
-                    _mutableRecipeListModel.value = list
+                        viewModelScope.launch(Dispatchers.IO) {
+                            db.myDao().delete(item)
+                        }
+                        deleteItem(item.id)
+                        val list = _mutableRecipeListModel.value!!
+                        list.removeAt(position)
+                        _mutableRecipeListModel.value = list
 
-                })
-            .setNegativeButton("취소",
-                DialogInterface.OnClickListener { dialog, id ->
-                })
-        val alertDialog = builder.create()
-        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        alertDialog.show()
-
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+            val alertDialog = builder.create()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            alertDialog.show()
+        } catch (e: Exception) {
+            Log.d("MyRecipeFragmentViewModel", e.toString())
+        }
     }
 }

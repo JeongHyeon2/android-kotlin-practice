@@ -20,6 +20,7 @@ class LoginViewModel : ViewModel() {
     private val _loadingState = MutableLiveData<Boolean>(false)
     val loadingState: LiveData<Boolean> get() = _loadingState
     fun onLoginButtonClick() {
+        try{
         _loadingState.value = true
         auth.signInWithEmailAndPassword(email.value!!, pwd.value!!)
             .addOnCompleteListener { task ->
@@ -39,6 +40,9 @@ class LoginViewModel : ViewModel() {
                     Toast.makeText(context, "이메일 혹은 패스워드가 올바르지 않습니다", Toast.LENGTH_SHORT).show()
                 }
             }
+        }catch (e:Exception){
+            Log.d("LoginViewModel",e.toString())
+        }
 
     }
 }

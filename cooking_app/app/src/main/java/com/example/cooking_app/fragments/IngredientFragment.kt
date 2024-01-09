@@ -50,7 +50,7 @@ class IngredientFragment : Fragment() {
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.ingredientTextview.visibility = View.GONE
-            }else{
+            } else {
                 if (viewModel.ingredients.value!!.size == 0 && !it) {
                     binding.ingredientTextview.visibility = View.VISIBLE
                 }
@@ -60,9 +60,10 @@ class IngredientFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.ingredientFragmentAdd.setOnClickListener {
-            if(viewModel.ingredients.value!!.size>=1000){
-                Toast.makeText(requireContext(),"최대 재료개수 1000개를 초과하였습니다!",Toast.LENGTH_SHORT).show()
-        }else{
+            if (viewModel.ingredients.value!!.size >= 1000) {
+                Toast.makeText(requireContext(), "최대 재료개수 1000개를 초과하였습니다!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 MyDialogFragment(-1, true).show(childFragmentManager, "dialog")
 
             }
@@ -76,10 +77,10 @@ class IngredientFragment : Fragment() {
             )
         }
         binding.myIngredientSearchBtn.setOnClickListener {
-            val position =  viewModel.findDataByName(binding.myIngredientSearch.text.toString())
-            if(position>=0){
+            val position = viewModel.findDataByName(binding.myIngredientSearch.text.toString())
+            if (position >= 0) {
                 binding.ingredientFragmentRv.scrollToPosition(position)
-            }else{
+            } else {
                 Toast.makeText(requireContext(), "존재하지 않는 재료명입니다.", Toast.LENGTH_SHORT).show()
 
             }

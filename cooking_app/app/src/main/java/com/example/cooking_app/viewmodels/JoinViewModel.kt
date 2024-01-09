@@ -53,22 +53,27 @@ class JoinViewModel : ViewModel() {
     }
 
     fun onClickJoinBtn() {
-        if (checkValidator()) {
-            auth.createUserWithEmailAndPassword(email.value.toString(), pwd.value.toString())
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        sendEmailVerification()
+        try {
+            if (checkValidator()) {
+                auth.createUserWithEmailAndPassword(email.value.toString(), pwd.value.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            sendEmailVerification()
 
-                    } else {
-                        if (task.exception is FirebaseAuthUserCollisionException) {
-                            Toast.makeText(context, "이미 존재하는 이메일입니다", Toast.LENGTH_SHORT)
-                                .show()
+                        } else {
+                            if (task.exception is FirebaseAuthUserCollisionException) {
+                                Toast.makeText(context, "이미 존재하는 이메일입니다", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     }
-                }
+            }
+        }catch (e:Exception){
+            Log.d("JoinViewModel",e.toString())
         }
     }
     private fun sendEmailVerification() {
+        try{
         val user = auth.currentUser
         user?.sendEmailVerification()
             ?.addOnCompleteListener { task ->
@@ -87,6 +92,9 @@ class JoinViewModel : ViewModel() {
                     // 예외 처리를 수행할 수 있습니다.
                 }
             }
+        }catch (e:Exception){
+            Log.d("JoinViewModel",e.toString())
+        }
     }
 
 }

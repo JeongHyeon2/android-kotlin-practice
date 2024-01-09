@@ -45,41 +45,59 @@ class CreateRecipeViewModel() : ViewModel() {
 
     private val db = MyDatabase.getDatabase(App.context())
 
-    fun setLoadingStateTrue()=viewModelScope.launch(Dispatchers.Main) {
+    fun setLoadingStateTrue() = viewModelScope.launch(Dispatchers.Main) {
         _loadingState.value = true
     }
-    fun setLoadingStateFalse()=viewModelScope.launch(Dispatchers.Main) {
+
+    fun setLoadingStateFalse() = viewModelScope.launch(Dispatchers.Main) {
         _loadingState.value = false
     }
 
 
-
     fun addItem(item: String) {
-        val old = _mutableRecipeListModel.value!!
-        val newList = _mutableRecipeListModel.value!!.recipes
-        newList.add(item)
-        val new = RecipeModel(old.title, newList, old.ingredients, old.image)
-        _mutableRecipeListModel.value = new
+        try {
+            val old = _mutableRecipeListModel.value!!
+            val newList = _mutableRecipeListModel.value!!.recipes
+            newList.add(item)
+            val new = RecipeModel(old.title, newList, old.ingredients, old.image)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
     }
-    fun editImage(src:String){
-        val old = _mutableRecipeListModel.value!!
-        val new = RecipeModel(old.title, old.recipes, old.ingredients, src)
-        _mutableRecipeListModel.value = new
+
+    fun editImage(src: String) {
+        try {
+            val old = _mutableRecipeListModel.value!!
+            val new = RecipeModel(old.title, old.recipes, old.ingredients, src)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
     }
 
     fun addIngredient(ingredient: RecipeIngredient) {
-        val old = _mutableRecipeListModel.value!!
-        val newList = _mutableRecipeListModel.value!!.ingredients
-        newList.add(ingredient)
-        val new = RecipeModel(old.title, old.recipes, newList, old.image)
-        _mutableRecipeListModel.value = new
+        try {
+            val old = _mutableRecipeListModel.value!!
+            val newList = _mutableRecipeListModel.value!!.ingredients
+            newList.add(ingredient)
+            val new = RecipeModel(old.title, old.recipes, newList, old.image)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
     }
-    fun editIngredient(ingredient: RecipeIngredient,position: Int){
-        val old = _mutableRecipeListModel.value!!
-        val newList = _mutableRecipeListModel.value!!.ingredients
-        newList[position] = ingredient
-        val new = RecipeModel(old.title, old.recipes, newList, old.image)
-        _mutableRecipeListModel.value = new
+
+    fun editIngredient(ingredient: RecipeIngredient, position: Int) {
+        try {
+            val old = _mutableRecipeListModel.value!!
+            val newList = _mutableRecipeListModel.value!!.ingredients
+            newList[position] = ingredient
+            val new = RecipeModel(old.title, old.recipes, newList, old.image)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
 
     }
 
@@ -92,11 +110,11 @@ class CreateRecipeViewModel() : ViewModel() {
         currentList[position] = text
     }
 
-    fun getData(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
+    fun getData(key: String, iv: ImageView) = viewModelScope.launch(Dispatchers.IO) {
         FBRef.myRecipe.child(key).get().addOnSuccessListener {
             _mutableRecipeListModel.value = it.getValue(RecipeModel::class.java)
             val link = liveRecipeListModel.value!!.image
-            if(!(link=="" || link==null)) {
+            if (!(link == "" || link == null)) {
                 val storageRef = Firebase.storage.reference.child(liveRecipeListModel.value!!.image)
                 storageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -110,48 +128,65 @@ class CreateRecipeViewModel() : ViewModel() {
             Log.e("firebase", "Error getting data", it)
         }
     }
-    fun getDataFromDB(key: String,iv:ImageView) = viewModelScope.launch(Dispatchers.IO) {
-        val data = db.myDao().getOneData(key).model
-        val image = loadBitmapFromFilePath(data.image)
-        withContext(Dispatchers.Main){
-            _mutableRecipeListModel.value = data
-         if(image!=null) {
-             iv.setImageBitmap(image)
-         }
 
-            iv.visibility = View.GONE
+    fun getDataFromDB(key: String, iv: ImageView) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val data = db.myDao().getOneData(key).model
+            val image = loadBitmapFromFilePath(data.image)
+            withContext(Dispatchers.Main) {
+                _mutableRecipeListModel.value = data
+                if (image != null) {
+                    iv.setImageBitmap(image)
+                }
+
+                iv.visibility = View.GONE
+            }
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
         }
     }
 
     fun deleteItem(position: Int) {
-        if (_mutableRecipeListModel.value!!.recipes.size == 1) return
-        val old = _mutableRecipeListModel.value!!
-        val newList = _mutableRecipeListModel.value!!.recipes
-        newList.removeAt(position)
-        val new = RecipeModel(old.title, newList, old.ingredients, old.image)
-        _mutableRecipeListModel.value = new
+        try {
+            if (_mutableRecipeListModel.value!!.recipes.size == 1) return
+            val old = _mutableRecipeListModel.value!!
+            val newList = _mutableRecipeListModel.value!!.recipes
+            newList.removeAt(position)
+            val new = RecipeModel(old.title, newList, old.ingredients, old.image)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
     }
 
     fun deleteRecipe(index: Int) {
-        val old = _mutableRecipeListModel.value!!
-        val newList = _mutableRecipeListModel.value!!.ingredients
-        newList.removeAt(index)
-        val new = RecipeModel(old.title, old.recipes, newList, old.image)
-        _mutableRecipeListModel.value = new
+        try {
+            val old = _mutableRecipeListModel.value!!
+            val newList = _mutableRecipeListModel.value!!.ingredients
+            newList.removeAt(index)
+            val new = RecipeModel(old.title, old.recipes, newList, old.image)
+            _mutableRecipeListModel.value = new
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
+        }
     }
 
     fun getInformation(): String {
         var cost = 0
         var cal = 0
-        _mutableRecipeListModel.value!!.ingredients.map {
-            try {
-                cost += ((it.cost.toDouble() / it.amountOfPurchase.toDouble()) * it.amount.toDouble()).toInt()
-                cal += (it.calorie.toDouble() * it.amount.toDouble() / 100).toInt()
+        try {
+            _mutableRecipeListModel.value!!.ingredients.map {
+                try {
+                    cost += ((it.cost.toDouble() / it.amountOfPurchase.toDouble()) * it.amount.toDouble()).toInt()
+                    cal += (it.calorie.toDouble() * it.amount.toDouble() / 100).toInt()
 
-            } catch (e: Exception) {
+                } catch (e: Exception) {
+                }
             }
+        } catch (e: Exception) {
+            Log.d("CreateRecipeViewModel", e.toString())
         }
-        return "가격: "+cost.toString() + "원  열량: "+cal.toString() +"kcal"
+        return "가격: " + cost.toString() + "원  열량: " + cal.toString() + "kcal"
 
     }
 }
