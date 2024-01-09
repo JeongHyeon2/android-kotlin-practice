@@ -82,7 +82,6 @@
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/cooking_app_padding_small"
-            android:paddingTop="@dimen/cooking_app_padding_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_bar"

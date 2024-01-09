@@ -60,7 +60,12 @@ class IngredientFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.ingredientFragmentAdd.setOnClickListener {
-            MyDialogFragment(-1, true).show(childFragmentManager, "dialog")
+            if(viewModel.ingredients.value!!.size>=1000){
+                Toast.makeText(requireContext(),"최대 재료개수 1000개를 초과하였습니다!",Toast.LENGTH_SHORT).show()
+        }else{
+                MyDialogFragment(-1, true).show(childFragmentManager, "dialog")
+
+            }
         }
         binding.ingredientFragmentRv.adapter = myAdapter
         binding.ingredientFragmentRv.layoutManager = LinearLayoutManager(requireContext())

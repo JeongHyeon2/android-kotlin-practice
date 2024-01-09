@@ -68,9 +68,13 @@ class MyRecipeFragment() : Fragment() {
         }
 
         binding.myRecipeFab.setOnClickListener {
-            val intent = Intent(activity, CreateRecipeActivity::class.java)
-            intent.putExtra("ID_KEY", "NONE")
-            startActivityForResult(intent, 100)
+            if(viewModel.liveRecipeListModel.value!!.size>=100){
+                Toast.makeText(requireContext(),"최대 레시피 100개를 초과하였습니다!",Toast.LENGTH_SHORT).show()
+            }else {
+                val intent = Intent(activity, CreateRecipeActivity::class.java)
+                intent.putExtra("ID_KEY", "NONE")
+                startActivityForResult(intent, 100)
+            }
         }
         binding.myRecipeSearchBtn.setOnClickListener {
             val position =
