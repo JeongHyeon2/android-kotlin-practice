@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <variable
             name="vm"
-            type="com.example.cooking_app.viewmodels.IngredientFragmentViewModel" />
+            type="my.app.cooking_app.viewmodels.IngredientFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

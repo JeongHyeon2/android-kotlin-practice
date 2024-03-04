@@ -1,0 +1,38 @@
+package my.app.cooking_app.views
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import my.app.cooking_app.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+class WebViewActivity : AppCompatActivity() {
+    private lateinit var webView: WebView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_web_view)
+        webView = findViewById<WebView>(R.id.webview)
+        webView.settings.javaScriptEnabled = true
+
+        webView.webViewClient = WebViewClient()
+        webView.webChromeClient = WebChromeClient()
+        val name = intent.getStringExtra("name")
+
+
+        webView.loadUrl("https://www.google.com/search?q=${name}+칼로리")
+        findViewById<FloatingActionButton>(R.id.fab_button).setOnClickListener {
+            finish()
+        }
+    }
+
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+}

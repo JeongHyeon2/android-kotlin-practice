@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myRecipeFragment"
-        android:name="com.example.cooking_app.fragments.MyRecipeFragment"
+        android:name="my.app.cooking_app.fragments.MyRecipeFragment"
         android:label="fragment_my_recipe"
         tools:layout="@layout/fragment_my_recipe" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.example.cooking_app.fragments.SettingFragment"
+        android:name="my.app.cooking_app.fragments.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/ingredientFragment"
-        android:name="com.example.cooking_app.fragments.IngredientFragment"
+        android:name="my.app.cooking_app.fragments.IngredientFragment"
         android:label="IngredientFragment" >
         <action
             android:id="@+id/action_ingredientFragment_to_settingFragment"

@@ -4,7 +4,7 @@
         <import type="android.view.View" />
         <variable
             name="vm"
-            type="com.example.cooking_app.viewmodels.LoginViewModel" />
+            type="my.app.cooking_app.viewmodels.LoginViewModel" />
     </data>
     <LinearLayout
         android:layout_marginTop="@dimen/cooking_app_padding_xlarge"

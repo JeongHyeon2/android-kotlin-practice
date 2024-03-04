@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.cooking_app.viewmodels.CreateRecipeViewModel" />
+            type="my.app.cooking_app.viewmodels.CreateRecipeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
